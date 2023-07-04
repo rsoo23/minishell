@@ -1,0 +1,268 @@
+--------- unistd.h ---------
+ 1. char *ttyname(int fd);
+    -- arguments --
+    fd: The file descriptor of the open file for which you want to retrieve information.
+The ttyname() function takes fd as an argument and returns a pointer to a null-terminated string containing the name of the terminal associated with that file descriptor. If fd is not associated with a terminal, ttyname() returns NULL.
+
+ 2. char *getcwd(char *buf, size_t size);
+    -- arguments --
+    buf: A pointer to a character array where the current working directory will be stored.
+    size: The size of the character array pointed to by buf
+The return value of getcwd is a pointer to the character array containing the current working directory on success, or NULL on failure.
+To use getcwd, you need to provide a buffer (buf) where the function will store the current working directory. You also need to specify the size of the buffer to avoid buffer overflow. The size should be large enough to accommodate the path of the current working directory.
+
+ 3. int chdir(const char *path);
+    -- arguments --
+    path: A pointer to a null-terminated string that specifies the path to the directory that will become the new current working directory.
+The return value of chdir is 0 on success, indicating that the directory change was successful, or -1 on failure.
+
+Note the struct stat mentioned in some functions below is located in <sys/stat.h>
+ 4. int stat(const char *pathname, struct stat *statbuf);
+    -- arguments --
+    pathname: A pointer to a null-terminated string that specifies the path to the file whose information is to be retrieved.
+    statbuf: A pointer to a struct stat object where the file information will be stored.
+The return value of stat is 0 on success, indicating that the file information was retrieved successfully, or -1 on failure.
+
+
+ 5. int lstat(const char *pathname, struct stat *statbuf);
+    -- arguments --
+    pathname: A pointer to a null-terminated string that specifies the path to the file or symbolic link whose information is to be retrieved.
+    statbuf: A pointer to a struct stat object where the file or symbolic link information will be stored.
+The lstat function is similar to the stat function, but it is used specifically for symbolic links.
+The return value of lstat is 0 on success, indicating that the information was retrieved successfully, or -1 on failure.
+The main difference between lstat and stat is that lstat does not follow symbolic links. If the specified path is a symbolic link, lstat will provide information about the link itself rather than the file or directory it points to. This allows you to examine the properties of the symbolic link itself, such as its size and permissions, instead of the properties of the linked file or directory.
+
+
+ 6. int fstat(int fd, struct stat *statbuf);
+    -- arguments --
+    fd: The file descriptor of the open file for which you want to retrieve information.
+    statbuf: A pointer to a struct stat object where the file information will be stored.
+The fstat function is used to retrieve information about an open file using its file descriptor.
+The return value of fstat is 0 on success, indicating that the information was retrieved successfully, or -1 on failure.
+
+
+ 7. int unlink(const char *pathname);
+    -- arguments --
+    pathname: A string representing the path to the file that you want to delete.
+The unlink function is used to delete a name from the file system.
+The return value of unlink is 0 on success, indicating that the file was deleted successfully, or -1 on failure.
+
+ 8. int isatty(int fd);
+    -- arguments --
+    fd: The file descriptor of the open file for which you want to retrieve information.
+The isatty function takes an integer fd as input, which represents a file descriptor, and returns an integer value. It returns 1 if the file descriptor refers to a terminal, and 0 otherwise.
+
+
+ 9. int ttyslot(void);
+The ttyslot function takes no arguments and returns an integer value. It returns the slot number of the user's terminal in the utmp file, or -1 if the terminal is not found in the utmp file.
+
+
+
+--------- READLINE ---------
+    ---- readline/readline.h ---
+        1. char *readline(const char *prompt);
+        The readline() function reads a line from the user, displaying the specified prompt, and returns a pointer to a dynamically allocated string containing the user's input. The caller is responsible for freeing the allocated memory when it is no longer needed.
+
+        2. void rl_on_new_line(void);
+        This function does not take any arguments and does not return a value. It is typically used in conjunction with other Readline functions to manage the input and display of the command line interface.
+
+        3. void rl_replace_line(const char *text, int clear_undo);
+        The rl_replace_line function is used to replace the current line of input in the Readline library's input buffer with the specified text. The clear_undo parameter determines whether the undo history should be cleared after replacing the line. Pass a non-zero value to clear the undo history, or 0 to keep it unchanged.
+
+        4. void rl_redisplay(void);
+        This function is used to redraw the current line in the Readline interface. It is typically called when you want to update the display after making changes to the line or performing other actions that require a refresh of the prompt and input.
+
+        5. void add_history(const char *line);
+        This function is used to add a line to the history list maintained by Readline. It takes a const char* argument line, which represents the line to be added to the history. The line argument should typically be the same string that was returned by the readline function. Once a line is added to the history, you can use the Up and Down arrow keys to navigate through previously entered lines.
+
+    ---- readline/history.h ----
+        2. void rl_clear_history(void);
+        When you call rl_clear_history(), it will clear the entire history of previously entered lines, removing all entries from memory. After calling this function, the history will be empty, and there will be no previous command lines available.
+        To use readline(), you need to link your program against the Readline library using the -lreadline compiler flag.
+
+
+
+-------- sys/wait.h --------
+ 1. pid_t wait3(int *status, int options, struct rusage *rusage);
+    -- arguments --
+        status (output parameter): Pointer to an integer where the exit status of the terminated child process will be stored.
+        options: Additional options for controlling the behavior of wait3. You can pass 0 for default behavior or use the available options provided by the waitpid function.
+        rusage (output parameter): Pointer to a struct rusage where resource usage information of the terminated child process will be stored.
+
+ 2. pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
+    -- arguments --
+        pid: The process ID of the child process you want to wait for. If pid is -1, wait4 will wait for any child process.
+        status (output parameter): Pointer to an integer where the exit status of the terminated child process will be stored.
+        options: Additional options for controlling the behavior of wait4. You can pass 0 for default behavior or use the available options provided by the waitpid function.
+        rusage (output parameter): Pointer to a struct rusage where resource usage information of the terminated child process will be stored.
+
+The return value of wait3/wait4 is the process ID of the terminated child process, or -1 if an error occurred.
+Note that wait3/wait4 is a variant of the waitpid function that provides more extensive resource usage information through the rusage argument. If you don't need resource usage information, you can use waitpid instead.
+
+
+
+--------- signal.h ---------
+Note that some functions operate on the sigset_t datatype defined in <signal.h>.
+Note The sigset_t data type represents a set of signals.
+
+ 1. void (*signal(int signum, void (*handler)(int)))(int);
+    -- arguments --
+        signum: The signal number or identifier for which you want to set the behavior. You can use the predefined signal constants provided in <signal.h> (e.g., SIGINT for the interrupt signal).
+        handler: Pointer to a signal handler function that will be called when the specified signal occurs. The handler function should have the signature void handler(int), where the int parameter represents the signal number.
+The return value of signal is a pointer to the previous signal handler function associated with the specified signal. By default, signal returns SIG_DFL (the default signal handling behavior) for most signals.
+Note that the signal function has been superseded by the more robust sigaction function, which provides more control over signal handling. It is recommended to use sigaction instead of signal in new code.
+
+
+ 2. int sigemptyset(sigset_t *set);
+    -- arguments --
+    set: A pointer to a sigset_t object where the empty signal set will be stored.
+sigemptyset initializes the sigset_t set to be empty (i.e., containing no signals).
+The return value of sigemptyset is 0 on success or -1 if an error occurs.
+After calling sigemptyset, you can add specific signals to the set using functions like sigaddset. The resulting set can be used for various purposes, such as blocking signals using sigprocmask or checking signal membership using sigismember.
+
+
+ 3. int sigaddset(sigset_t *set, int signum);
+    -- arguments --
+    set: A pointer to a sigset_t object representing the signal set.
+    signum: The signal number to add to the set.
+sigaddset adds the specified signal number to the sigset_t set.
+The return value of sigaddset is 0 on success or -1 if an error occurs.
+After calling sigaddset, you can use the resulting signal set for various purposes, such as blocking signals using sigprocmask or checking signal membership using sigismember.
+
+
+ 4. int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
+    -- arguments --
+    signum: The signal number or identifier for which you want to set the behavior. You can use the predefined signal constants provided in <signal.h> (e.g., SIGINT for the interrupt signal).
+    act: Pointer to a struct sigaction object that specifies the new signal handling behavior.
+    oldact: (Optional) Pointer to a struct sigaction object where the previous signal handling behavior will be stored. If you don't need the previous behavior, you can pass NULL.
+The sigaction function is used to set the behavior of a specific signal using the struct sigaction data structure. Here is the prototype for sigaction:
+Note that different platforms may have slight variations in the struct sigaction definition. It's recommended to refer to the system's manual or <signal.h> header for precise details on your specific platform.
+The return value of sigaction is 0 on success or -1 if an error occurs.
+Using sigaction, you can specify various signal handling options, including signal handlers, flags, and signal mask manipulation. It provides more control and flexibility compared to the older signal function.
+struct sigaction {
+    void (*sa_handler)(int);
+    void (*sa_sigaction)(int, siginfo_t *, void *);
+    sigset_t sa_mask;
+    int sa_flags;
+    void (*sa_restorer)(void);
+};
+
+
+
+--------- dirent.h ---------
+Note DIR data type is in the <dirent.h>
+ 1. DIR *opendir(const char *name);
+    -- argument --
+    name: A string representing the name of the directory to be opened.
+The opendir function is used to open a directory stream.
+The opendir function returns a pointer to a DIR structure, which represents the directory stream, on success. It returns NULL on failure.
+
+ 2. struct dirent *readdir(DIR *dirp);
+    -- argurments --
+    dirp: Pointer to the directory stream obtained from opendir.
+The readdir function reads the next directory entry from the directory stream specified by dirp. It returns a pointer to a struct dirent representing the directory entry, or NULL if the end of the directory stream is reached or an error occurs.
+
+ 3. int closedir(DIR *dirp);
+    -- arguments --
+    dirp: Pointer to the directory stream obtained from opendir.
+The closedir function closes the directory stream specified by dirp, releasing any resources associated with it. It returns 0 on success or -1 on failure.
+
+
+
+--------- string.h ---------
+ 1. char *strerror(int errnum);
+    -- arguments --
+The strerror function takes an integer errnum as input, which represents an error code, and returns a pointer to a string containing a descriptive error message corresponding to that error code.
+
+
+
+------- sys/ioctl.h --------
+ 1. int ioctl(int fd, unsigned long request, ...);
+    -- argumetns --
+    fd is the file descriptor on which the operation will be performed.
+    request is an unsigned long value that specifies the particular operation to be performed.
+    The third argument is optional and represents additional data required by certain operations.
+The ioctl function returns an integer value to indicate the result of the operation. The specific meaning of the return value depends on the operation being performed.
+The ioctl function is quite versatile and supports a wide range of operations for various devices and file descriptors. The exact list of available operations and their parameters can vary depending on the system and the specific device driver.
+
+
+
+-------- stdlib.h> ---------
+ 1. char *getenv(const char *name);
+    -- arguments --
+    name is a string representing the name of the environment variable whose value is to be retrieved.
+The getenv function returns a pointer to the value of the specified environment variable as a null-terminated string. If the environment variable is not found, it returns a null pointer.
+
+
+
+-------- termios.h ---------
+ 1. int tcsetattr(int fd, int optional_actions, const struct termios *termios_p);
+    -- arguments --
+    fd is the file descriptor of the terminal.
+    optional_actions specifies the actions to be performed. It can be one of the following values:
+        - TCSANOW: Apply the changes immediately.
+        - TCSADRAIN: Apply the changes after transmitting all queued output.
+        - TCSAFLUSH: Apply the changes after transmitting all queued output and discarding any queued input.
+    termios_p is a pointer to a struct termios that contains the new terminal attributes.
+The tcsetattr function is used to set the terminal attributes.
+The tcsetattr function returns 0 on success, or -1 on failure.
+
+2. int tcgetattr(int fd, struct termios *termios_p);
+    -- arguments --
+    fd is the file descriptor of the terminal.
+    termios_p is a pointer to a struct termios where the current terminal attributes will be stored.
+The tcgetattr function is used to get the terminal attributes.
+The tcgetattr function returns 0 on success, or -1 on failure.
+
+
+
+-------- termcap.h --------
+ 1. int tgetent(char *bp, const char *name);
+    -- arguments --
+    bp is a buffer where the terminal capabilities information will be stored.
+    name is the name of the terminal type or the environment variable that contains the terminal type.
+The tgetent function is used to initialize the terminal capabilities database.
+The tgetent function returns the following values:
+    - 1 if the terminal entry is found and successfully read.
+    - 0 if the terminal entry is not found.
+    - -1 if an error occurs while reading the terminal entry.
+
+ 2. int tgetflag(const char *capname);
+    -- arguments --
+    capname is a string specifying the name of the capability to retrieve.
+The tgetflag function is used to retrieve a boolean capability value from the terminal capabilities database.
+The tgetflag function returns an integer value representing the boolean value of the specified capability:
+    - 1 if the capability is present and has a true value.
+    - 0 if the capability is present and has a false value or is not set.
+    - -1 if an error occurs or the capability is not found.
+
+ 3. int tgetnum(const char *capname);
+    -- arguments --
+    capname is a string specifying the name of the capability to retrieve.
+The tgetnum function is used to retrieve a numeric capability value from the terminal capabilities database.
+The tgetnum function returns an integer value representing the numeric value of the specified capability. If the capability is not found or an error occurs, it returns -1.
+
+ 4. char *tgetstr(const char *capname, char **area);
+    -- arguments --
+    capname is a string specifying the name of the capability to retrieve.
+    area is a pointer to a character pointer that serves as a temporary storage area for the capability string.
+The tgetstr function is used to retrieve a string capability value from the terminal capabilities database.
+The tgetstr function returns a pointer to the retrieved capability string. If the capability is not found or an error occurs, it returns NULL.
+
+ 5. char *tgoto(const char *cap, int col, int row);
+    -- arguments --
+    cap is a string specifying the terminal capability for which the cursor motion string is generated.
+    col is an integer representing the target column position.
+    row is an integer representing the target row position.
+The tgoto function is used to generate a cursor motion string for a given terminal capability.
+The tgoto function returns a pointer to the generated cursor motion string. If an error occurs, it returns NULL.
+Note that tgetstr is used to retrieve the capability string for "cm" before passing it to tgoto.
+
+ 6. int tputs(const char *str, int affcnt, int (*putc)(int));
+    -- arguments --
+    str is a null-terminated string containing the terminal capability string to be output.
+    affcnt is the number of lines affected by the output.
+    putc is a function pointer to a function that takes an integer as an argument and returns an integer. This function is used to output each character of the capability string.
+The tputs function is used to output a terminal capability string to the terminal.
+The tputs function returns a non-negative value on success, or ERR (defined in term.h) if an error occurs.
+
