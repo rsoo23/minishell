@@ -26,12 +26,15 @@ OBJS = $(SRCS_CFILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
+	make bonus -C ./libft
 	$(CC) $(CFLAGS) $^ -o $(NAME)
 
 clean:
-	$(RM) $(OBJS)
+	make clean -C ./libft
+	$(RM) $(OBJS) 
 
 fclean: clean
+	make fclean -C ./libft
 	$(RM) $(NAME)
 
 re: fclean all
