@@ -13,6 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#include "libft/libft.h"
+
 #include <errno.h>                  // perror
 #include <fcntl.h>                  // open
 // #include <limits.h>                 // PATH_MAX
@@ -30,8 +32,9 @@
 #include <sys/wait.h>               // wait, waitpid, wait3, wait4
 #include <termios.h>                // tcsetattr, tcgetattr
 
-
-
-
+// int ft_strncmp(const char *s1, const char *s2, unsigned long nb);
+// int ft_strlen(const char *s);
+char    *merge_path(char *c, char **envp);
+void	freeing_2darray(char **s);
 
 #endif
