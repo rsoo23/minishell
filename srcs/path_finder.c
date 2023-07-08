@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   path_finder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 14:35:37 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/04 16:49:39 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/09 00:24:03 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 void	freeing_2darray(char **s)
 {
@@ -22,7 +22,7 @@ void	freeing_2darray(char **s)
 	free(s);
 }
 
-char    **getting_paths(char **envp)
+char	**getting_paths(char **envp)
 {
 	int	i = -1;
 	while (envp[++i])

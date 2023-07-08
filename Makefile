@@ -12,29 +12,32 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3 -lreadline
 RM = rm -rf
 
 SRCS_DIR = srcs/
-SRCS = main
+SRCS = main path_finder
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
 
-%.o: %.c
+LIBFT_DIR = libft
+LIBFT = libft.a
+
+%.o: %.c ./Makefile
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	make bonus -C ./libft
-	$(CC) $(CFLAGS) $^ -o $(NAME)
+	make bonus -C $(LIBFT_DIR)
+	$(CC) $(CFLAGS) $^ -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
 
 clean:
-	make clean -C ./libft
+	make clean -C $(LIBFT_DIR)
 	$(RM) $(OBJS) 
 
 fclean: clean
-	make fclean -C ./libft
+	make fclean -C $(LIBFT_DIR)
 	$(RM) $(NAME)
 
 re: fclean all

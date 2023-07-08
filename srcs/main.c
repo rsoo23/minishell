@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 14:21:47 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/04 16:55:10 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/09 00:25:39 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 // int ft_strlen(const char *s)
 // {
@@ -36,7 +36,7 @@
 //     return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 // }
 
-int	find_length(char *line)
+static int	find_length(char *line)
 {
 	int		i;
 	int		amount;
@@ -100,7 +100,7 @@ char    *remove_extra_spaces(char *line)
 // 	}
 // }
 
-int	command_exe(char *input, char **envp)
+static int	command_exe(char *input, char **envp)
 {
 	char	**temp;
 	char	*temp1;
@@ -124,8 +124,7 @@ int main(int ac, char **av, char **envp)
     (void)ac;
     (void)av;
     (void)envp;
-    char *temp;
-    char *input;
+    char	*input;
 
     printf("\nProgram started\n");
     printf("--------------------------------\n\n");
@@ -134,7 +133,6 @@ int main(int ac, char **av, char **envp)
         ft_strncmp(input, "stop", ft_strlen(input)) != 0)
     {
 		command_exe(input, envp);
-        free(temp);
         free(input);
         input = readline("minishell: ");
     }
