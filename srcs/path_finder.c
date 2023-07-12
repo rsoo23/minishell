@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   path_finder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 14:35:37 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/09 00:24:03 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/10 11:31:00 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 void	freeing_2darray(char **s)
 {
@@ -22,25 +22,20 @@ void	freeing_2darray(char **s)
 	free(s);
 }
 
-char	**getting_paths(char **envp)
+// finds the command path but not sure we need it or not for later as we could use functions that do the command like cd/pwd
+char    *merge_path(char *c)
 {
-	int	i = -1;
-	while (envp[++i])
-		if (!ft_strncmp("PATH=", envp[i], 5))
-			break ;
-	if (!envp[i])
-		return (NULL);
-	return (ft_split(envp[i], ':'));
-}
-
-char    *merge_path(char *c, char **envp)
-{
-    int i = 0;
+    int i;
     char *r_str;
-	char **paths = getting_paths(envp);
+	char **paths;
+
+	if (!c)
+		return (NULL);
+	paths = ft_split(getenv("PATH"), ':');
+	i = -1;
 	if (!paths || !*paths)
 		return (NULL);
-    while (paths[i])
+    while (paths[++i])
     {
         r_str = ft_strjoin(paths[i], c);
         if (!r_str)
@@ -49,7 +44,6 @@ char    *merge_path(char *c, char **envp)
             break ;
         free(r_str);
         r_str = NULL;
-        i++;
     }
 	free(c);
 	freeing_2darray(paths);
