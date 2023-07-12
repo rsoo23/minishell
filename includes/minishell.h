@@ -32,6 +32,14 @@
 # include <sys/wait.h>               // wait, waitpid, wait3, wait4
 # include <termios.h>                // tcsetattr, tcgetattr
 
+typedef struct s_tok
+{
+    int				index;
+	char			*s;	
+	struct  s_tok   *next;
+    struct  s_tok   *prev;
+}   t_tok;
+
 // path_finder.c
 char    *merge_path(char *c, char **envp);
 char    **getting_paths(char **envp);
