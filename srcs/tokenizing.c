@@ -6,97 +6,91 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/13 00:14:56 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/13 14:44:37 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	op_check(char *c)
+static t_tok	*get_token(char *s, int len, int tok_i)
 {
-	if ((*c == '>') || (*c == '<') || (*c == '>' && c[1] == '>'))
-		return (3);
-	else if (*c == '<' && c[1] == '<')
-		return (4);
-	else if (*c == '|')
-		return (6);
-	return (0);
+	char	*temp_tok_str;
+	int		i;
+
+	temp_tok_str = malloc(len + 1);
+	if (!temp_tok_str)
+		return (NULL);
+	i = -1;
+	while (++i < len)
+		temp_tok_str[i] = s[i];
+	temp_tok_str[i] = '\0';
+	return (init_token(temp_tok_str, tok_i));
 }
 
-void	tokenize(t_tok **list, char *s)
+static void	tokenize_word(t_tok_info *info, char *s)
 {
-	int	i;
-	int j;
-	int k;
+	int		len;
+	t_tok	*new_token;
 
-	i = -1;
-	j = 0;
-	k = 0;
+	len = 0;
+	while (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])
+	{
+		info->i++;
+		len++;
+	}
+	new_token = get_token(s + info->i - len, len, info->tok_i++);
+	add_token_to_back(&info->token_list, new_token);
+}
+
+static void	tokenize_meta_char(t_tok_info *info, char *s)
+{
+	int		len;
+	t_tok	*new_token;
+
+	len = 0;
+	while (is_meta_char(s[info->i]) && s[info->i])
+	{
+		info->i++;
+		len++;
+	}
+	new_token = get_token(s + info->i - len, len, info->tok_i++);
+	add_token_to_back(&info->token_list, new_token);
+}
+
+void	tokenize(t_tok_info *info, char *s)
+{
 	if (!s)
 		return ;
-	while (++i < (int)ft_strlen(s) + 1)
+	info->i = 0;
+	info->tok_i = 0;
+	info->token_list = NULL;
+	while (s[info->i])
 	{
-		if ((s[i] == 32 || s[i] == '\0') && k != 0)
-		{
-			c_addback(list, c_new(ft_strndup(s + (i - k), k), op_check(s + (i - k))));
-			k = 0;
-		}
-		else if (s[i] != 32)
-			k++;
+		while (is_wspace(s[info->i]) && s[info->i])
+			info->i++;
+		if (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])
+			tokenize_word(info, s);
+		while (is_wspace(s[info->i]) && s[info->i])
+			info->i++;
+		if (is_meta_char(s[info->i]) && s[info->i])
+			tokenize_meta_char(info, s);
 	}
 }
 
-void	create_token()
+void	print_tok(t_tok_info info)
 {
-	
-}
-
-void	tokenize(t_tok **tokens, char *s)
-{
-	char	*token;
-	int		token_len;
-
-	if ((!*s))
-		return ;
-	while (*s)
+	t_tok *temp = info.token_list;
+	while (temp)
 	{
-		while (is_wspace(*s))
-			s++;
-		create_token(tokens, s);	
-		add_token_to_back();
-		// len = 0;
-		// while (!is_wspace(*s))
-		// {
-		// 	s++;
-		// 	tok_len++;
-		// }
-		// token = malloc()
-	}
-}
-
-/*
-tokenizer
-1. receives string, ex: (  ls -la | grep files | wc -l  )
-2. while s[i]
-*/
-
-void	print_tok(t_tok *l)
-{
-	t_tok *temp = l;
-	while (temp->next)
-	{
-		printf("%s ", temp->line);
-		printf("%d\n", temp->type);
+		printf("%d: %s\n", temp->index, temp->str);
 		temp = temp->next;
 	}
-	
 }
 
 int main(int ac, char **av)
 {
 	(void)ac;
-	t_tok	*tokens;
-	tokenize(&tokens, av[1]);
-	print_tok(list);
-	return (0);
+	t_tok_info	info;
+	tokenize(&info, av[1]);
+	print_tok(info);
 }

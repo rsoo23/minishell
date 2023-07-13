@@ -35,14 +35,32 @@
 typedef struct s_tok
 {
     int				index;
-	char			*s;	
+	char			*str;	
 	struct  s_tok   *next;
     struct  s_tok   *prev;
 }   t_tok;
+
+typedef struct s_tok_info
+{
+	int		i;
+	int		tok_i;
+	t_tok	*token_list;
+}	t_tok_info;
 
 // path_finder.c
 char    *merge_path(char *c, char **envp);
 char    **getting_paths(char **envp);
 void	freeing_2darray(char **s);
+
+// token_list_utils_1.c
+t_tok	*init_token(char *temp_tok_str, int tok_i);
+t_tok	*last_token(t_tok *s);
+void	add_token_to_back(t_tok **c, t_tok *new);
+void	clear_tokens(t_tok **c);
+int		token_list_size(t_tok *c);
+
+// tokenizing_utils_1.c
+int		is_meta_char(char c);
+int		is_wspace(char c);
 
 #endif
