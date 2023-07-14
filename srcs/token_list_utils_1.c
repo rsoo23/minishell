@@ -6,12 +6,28 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/13 14:49:41 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/14 10:24:45 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/minishell.h"
+
+t_tok	*get_token(t_tok_info *info, char *s)
+{
+	char	*temp_tok_str;
+	char	*temp_str;
+	int		i;
+
+	temp_str = s + info->i - info->temp_word_len;
+	temp_tok_str = malloc(info->temp_word_len + 1);
+	if (!temp_tok_str)
+		return (NULL);
+	i = -1;
+	while (++i < info->temp_word_len)
+		temp_tok_str[i] = temp_str[i];
+	temp_tok_str[i] = '\0';
+	return (init_token(temp_tok_str, info->tok_i++));
+}
 
 t_tok	*init_token(char *temp_tok_str, int tok_i)
 {
@@ -55,36 +71,20 @@ void    add_token_to_back(t_tok **token_list, t_tok *new_token)
 	}
 }
 
-void    clear_tokens(t_tok **c)
+void    clear_tokens(t_tok **token_list)
 {
 	t_tok   *temp;
 
-	if (!c || !*c)
+	if (!token_list || !*token_list)
 		return ;
-	temp = *c;
-	while (*c)
+	temp = *token_list;
+	while (*token_list)
 	{
-		temp = *c;
-		*c = (*c)->next;
+		temp = *token_list;
+		*token_list = (*token_list)->next;
 		free(temp->str);
 		free(temp);
 	}
-	*c = NULL;
+	*token_list = NULL;
 }
 
-int token_list_size(t_tok *c)
-{
-	t_tok	*temp;
-	int			i;
-
-	if (!c)
-		return (0);
-	temp = c;
-	i = 0;
-	while (temp->next)
-	{
-		temp = temp->next;
-		i++;
-	}
-	return (i);
-}

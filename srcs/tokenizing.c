@@ -6,54 +6,48 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/13 14:44:37 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/14 10:23:05 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static t_tok	*get_token(char *s, int len, int tok_i)
-{
-	char	*temp_tok_str;
-	int		i;
+// single quote: ' (ascii: 39)
+// double quote: " (ascii: 34)
 
-	temp_tok_str = malloc(len + 1);
-	if (!temp_tok_str)
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		temp_tok_str[i] = s[i];
-	temp_tok_str[i] = '\0';
-	return (init_token(temp_tok_str, tok_i));
-}
-
+// 'Path' 
 static void	tokenize_word(t_tok_info *info, char *s)
 {
-	int		len;
 	t_tok	*new_token;
 
-	len = 0;
-	while (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])
+	info->temp_word_len = 0;
+	if (s[info->i] == 39)
+		read_single_quotes(info, s);
+	else if (s[info->i] == 34)
+		read_double_quotes(info, s);
+	else
 	{
-		info->i++;
-		len++;
+		while (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])
+		{
+			info->i++;
+			info->temp_word_len++;
+		}
 	}
-	new_token = get_token(s + info->i - len, len, info->tok_i++);
+	new_token = get_token(info, s);
 	add_token_to_back(&info->token_list, new_token);
 }
 
 static void	tokenize_meta_char(t_tok_info *info, char *s)
 {
-	int		len;
 	t_tok	*new_token;
 
-	len = 0;
+	info->temp_word_len = 0;
 	while (is_meta_char(s[info->i]) && s[info->i])
 	{
 		info->i++;
-		len++;
+		info->temp_word_len++;
 	}
-	new_token = get_token(s + info->i - len, len, info->tok_i++);
+	new_token = get_token(info, s);
 	add_token_to_back(&info->token_list, new_token);
 }
 
