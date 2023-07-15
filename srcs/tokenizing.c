@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/15 10:57:32 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/15 16:24:56 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,30 @@
 // double quote: " (ascii: 34)
 void	read_single_quotes(t_tok_info *info, char *s)
 {
+	// int	start_index;
+	// int	end_index;
+
+	// start_index = info->i++;
+	// printf("st: %d\n", start_index);
+	// while (s[info->i] != 39 && s[info->i])
+	// 	info->i++;
+	// end_index = info->i;
+	// printf("end: %d\n", info->i);
+	// if (info->literal_str)
+	// {
+	// 	free(info->literal_str);
+	// 	info->literal_str = NULL;
+	// }
+	// info->temp_word_len = end_index - start_index + 1;
+	// info->literal_str = ft_substr(s, start_index, info->temp_word_len);
+	// printf("lit: %s\n", info->literal_str);
+
+	// printf("reading single quotes\n");
 	info->i++;
 	info->temp_word_len++;
-	while (s[info->i] != 39)
+	while (s[info->i] != 39 && s[info->i])
 	{
+		printf("	%c\n", s[info->i]);
 		if (!s[info->i])
 		{
 			printf("single quotes not closed\n");
@@ -32,25 +52,25 @@ void	read_single_quotes(t_tok_info *info, char *s)
 	info->temp_word_len++;
 }
 
-// void	read_double_quotes(t_tok_info *info, char *s)
-// {
-// 	info->i++;
-// 	info->temp_word_len++;
-// 	while (s[info->i] != 34)
-// 	{
-// 		if (!s[info->i])
-// 		{
-// 			printf("double quotes not closed\n");
-// 			return ;
-// 		}
-// 		info->i++;
-// 		info->temp_word_len++;
-// 	}
-// 	info->i++;
-// 	info->temp_word_len++;
-// }
+void	read_double_quotes(t_tok_info *info, char *s)
+{
+	// printf("reading double quotes\n");
+	info->i++;
+	info->temp_word_len++;
+	while (s[info->i] != 34)
+	{
+		if (!s[info->i])
+		{
+			printf("double quotes not closed\n");
+			return ;
+		}
+		info->i++;
+		info->temp_word_len++;
+	}
+	info->i++;
+	info->temp_word_len++;
+}
 
-// 'Path' 
 static void	tokenize_word(t_tok_info *info, char *s)
 {
 	t_tok	*new_token;
@@ -58,8 +78,8 @@ static void	tokenize_word(t_tok_info *info, char *s)
 	info->temp_word_len = 0;
 	if (s[info->i] == 39)
 		read_single_quotes(info, s);
-	// else if (s[info->i] == 34)
-	// 	read_double_quotes(info, s);
+	else if (s[info->i] == 34)
+		read_double_quotes(info, s);
 	else
 	{
 		while (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])

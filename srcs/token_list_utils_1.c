@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/14 10:24:45 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/15 16:41:27 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,8 @@
 t_tok	*get_token(t_tok_info *info, char *s)
 {
 	char	*temp_tok_str;
-	char	*temp_str;
-	int		i;
 
-	temp_str = s + info->i - info->temp_word_len;
-	temp_tok_str = malloc(info->temp_word_len + 1);
-	if (!temp_tok_str)
-		return (NULL);
-	i = -1;
-	while (++i < info->temp_word_len)
-		temp_tok_str[i] = temp_str[i];
-	temp_tok_str[i] = '\0';
+	temp_tok_str = ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
 	return (init_token(temp_tok_str, info->tok_i++));
 }
 
