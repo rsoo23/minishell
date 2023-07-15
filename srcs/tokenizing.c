@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/14 10:23:05 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/15 10:57:32 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,41 @@
 
 // single quote: ' (ascii: 39)
 // double quote: " (ascii: 34)
+void	read_single_quotes(t_tok_info *info, char *s)
+{
+	info->i++;
+	info->temp_word_len++;
+	while (s[info->i] != 39)
+	{
+		if (!s[info->i])
+		{
+			printf("single quotes not closed\n");
+			return ;
+		}
+		info->i++;
+		info->temp_word_len++;
+	}
+	info->i++;
+	info->temp_word_len++;
+}
+
+// void	read_double_quotes(t_tok_info *info, char *s)
+// {
+// 	info->i++;
+// 	info->temp_word_len++;
+// 	while (s[info->i] != 34)
+// 	{
+// 		if (!s[info->i])
+// 		{
+// 			printf("double quotes not closed\n");
+// 			return ;
+// 		}
+// 		info->i++;
+// 		info->temp_word_len++;
+// 	}
+// 	info->i++;
+// 	info->temp_word_len++;
+// }
 
 // 'Path' 
 static void	tokenize_word(t_tok_info *info, char *s)
@@ -23,8 +58,8 @@ static void	tokenize_word(t_tok_info *info, char *s)
 	info->temp_word_len = 0;
 	if (s[info->i] == 39)
 		read_single_quotes(info, s);
-	else if (s[info->i] == 34)
-		read_double_quotes(info, s);
+	// else if (s[info->i] == 34)
+	// 	read_double_quotes(info, s);
 	else
 	{
 		while (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])

@@ -1,0 +1,18 @@
+Quotes
+    - detect any unclosed quotes
+
+Double Quotes Outside
+
+[x] "hello""hello": hellohello
+[x] "hello''hello": hello''hello
+
+----------------------------------------------
+Single Quotes Outside
+
+[x] 'hello''hello''hello': hellohellohello
+[x] 'hello"hello"hello': hello"hello"hello
+----------------------------------------------
+Mixed Quotes
+
+[x] "hello"'hello': hellohello
+[x] "hello"'hello''hello': hellohellohello
