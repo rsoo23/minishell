@@ -1,0 +1,56 @@
+
+Tokenizing Test Cases
+    - the indices are based on the index of the linked list
+
+Double Quotes Outside
+
+[x] "hello""hello": hellohello
+[x] "hello''hello": hello''hello
+
+----------------------------------------------
+Single Quotes Outside
+
+[x] 'hello''hello''hello': hellohellohello
+[x] 'hello"hello"hello': hello"hello"hello
+
+----------------------------------------------
+Mixed Quotes
+
+[x] "hello"'hello': hellohello
+[x] "hello"'hello''hello': hellohellohello
+
+----------------------------------------------
+Single Quotes + Meta Char
+
+[x] cat | '< infile | ls -la > outfile'
+    0: cat
+    1: |
+    2: '< infile | ls -la > outfile'
+
+
+[x] 'echo $USER hi'
+    0: echo $USER hi
+
+[x] echo 'hi $USER hi'
+    0: hi $USER hi
+----------------------------------------------
+Double Quotes + Meta Char (except $)
+
+[x] ls -la | "< infile | wc -w > outfile"
+    0: ls
+    1: -la
+    2: |
+    3: < infile | wc -w > outfile
+
+[x] echo "$USER"
+    0: echo
+    1: rsoo
+
+[x] "echo '$USER'"
+    0: echo
+    1: 'rsoo'
+
+----------------------------------------------
+
+
+----------------------------------------------

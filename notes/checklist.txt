@@ -28,7 +28,7 @@ Not handle meta-characters except for $
 7. [ ] Redirections
 < redirect input
 > redirect output
-<< heredoc (takes input from STDIN until delimiter) (doesn’t have to update history
+<< heredoc (takes input from STDIN until delimiter) (doesn’t have to update history)
 >> redirect output, append 
 
 8. [ ] Pipes

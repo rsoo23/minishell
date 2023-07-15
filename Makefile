@@ -16,7 +16,7 @@ CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3 -lreadline
 RM = rm -rf
 
 SRCS_DIR = srcs/
-SRCS = main path_finder
+SRCS = microshell path_finder tokenizing tokenizing_utils_1 token_list_utils_1
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
 
