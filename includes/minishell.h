@@ -50,9 +50,9 @@ typedef struct s_tok_info
 
 typedef struct s_cmd
 {
-	char			*infile_fd;
-	char			*outfile_fd;
 	char			**cmds;
+	char			*redirection;
+	char			*file_name;
 	char			*limiter;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
@@ -65,7 +65,7 @@ typedef struct s_main
 	char		**arr;
 	char		*user_input;
 	t_tok_info	tokens_info;
-	t_cmd		cmd_list;
+	t_cmd		*cmd_list;
 }	t_main;
 
 // path_finder.c
@@ -87,5 +87,11 @@ int		is_meta_char(char c);
 int		is_wspace(char c);
 void	read_single_quotes(t_tok_info *info, char *s);
 void	read_double_quotes(t_tok_info *info, char *s);
+
+// cmd_list_utils_1.c
+t_cmd	*init_cmd(void);
+t_cmd	*find_last_cmd(t_cmd *cmd_list);
+void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd);
+void	clear_cmds(t_cmd **cmd_list);
 
 #endif

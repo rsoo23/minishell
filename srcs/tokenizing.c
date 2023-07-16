@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/16 10:51:47 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/16 11:42:36 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,3 @@ void	tokenize(t_tok_info *info, char *s)
 			tokenize_meta_char(info, s);
 	}
 }
-
-// void	print_tok(t_tok_info info)
-// {
-// 	t_tok *temp = info.token_list;
-// 	while (temp)
-// 	{
-// 		printf("%d: %s\n", temp->index, temp->str);
-// 		temp = temp->next;
-// 	}
-// }
-
-// int main(int ac, char **av)
-// {
-// 	(void)ac;
-// 	t_tok_info	info;
-// 	tokenize(&info, av[1]);
-// 	print_tok(info);
-// }

@@ -1,0 +1,16 @@
+
+Parsing
+
+1. Search for <<, get limiter 
+2. Search for <, get infile_fd
+3. Search for > or >>, get outfile_fd
+
+Tests
+1. Only Pipes: cmd | cmd | cmd | ...
+
+2. Both < and >: cmd < infile.txt | cmd | ... | ... > outfile.txt
+grep "pattern" < input.txt | wc -l
+
+3. Both << and >>: cmd << limiter | cmd | ... | ... >> outfile.txt
+
+4. <>: receive input from file, output to STDOUT
