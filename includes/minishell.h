@@ -58,7 +58,6 @@ t_tok	*init_token(char *temp_tok_str, int tok_i);
 t_tok	*last_token(t_tok *s);
 void	add_token_to_back(t_tok **c, t_tok *new);
 void	clear_tokens(t_tok **c);
-t_tok	*get_token(t_tok_info *info, char *s);
 
 // tokenizing_utils_1.c
 int		is_meta_char(char c);

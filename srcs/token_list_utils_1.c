@@ -6,19 +6,11 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/15 16:41:27 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/16 10:49:41 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-t_tok	*get_token(t_tok_info *info, char *s)
-{
-	char	*temp_tok_str;
-
-	temp_tok_str = ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
-	return (init_token(temp_tok_str, info->tok_i++));
-}
 
 t_tok	*init_token(char *temp_tok_str, int tok_i)
 {
