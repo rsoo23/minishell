@@ -48,10 +48,33 @@ typedef struct s_tok_info
 	t_tok	*token_list;
 }	t_tok_info;
 
+typedef struct s_cmd
+{
+	char			*infile_fd;
+	char			*outfile_fd;
+	char			**cmds;
+	char			*limiter;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+}	t_cmd;
+
+typedef struct s_main
+{
+	char		*current_path;
+	char		*user_path;
+	char		**arr;
+	char		*user_input;
+	t_tok_info	tokens_info;
+	t_cmd		cmd_list;
+}	t_main;
+
 // path_finder.c
 char    *merge_path(char *c, char **envp);
 char    **getting_paths(char **envp);
 void	freeing_2darray(char **s);
+
+//tokenizing.c
+void	tokenize(t_tok_info *info, char *s);
 
 // token_list_utils_1.c
 t_tok	*init_token(char *temp_tok_str, int tok_i);
