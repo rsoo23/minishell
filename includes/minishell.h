@@ -17,7 +17,7 @@
 
 # include <errno.h>                  // perror
 # include <fcntl.h>                  // open
-// # include <limits.h>                 // PATH_MAX
+# include <limits.h>                 // PATH_MAX
 # include <stdlib.h>                 // malloc, free
 # include <stdio.h>                  // printf
 # include <string.h>                 // strerror
@@ -66,6 +66,7 @@ typedef struct s_main
 	char		*user_input;
 	t_tok_info	tokens_info;
 	t_cmd		*cmd_list;
+	char		**envp;
 }	t_main;
 
 // path_finder.c
