@@ -12,12 +12,12 @@
 
 #include "../includes/minishell.h"
 
-void	get_limiter(t_tok *token_list, t_cmd **cmd_list)
+void	get_limiter(t_tok **token_list, t_cmd **cmd_list)
 {
 	t_tok	*temp;
 	t_cmd	*new_cmd;
 
-	temp = token_list;
+	temp = *token_list;
 	while (temp)
 	{
 		if (ft_strncmp(temp->str, "<<", 2) == 0)
@@ -32,12 +32,15 @@ void	get_limiter(t_tok *token_list, t_cmd **cmd_list)
 			new_cmd->redirection = ft_strdup("<<");
 			new_cmd->limiter = ft_strjoin(temp->str, "\n");
 			add_cmd_to_back(cmd_list, new_cmd);
+			delete_token(token_list, "<<");
+			delete_token(token_list, new_cmd->limiter);
+			return ;
 		}
 		temp = temp->next;
 	}
 }
 
-void	get_file_name_and_redir(t_tok *token_list, t_cmd **cmd_list, char *redir)
+void	get_filename_and_redir(t_tok **token_list, t_cmd **cmd_list, char *redir)
 {
 	t_tok	*temp;
 	t_cmd	*new_cmd;
@@ -57,6 +60,9 @@ void	get_file_name_and_redir(t_tok *token_list, t_cmd **cmd_list, char *redir)
 			new_cmd->redirection = ft_strdup(redir);
 			new_cmd->file_name = ft_strdup(temp->str);
 			add_cmd_to_back(cmd_list, new_cmd);
+			delete_token(token_list, redir);
+			delete_token(token_list, new_cmd->file_name);
+			return ;
 		}
 		temp = temp->next;
 	}
@@ -64,10 +70,10 @@ void	get_file_name_and_redir(t_tok *token_list, t_cmd **cmd_list, char *redir)
 
 void	parsing(t_tok *token_list, t_cmd *cmd_list)
 {
-	get_limiter(token_list, &cmd_list);
-	get_file_name_and_redir(token_list, &cmd_list, "<");
-	get_file_name_and_redir(token_list, &cmd_list, ">");
-	get_file_name_and_redir(token_list, &cmd_list, ">>");
+	get_limiter(&token_list, &cmd_list);
+	get_filename_and_redir(&token_list, &cmd_list, "<");
+	get_filename_and_redir(&token_list, &cmd_list, ">");
+	get_filename_and_redir(&token_list, &cmd_list, ">>");
 }
 
 void	print_tok(t_tok_info info)

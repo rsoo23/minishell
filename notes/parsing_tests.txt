@@ -13,4 +13,9 @@ grep "pattern" < input.txt | wc -l
 
 3. Both << and >>: cmd << limiter | cmd | ... | ... >> outfile.txt
 
+    - << limiter
+    - cmd << limiter
+    - cmd << limiter >> outfile
+    - cmd << limiter | cmd >> outfile
+
 4. <>: receive input from file, output to STDOUT

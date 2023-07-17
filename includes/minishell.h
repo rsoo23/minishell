@@ -78,9 +78,10 @@ void	tokenize(t_tok_info *info, char *s);
 
 // token_list_utils_1.c
 t_tok	*init_token(char *temp_tok_str, int tok_i);
-t_tok	*last_token(t_tok *s);
-void	add_token_to_back(t_tok **c, t_tok *new);
-void	clear_tokens(t_tok **c);
+t_tok	*last_token(t_tok *token_list);
+void	add_token_to_back(t_tok **token_list, t_tok *new_token);
+void	delete_all_tokens(t_tok **token_list);
+void	delete_token(t_tok **token_list, char *content);
 
 // tokenizing_utils_1.c
 int		is_meta_char(char c);
