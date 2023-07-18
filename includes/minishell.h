@@ -69,6 +69,9 @@ typedef struct s_main
 	char		**envp;
 }	t_main;
 
+// main.c
+int		array2d_y(char **a);
+
 // path_finder.c
 char    *merge_path(char *c, char **envp);
 char    **getting_paths(char **envp);
@@ -90,10 +93,16 @@ int		is_wspace(char c);
 void	read_single_quotes(t_tok_info *info, char *s);
 void	read_double_quotes(t_tok_info *info, char *s);
 
+// parsing.c
+void	parsing(t_tok **token_list, t_cmd **cmd_list);
+
+// parsing_utils_1.c
+char	**append_cmds(char **cmds, char *str);
+
 // cmd_list_utils_1.c
 t_cmd	*init_cmd(void);
 t_cmd	*find_last_cmd(t_cmd *cmd_list);
 void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd);
-void	clear_cmds(t_cmd **cmd_list);
+// void	clear_cmds(t_cmd **cmd_list);
 
 #endif
