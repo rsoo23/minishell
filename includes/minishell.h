@@ -99,8 +99,6 @@ t_cmd	*find_last_cmd(t_cmd *cmd_list);
 void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd);
 void	clear_cmds(t_cmd **cmd_list);
 
-
-
 // printing_msg.c
 int		finishing_up(void);
 void	print_welcome(void);
