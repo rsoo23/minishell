@@ -69,10 +69,7 @@ typedef struct s_main
 	char		**envp;
 }	t_main;
 
-// path_finder.c
-char    *merge_path(char *c, char **envp);
-char    **getting_paths(char **envp);
-void	freeing_2darray(char **s);
+extern t_main	g_main;
 
 //tokenizing.c
 void	tokenize(t_tok_info *info, char *s);
@@ -95,5 +92,37 @@ t_cmd	*init_cmd(void);
 t_cmd	*find_last_cmd(t_cmd *cmd_list);
 void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd);
 void	clear_cmds(t_cmd **cmd_list);
+
+
+
+// printing_msg.c
+int		finishing_up(void);
+void	print_welcome(void);
+
+// envp_func.c
+char	*shell_getenv(char *s);
+void	add_to_envp(char *s);
+void	remove_envp(char *s);
+void	unset_envp(char *s);
+char	**envp_dup(char **envp);
+
+// builtins.c
+int		changing_dir(char **arr);
+void	shell_echo(char **a);
+
+// cmd_exec.c
+int		create_child(char **envp);
+
+// shell_utils1.c
+char	*shell_strjoin(char const *s1, char *s2, char const *s3, int num);
+char	*name_finder(char *s);
+char	**array_append(char **a, char *line);
+int		array2d_y(char **a);
+
+// shell_utils2.c
+int		find_char(char *s, char c);
+void	print_envp(void);
+void	freeing_2darray(char **s);
+char	*merge_path(char *c);
 
 #endif
