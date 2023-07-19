@@ -6,16 +6,30 @@ Parsing
 3. Search for > or >>, get outfile_fd
 
 Tests
-1. Only Pipes: cmd | cmd | cmd | ...
+1. Simple commands
+    - [x] echo
+    - [x] echo -n
+    - [x] ls -l -a -h
+    - [x] cd ../Documents/Core
 
-2. Both < and >: cmd < infile.txt | cmd | ... | ... > outfile.txt
-grep "pattern" < input.txt | wc -l
+2. Only Pipes: cmd | cmd | cmd | ...
+    - [x] ls -la | wc -w 
+    - [x] ls -la | wc -w | cat | cat 
 
-3. Both << and >>: cmd << limiter | cmd | ... | ... >> outfile.txt
+3. Both < and >: cmd < infile.txt | cmd | ... | ... > outfile.txt
+    - [x] ls -la > outfile.txt
+    - [ ] cat > outfile.txt -e
+    - [x] sort < infile.txt
+    - [x] sort < infile.txt | ls -l 
+    - [x] sort < infile.txt | ls -l | cat 
+    - [x] grep hi < infile.txt | ls -l | cat > outfile.txt
 
-    - << limiter
-    - cmd << limiter
-    - cmd << limiter >> outfile
-    - cmd << limiter | cmd >> outfile
+4. Both << and >>: cmd << limiter | cmd | ... | ... >> outfile.txt
+    - [x] ls -la >> outfile
+    - [x] << limiter
+    - [x] cmd << limiter
+    - [x] cmd << limiter >> outfile
+    - [x] cmd << limiter | cmd >> outfile
 
-4. <>: receive input from file, output to STDOUT
+5. <>: receive input from file, output to STDOUT
+    - [x] wc -wl <> main.c

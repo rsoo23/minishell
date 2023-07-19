@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/19 10:37:27 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/19 10:42:16 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,11 @@ int	main(int ac, char **av, char **envp)
 		if (!g_main.user_input)
 			break ;
 		add_history(g_main.user_input);
+		// added:
+		tokenize(&g_main.tokens_info, g_main.user_input);
+		parsing(&g_main.tokens_info.token_list, &g_main.cmd_list);
+		delete_all_tokens(&g_main.tokens_info.token_list);
+		//
 		in = parsing(g_main.user_input, envp);
 		free(g_main.user_input);
 	}

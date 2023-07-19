@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/17 11:35:20 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/17 15:50:44 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,9 @@ void	delete_token(t_tok **token_list, char *content)
 	if (!token_list || !*token_list)
 		return ;
 	temp = *token_list;
-	while (*token_list)
+	while (temp)
 	{
-		temp = *token_list;
-		if (!ft_strncmp(temp->str, content, 2))
+		if (!ft_strncmp(temp->str, content, ft_strlen(content)))
 		{
 			if (temp->next)
 				temp->next->prev = temp->prev;
@@ -93,7 +92,7 @@ void	delete_token(t_tok **token_list, char *content)
 			free(temp);
 			return ;
 		}
-		(*token_list) = (*token_list)->next;
+		temp = temp->next;
 	}
 }
 

@@ -87,6 +87,12 @@ int		is_wspace(char c);
 void	read_single_quotes(t_tok_info *info, char *s);
 void	read_double_quotes(t_tok_info *info, char *s);
 
+// parsing.c
+void	parsing(t_tok **token_list, t_cmd **cmd_list);
+
+// parsing_utils_1.c
+char	**append_cmds(char **cmds, char *str);
+
 // cmd_list_utils_1.c
 t_cmd	*init_cmd(void);
 t_cmd	*find_last_cmd(t_cmd *cmd_list);
@@ -124,5 +130,6 @@ int		find_char(char *s, char c);
 void	print_envp(void);
 void	freeing_2darray(char **s);
 char	*merge_path(char *c);
+// void	clear_cmds(t_cmd **cmd_list);
 
 #endif
