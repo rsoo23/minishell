@@ -12,7 +12,9 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3 -lreadline
+CFLAGS = -Wall -Werror -Wextra -lreadline
+CSAN = -fsanitize=address -g3
+RDLINE = -L /usr/local/Cellar/readline/8.2.1/lib -I /usr/local/Cellar/readline/8.2.1/include -lreadline
 RM = rm -rf
 
 SRCS_DIR = srcs/
@@ -24,13 +26,13 @@ LIBFT_DIR = libft
 LIBFT = libft.a
 
 %.o: %.c ./Makefile
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(CSAN) $(RDLINE) -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	make bonus -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $^ -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
+	$(CC) $(CFLAGS) $(CSAN) $(RDLINE) $^ -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
 
 clean:
 	make clean -C $(LIBFT_DIR)

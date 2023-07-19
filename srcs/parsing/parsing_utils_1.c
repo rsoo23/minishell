@@ -10,17 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-int	array2d_y(char **a)
-{
-	int	i;
-
-	i = 0;
-	while (a[i])
-		i++;
-	return (i);
-}
+#include "../../includes/minishell.h"
 
 // theres one in shell_utils1.c
 char	**append_cmds(char **cmds, char *str)
@@ -47,4 +37,44 @@ char	**append_cmds(char **cmds, char *str)
     temp_cmds[i] = NULL;
     free(cmds);
     return (temp_cmds);
+}
+
+int get_num_of_cmds(t_cmd *cmd_list)
+{
+    int num_of_cmds;
+
+    num_of_cmds = 0;
+    while (cmd_list)
+	{
+		if (cmd_list->cmds)
+			num_of_cmds++;
+		cmd_list = cmd_list->next;
+	}
+    return (num_of_cmds);
+}
+
+int	is_input_redir(char *redir)
+{
+	int	redir_len;
+
+	redir_len = ft_strlen(redir);
+	if (!ft_strncmp(redir, "<", redir_len))
+		return (1);	
+	else if (!ft_strncmp(redir, "<<", redir_len))
+		return (1);	
+	else if (!ft_strncmp(redir, "<>", redir_len))
+		return (1);
+	return (0);
+}
+
+int	is_output_redir(char *redir)
+{
+	int	redir_len;
+
+	redir_len = ft_strlen(redir);
+	if (!ft_strncmp(redir, ">", redir_len))
+		return (1);	
+	else if (!ft_strncmp(redir, ">>", redir_len))
+		return (1);	
+	return (0);
 }

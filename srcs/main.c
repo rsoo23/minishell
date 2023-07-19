@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/19 10:42:16 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/19 22:19:06 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,26 @@ int	parsing(char *s, char **envp)
 	freeing_2darray(g_main.arr);
 	g_main.arr = NULL;
 	return (0);
+}
+
+int	execute(t_cmd *cmd_list)
+{
+	t_cmd	*temp;
+
+	temp = cmd_list;
+	while (temp)
+	{
+		if (is_input_redir(temp->redirection))
+			handle_input_redir();
+		else if (is_output_redir(temp->redirection))
+			handle_output_redir();
+		else if (temp->cmds)
+		{
+			execute_builtins();
+			execute_cmds();
+		}
+		temp = temp->next;
+	}
 }
 
 // de init function first duplicates the envp and saves it to a 2d char array
@@ -105,8 +125,9 @@ int	main(int ac, char **av, char **envp)
 		add_history(g_main.user_input);
 		// added:
 		tokenize(&g_main.tokens_info, g_main.user_input);
-		parsing(&g_main.tokens_info.token_list, &g_main.cmd_list);
+		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		delete_all_tokens(&g_main.tokens_info.token_list);
+		execute(g_main.cmd_list);
 		//
 		in = parsing(g_main.user_input, envp);
 		free(g_main.user_input);

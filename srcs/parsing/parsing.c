@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	get_limiter(t_tok **token_list, t_cmd **cmd_list)
 {
@@ -89,6 +89,43 @@ void	get_cmds(t_tok **token_list, t_cmd **cmd_list)
 	}
 }
 
+void	malloc_pipes(t_cmd **cmd_list)
+{
+	t_cmd	*temp;
+	int		num_of_cmds;
+
+	temp = *cmd_list;
+	num_of_cmds = get_num_of_cmds(*cmd_list);
+	while (temp)
+	{
+		if (temp->cmds)
+		{
+			temp->fd_table.pipe = malloc((num_of_cmds - 1) * sizeof(int *));
+			if (!temp->fd_table.pipe)
+				return ;
+		}
+		temp = temp->next;
+	}
+}
+
+// first phase: get / arrange all tokens into the cmd_list
+// second phase: initialize heredoc pipe + pipes
+
+// CMD_LIST:
+//       [< main.c] [>> outfile] [cmd1]       [cmd2]       [cmd3]
+// IN  |                         fd_in        pipe[0][0]   pipe[1][0] 
+// OUT |                         pipe[0][1]   pipe[1][1]   fd_out
+void	parse(t_tok **token_list, t_cmd **cmd_list)
+{
+	get_limiter(token_list, cmd_list);
+	get_redir_and_filename(token_list, cmd_list, "<");
+	get_redir_and_filename(token_list, cmd_list, "<>");
+	get_redir_and_filename(token_list, cmd_list, ">");
+	get_redir_and_filename(token_list, cmd_list, ">>");
+	get_cmds(token_list, cmd_list);
+	malloc_pipes(cmd_list);
+}
+
 // void	print_tok(t_tok *token_list)
 // {
 // 	t_tok *temp = token_list;
@@ -99,16 +136,6 @@ void	get_cmds(t_tok **token_list, t_cmd **cmd_list)
 // 	}
 // 	printf("\n");
 // }
-
-void	parsing(t_tok **token_list, t_cmd **cmd_list)
-{
-	get_limiter(token_list, cmd_list);
-	get_redir_and_filename(token_list, cmd_list, "<");
-	get_redir_and_filename(token_list, cmd_list, "<>");
-	get_cmds(token_list, cmd_list);
-	get_redir_and_filename(token_list, cmd_list, ">");
-	get_redir_and_filename(token_list, cmd_list, ">>");
-}
 
 // void	print_cmd_list(t_cmd *cmd_list)
 // {

@@ -48,12 +48,21 @@ typedef struct s_tok_info
 	t_tok	*token_list;
 }	t_tok_info;
 
+typedef struct s_fd
+{
+	int	*pipe[2];
+	int	infile_fd;
+	int	outfile_fd;
+	int	heredoc_pipe[2];
+}	t_fd;
+
 typedef struct s_cmd
 {
 	char			**cmds;
 	char			*redirection;
 	char			*file_name;
 	char			*limiter;
+	t_fd			fd_table;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
@@ -88,7 +97,7 @@ void	read_single_quotes(t_tok_info *info, char *s);
 void	read_double_quotes(t_tok_info *info, char *s);
 
 // parsing.c
-void	parsing(t_tok **token_list, t_cmd **cmd_list);
+void	parse(t_tok **token_list, t_cmd **cmd_list);
 
 // parsing_utils_1.c
 char	**append_cmds(char **cmds, char *str);

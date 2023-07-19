@@ -33,3 +33,26 @@ Tests
 
 5. <>: receive input from file, output to STDOUT
     - [x] wc -wl <> main.c
+
+ls -la << stop | wc -w >> outfile
+tokenizer:
+ls
+-la
+<<
+stop
+|
+wc 
+-w
+>>
+outfile
+
+parse:
+[<< stop]
+[ls -la]
+[wc -w]
+[>> outfile]
+
+[<< stop]
+[>> outfile]
+[ls -la]
+[wc -w]
