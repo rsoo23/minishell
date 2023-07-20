@@ -6,71 +6,13 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/19 22:19:06 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/20 10:09:11 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 t_main	g_main;
-
-// temp parser
-// it first splits the input by space then checks for the first 
-// element in the array to see if its a built in function
-// else it tries to run it with execve with the create_child function
-int	parsing(char *s, char **envp)
-{
-	int		len;
-	char	**arr;
-
-	if (!s)
-		return (0);
-	arr = ft_split(s, ' ');
-	len = ft_strlen(arr[0]) + 1;
-	g_main.arr = arr;
-	if (!arr)
-		return (0);
-	if (arr[0] && !ft_strncmp(arr[0], "cd", len))
-		changing_dir(arr);
-	else if (arr[0] && !ft_strncmp(arr[0], "pwd", len))
-		printf("%s\n", g_main.current_path);
-	else if (arr[0] && !ft_strncmp(arr[0], "exit", len) && array2d_y(arr) == 1)
-		return (1);
-	else if (arr[0] && !ft_strncmp(arr[0], "export", len))
-		add_to_envp(arr[1]);
-	else if (arr[0] && !ft_strncmp(arr[0], "unset", len)
-		&& array2d_y(arr) == 2)
-		remove_envp(arr[1]);
-	else if (arr[0] && !ft_strncmp(arr[0], "env", len))
-		print_envp();
-	else if (arr[0] && !ft_strncmp(arr[0], "echo", len))
-		shell_echo(arr);
-	else if (arr[0])
-		create_child(envp);
-	freeing_2darray(g_main.arr);
-	g_main.arr = NULL;
-	return (0);
-}
-
-int	execute(t_cmd *cmd_list)
-{
-	t_cmd	*temp;
-
-	temp = cmd_list;
-	while (temp)
-	{
-		if (is_input_redir(temp->redirection))
-			handle_input_redir();
-		else if (is_output_redir(temp->redirection))
-			handle_output_redir();
-		else if (temp->cmds)
-		{
-			execute_builtins();
-			execute_cmds();
-		}
-		temp = temp->next;
-	}
-}
 
 // de init function first duplicates the envp and saves it to a 2d char array
 // den we just get the pointer that points to the PWD and the HOME 
@@ -123,13 +65,10 @@ int	main(int ac, char **av, char **envp)
 		if (!g_main.user_input)
 			break ;
 		add_history(g_main.user_input);
-		// added:
 		tokenize(&g_main.tokens_info, g_main.user_input);
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		delete_all_tokens(&g_main.tokens_info.token_list);
 		execute(g_main.cmd_list);
-		//
-		in = parsing(g_main.user_input, envp);
 		free(g_main.user_input);
 	}
 	return (finishing_up());

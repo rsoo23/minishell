@@ -89,22 +89,25 @@ void	get_cmds(t_tok **token_list, t_cmd **cmd_list)
 	}
 }
 
-void	malloc_pipes(t_cmd **cmd_list)
+void	init_pipes(t_cmd *cmd_list)
 {
-	t_cmd	*temp;
-	int		num_of_cmds;
+	int	num_of_cmds;
+	int	i;
 
-	temp = *cmd_list;
-	num_of_cmds = get_num_of_cmds(*cmd_list);
-	while (temp)
+	num_of_cmds = get_num_of_cmds(cmd_list);
+	i = -1;
+	while (cmd_list)
 	{
-		if (temp->cmds)
+		if (cmd_list->cmds)
 		{
-			temp->fd_table.pipe = malloc((num_of_cmds - 1) * sizeof(int *));
-			if (!temp->fd_table.pipe)
+			cmd_list->fd_table.pipe = malloc((num_of_cmds - 1) * sizeof(int *));
+			if (!cmd_list->fd_table.pipe)
 				return ;
+			while (++i < num_of_cmds)
+				if (pipe(cmd_list->fd_table.pipe[i]) == -1)
+					return ;
 		}
-		temp = temp->next;
+		cmd_list = cmd_list->next;
 	}
 }
 
@@ -123,7 +126,9 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 	get_redir_and_filename(token_list, cmd_list, ">");
 	get_redir_and_filename(token_list, cmd_list, ">>");
 	get_cmds(token_list, cmd_list);
-	malloc_pipes(cmd_list);
+	init_pipes(*cmd_list);
+	assign_infile_fd(*cmd_list);
+	assign_outfile_fd(*cmd_list);
 }
 
 // void	print_tok(t_tok *token_list)

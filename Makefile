@@ -18,7 +18,7 @@ RDLINE = -L /usr/local/Cellar/readline/8.2.1/lib -I /usr/local/Cellar/readline/8
 RM = rm -rf
 
 SRCS_DIR = srcs/
-SRCS = main builtins cmd_exec envp_func printing_msg shell_utils_1 shell_utils_2 tokenizing/tokenizing tokenizing/tokenizing_utils_1 tokenizing/token_list_utils_1 parsing/parsing parsing/parsing_utils_1 parsing/cmd_list_utils_1
+SRCS = main builtins envp_func printing_msg shell_utils_1 shell_utils_2 tokenizing/tokenizing tokenizing/tokenizing_utils_1 tokenizing/token_list_utils_1 parsing/parsing parsing/parsing_utils_1 parsing/parsing_utils_2 parsing/cmd_list_utils_1 executing/executing.c
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
 

@@ -53,28 +53,51 @@ int get_num_of_cmds(t_cmd *cmd_list)
     return (num_of_cmds);
 }
 
-int	is_input_redir(char *redir)
+// finds the node with < or <> then opens the file to get the fd
+// then finds the first cmd node and assigns in the fd to the cmd's infile_fd
+void	assign_infile_fd(t_cmd *cmd_list)
 {
-	int	redir_len;
+	int	fd;
 
-	redir_len = ft_strlen(redir);
-	if (!ft_strncmp(redir, "<", redir_len))
-		return (1);	
-	else if (!ft_strncmp(redir, "<<", redir_len))
-		return (1);	
-	else if (!ft_strncmp(redir, "<>", redir_len))
-		return (1);
-	return (0);
+	fd = 0;
+	while (cmd_list)
+	{
+		if (is_input_redir(cmd_list->redirection))
+		{
+			fd = open(cmd_list->file_name, O_RDONLY);
+			if (fd < 0)
+				return ;
+		}
+		else if (cmd_list->cmds)
+			cmd_list->fd_table.infile_fd = fd;
+		cmd_list = cmd_list->next;
+	}
 }
 
-int	is_output_redir(char *redir)
+// is_output_redir: 
+// if > then return 1,
+// if >> then return 2
+void	assign_outfile_fd(t_cmd *cmd_list)
 {
-	int	redir_len;
+	int	fd;
 
-	redir_len = ft_strlen(redir);
-	if (!ft_strncmp(redir, ">", redir_len))
-		return (1);	
-	else if (!ft_strncmp(redir, ">>", redir_len))
-		return (1);	
-	return (0);
+	fd = 1;
+	while (cmd_list)
+	{
+		if (is_output_redir(cmd_list->redirection) == 1)
+		{
+			fd = open(cmd_list->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+			if (fd < 0)
+				return ;
+		}
+		else if (is_output_redir(cmd_list->redirection) == 2)
+		{
+			fd = open(cmd_list->file_name, O_CREAT | O_WRONLY | O_APPEND, 0666);
+			if (fd < 0)
+				return ;
+		}
+		else if (cmd_list->cmds && !cmd_list->next)
+			cmd_list->fd_table.outfile_fd = fd;
+		cmd_list = cmd_list->next;
+	}
 }

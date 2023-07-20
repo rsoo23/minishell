@@ -51,7 +51,7 @@ char	*merge_path(char *c)
 
 	if (!c)
 		return (NULL);
-	paths = ft_split(getenv("PATH"), ':');
+	paths = ft_split(shell_getenv("PATH"), ':');
 	i = -1;
 	if (!paths || !*paths)
 		return (NULL);

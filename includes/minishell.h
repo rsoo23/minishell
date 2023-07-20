@@ -71,7 +71,6 @@ typedef struct s_main
 {
 	char		*current_path;
 	char		*user_path;
-	char		**arr;
 	char		*user_input;
 	t_tok_info	tokens_info;
 	t_cmd		*cmd_list;
@@ -101,12 +100,22 @@ void	parse(t_tok **token_list, t_cmd **cmd_list);
 
 // parsing_utils_1.c
 char	**append_cmds(char **cmds, char *str);
+int		get_num_of_cmds(t_cmd *cmd_list);
+void	assign_infile_fd(t_cmd *cmd_list);
+void	assign_outfile_fd(t_cmd *cmd_list);
+
+// parsing_utils_2.c
+int		is_input_redir(char *redir);
+int		is_output_redir(char *redir);
 
 // cmd_list_utils_1.c
 t_cmd	*init_cmd(void);
 t_cmd	*find_last_cmd(t_cmd *cmd_list);
 void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd);
 void	clear_cmds(t_cmd **cmd_list);
+
+// executing.c
+int		execute(t_cmd *cmd_list);
 
 // printing_msg.c
 int		finishing_up(void);
