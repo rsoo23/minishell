@@ -48,21 +48,16 @@ typedef struct s_tok_info
 	t_tok	*token_list;
 }	t_tok_info;
 
-typedef struct s_fd
-{
-	int	*pipe[2];
-	int	infile_fd;
-	int	outfile_fd;
-	int	heredoc_pipe[2];
-}	t_fd;
-
 typedef struct s_cmd
 {
-	char			**cmds;
-	char			*redirection;
-	char			*file_name;
-	char			*limiter;
-	t_fd			fd_table;
+	char	**cmds;
+	char	*redirection;
+	char	*file_name;
+	char	*limiter;
+	int		pipe[2];
+	int		infile_fd;
+	int		outfile_fd;
+	int		heredoc_pipe[2];
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
@@ -72,6 +67,7 @@ typedef struct s_main
 	char		*current_path;
 	char		*user_path;
 	char		*user_input;
+	int			num_of_cmds;
 	t_tok_info	tokens_info;
 	t_cmd		*cmd_list;
 	char		**envp;

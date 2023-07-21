@@ -57,11 +57,12 @@ void	execute_cmd(char **cmd_arr)
 
 void	child_process(t_cmd cmd, int i)
 {
-	close(cmd.fd_table.pipe[i][0]);
-	if (dup2(cmd.fd_table.infile_fd, STDIN_FILENO) == -1)
-		return ;
-	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-		return ;
+	if (i == 0)
+		infile_to_pipe(&cmd);
+	else if (i + 1 == g_main.num_of_cmds)
+		pipe_to_outfile(&cmd);
+	else
+		pipe_to_pipe(&cmd);
 	execute_builtin(cmd.cmds);
 	execute_cmd(cmd.cmds);
 }

@@ -69,7 +69,7 @@ void	assign_infile_fd(t_cmd *cmd_list)
 				return ;
 		}
 		else if (cmd_list->cmds)
-			cmd_list->fd_table.infile_fd = fd;
+			cmd_list->infile_fd = fd;
 		cmd_list = cmd_list->next;
 	}
 }

@@ -5,6 +5,8 @@ Parsing
 2. Search for <, get infile_fd
 3. Search for > or >>, get outfile_fd
 
+Current Format: [input redir] [output redir] [cmd1] [|] ...
+
 Tests
 1. Simple commands
     - [x] echo
@@ -12,19 +14,22 @@ Tests
     - [x] ls -l -a -h
     - [x] cd ../Documents/Core
 
-2. Only Pipes: cmd | cmd | cmd | ...
+2. Only Pipes:
     - [x] ls -la | wc -w 
     - [x] ls -la | wc -w | cat | cat 
 
-3. Both < and >: cmd < infile.txt | cmd | ... | ... > outfile.txt
+3. Both < and >:
     - [x] ls -la > outfile.txt
     - [ ] cat > outfile.txt -e
+        - parsing: [cat -e] [> outfile.txt]
+    - [ ] cat < infile.txt -e
+        - parsing: [< infile.txt] [cat -e]
     - [x] sort < infile.txt
     - [x] sort < infile.txt | ls -l 
     - [x] sort < infile.txt | ls -l | cat 
     - [x] grep hi < infile.txt | ls -l | cat > outfile.txt
 
-4. Both << and >>: cmd << limiter | cmd | ... | ... >> outfile.txt
+4. Both << and >>:
     - [x] ls -la >> outfile
     - [x] << limiter
     - [x] cmd << limiter
@@ -34,25 +39,38 @@ Tests
 5. <>: receive input from file, output to STDOUT
     - [x] wc -wl <> main.c
 
-ls -la << stop | wc -w >> outfile
-tokenizer:
-ls
--la
-<<
-stop
-|
-wc 
--w
->>
-outfile
+6. Multiple + Mixed Input Redir 
+    - [ ] wc -w << stop << hi ..
+        - last heredoc takes precedence for wc -w
+        - prev heredocs still execute
+        - parsing: [<< stop] [hd |] [<< hi] [hd |] [wc -w]
 
-parse:
-[<< stop]
-[ls -la]
-[wc -w]
-[>> outfile]
+    - [ ] wc -w << stop | wc -w << hi
+        - parsing: [<< stop] [hd |] [wc -w] [|] [<< hi] [hd |] [wc -w]
+    
+    - [ ] wc -w << stop < srcs/main.c
+        - < takes precedence for wc -w but heredoc still works
+        - parsing: [<< stop] [hd |] [< srcs/main.c] [wc -w]
 
-[<< stop]
-[>> outfile]
-[ls -la]
-[wc -w]
+    - [ ] wc -w << stop < srcs/main.c << hi
+        - 1st heredoc works, 2nd heredoc takes precedence and inputs to wc -w
+        - parsing: [<< stop] [hd |] [< srcs/main.c] [<< hi] [hd |] [wc -w]
+
+    - [ ] wc -w < srcs/main.c << stop
+        - heredoc takes precedence
+        - parsing: [< srcs/main.c] [<< stop] [hd |] [wc -w]
+
+    - Notes:
+        - rearrange the cmd infront of heredoc behind last output redir
+
+7. Multiple > / >>
+    - [ ] wc -w < srcs/main.c >a >b >c
+        - a, b and c gets created if do not exist
+        - only c gets the output
+
+    - [ ] wc -w < srcs/main.c > hi | << stop
+
+ 
+Special:
+    - [ ] wc -w << stop << boom << hi |
+        - pipe left hanging, waits for input of cmd to read from pipe
