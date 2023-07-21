@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/20 10:09:11 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/21 11:00:57 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,18 @@ void	sig_handler(int signum)
 	rl_redisplay();
 }
 
+// this is for later when we have an executor ready
+// set signal as default first
+// then only create child
+// then at wait pid area you set the signal to sig_handler_child
+void	sig_handler_child(int signum)
+{
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	return ;
+}
+
 // the main where we initialize the g_main variable and print the welcome msg
 // the while loop inside is checking if the return value of the parsing func
 // to see if the user inputed "exit" and will stop the loop when the user does
@@ -54,11 +66,11 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	main_init(envp);
 	in = 0;
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
 	print_welcome();
 	while (!in)
 	{
+		signal(SIGINT, sig_handler);
+		signal(SIGQUIT, sig_handler);
 		temp = name_finder(g_main.current_path);
 		g_main.user_input = readline(temp);
 		free(temp);
@@ -70,6 +82,8 @@ int	main(int ac, char **av, char **envp)
 		delete_all_tokens(&g_main.tokens_info.token_list);
 		execute(g_main.cmd_list);
 		free(g_main.user_input);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 	}
 	return (finishing_up());
 }
