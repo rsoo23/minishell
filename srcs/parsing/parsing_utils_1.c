@@ -12,6 +12,17 @@
 
 #include "../../includes/minishell.h"
 
+// finds the Y axis of a char 2d array
+int	array2d_y(char **a)
+{
+	int	i;
+
+	i = 0;
+	while (a[i])
+		i++;
+	return (i);
+}
+
 // theres one in shell_utils1.c
 char	**append_cmds(char **cmds, char *str)
 {
@@ -97,7 +108,7 @@ void	assign_outfile_fd(t_cmd *cmd_list)
 				return ;
 		}
 		else if (cmd_list->cmds && !cmd_list->next)
-			cmd_list->fd_table.outfile_fd = fd;
+			cmd_list->outfile_fd = fd;
 		cmd_list = cmd_list->next;
 	}
 }

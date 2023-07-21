@@ -12,63 +12,22 @@
 
 #include "../../includes/minishell.h"
 
-void	get_limiter(t_tok **token_list, t_cmd **cmd_list)
+void	get_redir_and_filename(t_cmd **cmd_list, char *redir, char *file_name)
 {
-	t_tok	*temp;
 	t_cmd	*new_cmd;
 
-	temp = *token_list;
-	while (temp)
+	if (!file_name)
 	{
-		if (ft_strncmp(temp->str, "<<", 2) == 0)
-		{
-			temp = temp->next;
-			if (!temp)
-			{
-				printf("<< error");
-				return ;
-			}
-			new_cmd = init_cmd();
-			new_cmd->redirection = ft_strdup("<<");
-			new_cmd->limiter = ft_strjoin(temp->str, "\n");
-			add_cmd_to_back(cmd_list, new_cmd);
-			delete_token(token_list, "<<");
-			delete_token(token_list, temp->str);
-			return ;
-		}
-		temp = temp->next;
+		printf("%s\n", ft_strjoin(redir, " error\n"));
+		return ;
 	}
+	new_cmd = init_cmd();
+	new_cmd->redirection = ft_strdup(redir);
+	new_cmd->file_name = ft_strdup(file_name);
+	add_cmd_to_back(cmd_list, new_cmd);
 }
 
-void	get_redir_and_filename(t_tok **token_list, t_cmd **cmd_list, char *redir)
-{
-	t_tok	*temp;
-	t_cmd	*new_cmd;
-
-	temp = *token_list;
-	while (temp)
-	{
-		if (ft_strncmp(temp->str, redir, ft_strlen(temp->str)) == 0)
-		{
-			temp = temp->next;
-			if (!temp)
-			{
-				printf("%s\n", ft_strjoin(redir, " error\n"));
-				return ;
-			}
-			new_cmd = init_cmd();
-			new_cmd->redirection = ft_strdup(redir);
-			new_cmd->file_name = ft_strdup(temp->str);
-			add_cmd_to_back(cmd_list, new_cmd);
-			delete_token(token_list, redir);
-			delete_token(token_list, new_cmd->file_name);
-			return ;
-		}
-		temp = temp->next;
-	}
-}
-
-void	get_cmds(t_tok **token_list, t_cmd **cmd_list)
+void	get_cmds_and_pipes(t_tok **token_list, t_cmd **cmd_list)
 {
 	t_tok	*temp;
 	t_cmd	*new_cmd;
@@ -83,30 +42,78 @@ void	get_cmds(t_tok **token_list, t_cmd **cmd_list)
 			temp = temp->next;
 		}
 		add_cmd_to_back(cmd_list, new_cmd);
-		if (!temp || !ft_strncmp(temp->str, ">", 1) || !ft_strncmp(temp->str, ">>", 2))
+		if (temp && !ft_strncmp(temp->str, "|", 1))
+		{
+			new_cmd = init_cmd();
+			if (pipe(new_cmd->pipe) == -1)
+				return ;
+			add_cmd_to_back(cmd_list, new_cmd);
+		}
+		else if (!temp || !ft_strncmp(temp->str, ">", 1) || !ft_strncmp(temp->str, ">>", 2))
 			break ;
 		temp = temp->next;
 	}
 }
 
-void	init_pipes(t_cmd *cmd_list)
+void	print_tok(t_tok *token_list)
 {
-	int	i;
-
-	g_main.num_of_cmds = get_num_of_cmds(cmd_list);
-	i = -1;
-	while (cmd_list)
+	t_tok *temp = token_list;
+	while (temp)
 	{
-		if (cmd_list->cmds)
+		printf("%d: %s\n", temp->index, temp->str);
+		temp = temp->next;
+	}
+	printf("\n");
+}
+
+static void	get_inputs(t_tok **token_list, t_cmd **cmd_list)
+{
+	t_tok	*temp;
+	char	*str;
+	char	*redir;
+
+	temp = *token_list;
+	while (temp)
+	{
+		redir = temp->str;
+		if (temp->next)
+			str = temp->next->str;
+		if (is_heredoc(redir) || is_input_redir(redir))
 		{
-			cmd_list->fd_table.pipe = malloc((g_main.num_of_cmds - 1) * sizeof(int *));
-			if (!cmd_list->fd_table.pipe)
-				return ;
-			while (++i < g_main.num_of_cmds)
-				if (pipe(cmd_list->fd_table.pipe[i]) == -1)
-					return ;
+			if (is_heredoc(redir))
+				get_heredoc(cmd_list, str);
+			else
+				get_redir_and_filename(cmd_list, redir, str);
+			temp = temp->prev->prev;
+			delete_token(token_list, redir);
+			delete_token(token_list, str);
+			print_tok(*token_list);
 		}
-		cmd_list = cmd_list->next;
+		temp = temp->next;
+	}
+}
+
+static void get_outputs(t_tok **token_list, t_cmd **cmd_list)
+{
+	t_tok	*temp;
+	char	*str;
+	char	*redir;
+
+	temp = *token_list;
+	while (temp)
+	{
+		redir = temp->str;
+		if (temp->next)
+			str = temp->next->str;
+		if (is_output_redir(redir))
+		{
+			get_redir_and_filename(cmd_list, redir, str);
+			temp = temp->prev->prev;
+			delete_token(token_list, redir);
+			delete_token(token_list, str);
+			print_tok(*token_list);
+		}
+		temp = temp->next;
 	}
 }
 
@@ -119,58 +126,39 @@ void	init_pipes(t_cmd *cmd_list)
 // OUT |                         pipe[0][1]   pipe[1][1]   fd_out
 void	parse(t_tok **token_list, t_cmd **cmd_list)
 {
-	get_limiter(token_list, cmd_list);
-	get_redir_and_filename(token_list, cmd_list, "<");
-	get_redir_and_filename(token_list, cmd_list, "<>");
-	get_redir_and_filename(token_list, cmd_list, ">");
-	get_redir_and_filename(token_list, cmd_list, ">>");
-	get_cmds(token_list, cmd_list);
-
-	init_pipes(*cmd_list);
+	get_inputs(token_list, cmd_list);
+	get_cmds_and_pipes(token_list, cmd_list);
+	get_outputs(token_list, cmd_list);
 	assign_infile_fd(*cmd_list);
 	assign_outfile_fd(*cmd_list);
 }
 
-// void	print_tok(t_tok *token_list)
-// {
-// 	t_tok *temp = token_list;
-// 	while (temp)
-// 	{
-// 		printf("%d: %s\n", temp->index, temp->str);
-// 		temp = temp->next;
-// 	}
-// 	printf("\n");
-// }
 
-// void	print_cmd_list(t_cmd *cmd_list)
-// {
-// 	t_cmd	*temp = cmd_list;
-// 	while (temp)
-// 	{
-// 		int i = -1;
-// 		if (temp->cmds)
-// 			while (temp->cmds[++i])
-// 				printf("cmd %d: %s\n", i, temp->cmds[i]);
-// 		printf("redir: %s\n", temp->redirection);
-// 		printf("file: %s\n", temp->file_name);
-// 		printf("lim: %s\n", temp->limiter);
-// 		temp = temp->next;
-// 	}
-// }
+void	print_cmd_list(t_cmd *cmd_list)
+{
+	t_cmd	*temp = cmd_list;
+	while (temp)
+	{
+		int i = -1;
+		if (temp->cmds)
+			while (temp->cmds[++i])
+				printf("cmd %d: %s\n", i, temp->cmds[i]);
+		printf("redir: %s\n", temp->redirection);
+		printf("file: %s\n", temp->file_name);
+		printf("lim: %s\n\n", temp->limiter);
+		temp = temp->next;
+	}
+}
 
-// int main(int ac, char **av)
-// {
-// 	(void)ac;
-// 	t_tok_info	info;
-// 	t_cmd		*cmd_list;
+int main(int ac, char **av)
+{
+	(void)ac;
+	t_tok_info	info;
+	t_cmd		*cmd_list;
 
-// 	tokenize(&info, av[1]);
-// 	print_tok(info.token_list);
-// 	parsing(&info.token_list, &cmd_list);
-// 	print_cmd_list(cmd_list);
-// 	delete_all_tokens(&info.token_list);
-// }
-/*
-cc -Wall -Wextra -Werror -fsanitize=address -ggdb tokenizing.c token_list_utils_1.c tokenizing_utils_1.c parsing.c cmd_list_utils_1.c parsing_utils_1.c ../libft/libft.a  && ./a.out "ls -la << lim | cat >> hi.txt"
-
-*/
+	tokenize(&info, av[1]);
+	print_tok(info.token_list);
+	parse(&info.token_list, &cmd_list);
+	print_cmd_list(cmd_list);
+	delete_all_tokens(&info.token_list);
+}

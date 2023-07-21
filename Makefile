@@ -31,6 +31,7 @@ SRCS = main \
 		parsing/parsing_utils_1 \
 		parsing/parsing_utils_2 \
 		parsing/cmd_list_utils_1 \
+		parsing/heredoc \
 		executing/executing \
 		executing/executing_utils_1
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))

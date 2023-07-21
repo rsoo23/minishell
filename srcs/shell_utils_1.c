@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:16:47 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/19 13:21:07 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/21 10:22:05 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,15 +119,4 @@ char	**array_append(char **a, char *line)
 	r_a[i] = NULL;
 	free(a);
 	return (r_a);
-}
-
-// finds the Y axis of a char 2d array
-int	array2d_y(char **a)
-{
-	int	i;
-
-	i = 0;
-	while (a[i])
-		i++;
-	return (i);
 }

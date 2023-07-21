@@ -16,6 +16,8 @@ int	is_input_redir(char *redir)
 {
 	int	redir_len;
 
+	if (!redir)
+		return (0);
 	redir_len = ft_strlen(redir);
 	if (!ft_strncmp(redir, "<", redir_len))
 		return (1);
@@ -24,10 +26,21 @@ int	is_input_redir(char *redir)
 	return (0);
 }
 
+int	is_heredoc(char *redir)
+{
+	if (!redir)
+		return (0);
+	if (!ft_strncmp(redir, "<<", 2))
+		return (1);
+	return (0);
+}
+
 int	is_output_redir(char *redir)
 {
 	int	redir_len;
 
+	if (!redir)
+		return (0);
 	redir_len = ft_strlen(redir);
 	if (!ft_strncmp(redir, ">", redir_len))
 		return (1);	

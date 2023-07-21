@@ -19,25 +19,25 @@ Tests
     - [x] ls -la | wc -w | cat | cat 
 
 3. Both < and >:
-    - [x] ls -la > outfile.txt
+    - [ ] ls -la > outfile.txt
     - [ ] cat > outfile.txt -e
         - parsing: [cat -e] [> outfile.txt]
     - [ ] cat < infile.txt -e
         - parsing: [< infile.txt] [cat -e]
-    - [x] sort < infile.txt
-    - [x] sort < infile.txt | ls -l 
-    - [x] sort < infile.txt | ls -l | cat 
-    - [x] grep hi < infile.txt | ls -l | cat > outfile.txt
+    - [ ] sort < infile.txt
+    - [ ] sort < infile.txt | ls -l 
+    - [ ] sort < infile.txt | ls -l | cat 
+    - [ ] grep hi < infile.txt | ls -l | cat > outfile.txt
 
 4. Both << and >>:
-    - [x] ls -la >> outfile
-    - [x] << limiter
-    - [x] cmd << limiter
-    - [x] cmd << limiter >> outfile
-    - [x] cmd << limiter | cmd >> outfile
+    - [ ] ls -la >> outfile
+    - [ ] << limiter
+    - [ ] cmd << limiter
+    - [ ] cmd << limiter >> outfile
+    - [ ] cmd << limiter | cmd >> outfile
 
 5. <>: receive input from file, output to STDOUT
-    - [x] wc -wl <> main.c
+    - [ ] wc -wl <> main.c
 
 6. Multiple + Mixed Input Redir 
     - [ ] wc -w << stop << hi ..
@@ -61,16 +61,28 @@ Tests
         - parsing: [< srcs/main.c] [<< stop] [hd |] [wc -w]
 
     - Notes:
-        - rearrange the cmd infront of heredoc behind last output redir
+        - rearrange the cmd infront of heredoc behind last output redir (problem: wc < .. < .. > .. -w)
+        - shift the input redir infront of wc (cmd)
+        - shift the output redir behind the flag
 
-7. Multiple > / >>
+7. Mixed < > << >>
     - [ ] wc -w < srcs/main.c >a >b >c
         - a, b and c gets created if do not exist
         - only c gets the output
 
     - [ ] wc -w < srcs/main.c > hi | << stop
+        - parsing: [< srcs/main.c] [wc -w] [> hi] [|] [<< stop] [hd |]
 
- 
+    - [ ] wc << hi > a << stop > b -w
+        - behaves like: wc -w << hi << stop > a > b
+        - parsing: [<< hi] [hd |] [<< stop] [hd |] [wc -w] [> a] [> b]
+
+    - [ ] wc < main.c > hi -w > a
+        - behaves like: wc -w < main.c > hi > a
+
+    - [ ] wc < main.c > hi -w > a -l
+        - behaves like: wc -w -l < main.c > hi > a
+
 Special:
     - [ ] wc -w << stop << boom << hi |
         - pipe left hanging, waits for input of cmd to read from pipe

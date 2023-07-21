@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/19 13:24:43 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/21 22:21:53 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,10 @@ void	delete_token(t_tok **token_list, char *content)
 {
 	t_tok	*temp;
 
-	if (!token_list || !*token_list)
-		return ;
 	temp = *token_list;
 	while (temp)
 	{
-		if (!ft_strncmp(temp->str, content, ft_strlen(content)))
+		if (!ft_strncmp(temp->str, content, ft_strlen(temp->str)))
 		{
 			if (temp->next)
 				temp->next->prev = temp->prev;
