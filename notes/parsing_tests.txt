@@ -86,3 +86,8 @@ Tests
 Special:
     - [ ] wc -w << stop << boom << hi |
         - pipe left hanging, waits for input of cmd to read from pipe
+
+
+cmd < main.c > out | cmd > out < in 
+
+[< main.c] [cmd] [> out] [|] [< in] [cmd] [> out]

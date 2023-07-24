@@ -50,20 +50,6 @@ char	**append_cmds(char **cmds, char *str)
     return (temp_cmds);
 }
 
-int get_num_of_cmds(t_cmd *cmd_list)
-{
-    int num_of_cmds;
-
-    num_of_cmds = 0;
-    while (cmd_list)
-	{
-		if (cmd_list->cmds)
-			num_of_cmds++;
-		cmd_list = cmd_list->next;
-	}
-    return (num_of_cmds);
-}
-
 // finds the node with < or <> then opens the file to get the fd
 // then finds the first cmd node and assigns in the fd to the cmd's infile_fd
 void	assign_infile_fd(t_cmd *cmd_list)
@@ -78,9 +64,9 @@ void	assign_infile_fd(t_cmd *cmd_list)
 			fd = open(cmd_list->file_name, O_RDONLY);
 			if (fd < 0)
 				return ;
+			if (cmd_list->next && cmd_list->next->cmds)
+				cmd_list->next->infile_fd = fd;
 		}
-		else if (cmd_list->cmds)
-			cmd_list->infile_fd = fd;
 		cmd_list = cmd_list->next;
 	}
 }
@@ -100,15 +86,17 @@ void	assign_outfile_fd(t_cmd *cmd_list)
 			fd = open(cmd_list->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 			if (fd < 0)
 				return ;
+			if (cmd_list->prev && cmd_list->prev->cmds)
+				cmd_list->prev->outfile_fd = fd;
 		}
 		else if (is_output_redir(cmd_list->redirection) == 2)
 		{
 			fd = open(cmd_list->file_name, O_CREAT | O_WRONLY | O_APPEND, 0666);
 			if (fd < 0)
 				return ;
+			if (cmd_list->prev && cmd_list->prev->cmds)
+				cmd_list->prev->outfile_fd = fd;
 		}
-		else if (cmd_list->cmds && !cmd_list->next)
-			cmd_list->outfile_fd = fd;
 		cmd_list = cmd_list->next;
 	}
 }

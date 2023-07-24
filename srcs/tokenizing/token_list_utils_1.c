@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/21 22:21:53 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/24 20:06:11 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,6 @@ void    add_token_to_back(t_tok **token_list, t_tok *new_token)
 		last_token->next = new_token;
 		new_token->prev = last_token;
 	}
-}
-
-void    delete_all_tokens(t_tok **token_list)
-{
-	t_tok   *temp;
-
-	if (!token_list || !*token_list)
-		return ;
-	temp = *token_list;
-	while (*token_list)
-	{
-		temp = *token_list;
-		*token_list = (*token_list)->next;
-		free(temp->str);
-		free(temp);
-	}
-	*token_list = NULL;
 }
 
 void	delete_token(t_tok **token_list, char *content)

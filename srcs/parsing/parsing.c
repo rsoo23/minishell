@@ -27,7 +27,7 @@ void	get_redir_and_filename(t_cmd **cmd_list, char *redir, char *file_name)
 	add_cmd_to_back(cmd_list, new_cmd);
 }
 
-void	get_cmds_and_pipes(t_tok **token_list, t_cmd **cmd_list)
+void	get_cmds(t_tok **token_list, t_cmd **cmd_list)
 {
 	t_tok	*temp;
 	t_cmd	*new_cmd;
@@ -35,22 +35,23 @@ void	get_cmds_and_pipes(t_tok **token_list, t_cmd **cmd_list)
 	temp = *token_list;
 	while (temp)
 	{
-		new_cmd = init_cmd();
-		while (temp && !is_meta_char(temp->str[0]))
-		{
-			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
-			temp = temp->next;
-		}
-		add_cmd_to_back(cmd_list, new_cmd);
-		if (temp && !ft_strncmp(temp->str, "|", 1))
+		if (!is_meta_char(temp->str[0]))
 		{
 			new_cmd = init_cmd();
-			if (pipe(new_cmd->pipe) == -1)
-				return ;
-			add_cmd_to_back(cmd_list, new_cmd);
+			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
+			temp = temp->next;
+			delete_token(token_list, temp->prev->str);
+			while (temp && !is_pipe(temp->str))
+			{
+				if (!ft_strncmp(temp->str[0], "-", 1))
+				{
+					new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
+					temp = temp->prev;
+					delete_token(token_list, temp->next->str);
+				}
+				temp = temp->next;
+			}
 		}
-		else if (!temp || !ft_strncmp(temp->str, ">", 1) || !ft_strncmp(temp->str, ">>", 2))
-			break ;
 		temp = temp->next;
 	}
 }
@@ -73,7 +74,7 @@ static void	get_inputs(t_tok **token_list, t_cmd **cmd_list)
 	char	*redir;
 
 	temp = *token_list;
-	while (temp)
+	while (temp && !is_pipe(temp->str))
 	{
 		redir = temp->str;
 		if (temp->next)
@@ -84,7 +85,7 @@ static void	get_inputs(t_tok **token_list, t_cmd **cmd_list)
 				get_heredoc(cmd_list, str);
 			else
 				get_redir_and_filename(cmd_list, redir, str);
-			temp = temp->prev->prev;
+			temp = temp->prev;
 			delete_token(token_list, redir);
 			delete_token(token_list, str);
 			print_tok(*token_list);
@@ -100,7 +101,7 @@ static void get_outputs(t_tok **token_list, t_cmd **cmd_list)
 	char	*redir;
 
 	temp = *token_list;
-	while (temp)
+	while (temp && !is_pipe(temp->str))
 	{
 		redir = temp->str;
 		if (temp->next)
@@ -108,7 +109,7 @@ static void get_outputs(t_tok **token_list, t_cmd **cmd_list)
 		if (is_output_redir(redir))
 		{
 			get_redir_and_filename(cmd_list, redir, str);
-			temp = temp->prev->prev;
+			temp = temp->prev;
 			delete_token(token_list, redir);
 			delete_token(token_list, str);
 			print_tok(*token_list);
@@ -117,22 +118,17 @@ static void get_outputs(t_tok **token_list, t_cmd **cmd_list)
 	}
 }
 
-// first phase: get / arrange all tokens into the cmd_list
-// second phase: initialize heredoc pipe + pipes
-
-// CMD_LIST:
-//       [< main.c] [>> outfile] [cmd1]       [cmd2]       [cmd3]
-// IN  |                         fd_in        pipe[0][0]   pipe[1][0] 
-// OUT |                         pipe[0][1]   pipe[1][1]   fd_out
 void	parse(t_tok **token_list, t_cmd **cmd_list)
 {
-	get_inputs(token_list, cmd_list);
-	get_cmds_and_pipes(token_list, cmd_list);
-	get_outputs(token_list, cmd_list);
+	while (*token_list)
+	{
+		get_inputs(token_list, cmd_list);
+		get_cmds(token_list, cmd_list);
+		get_outputs(token_list, cmd_list);
+	}
 	assign_infile_fd(*cmd_list);
 	assign_outfile_fd(*cmd_list);
 }
-
 
 void	print_cmd_list(t_cmd *cmd_list)
 {

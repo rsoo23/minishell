@@ -50,14 +50,11 @@ typedef struct s_tok_info
 
 typedef struct s_cmd
 {
+	int				index;
 	char			**cmds;
-	char			*redirection;
-	char			*file_name;
-	char			*limiter;
-	int				pipe[2];
 	int				infile_fd;
 	int				outfile_fd;
-	int				heredoc_pipe[2];
+	int				pipe[2];
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
@@ -77,27 +74,22 @@ extern t_main	g_main;
 
 //tokenizing.c
 void	tokenize(t_tok_info *info, char *s);
+int		is_wspace(char c);
 // token_list_utils_1.c
 t_tok	*init_token(char *temp_tok_str, int tok_i);
 t_tok	*last_token(t_tok *token_list);
 void	add_token_to_back(t_tok **token_list, t_tok *new_token);
-void	delete_all_tokens(t_tok **token_list);
 void	delete_token(t_tok **token_list, char *content);
-// tokenizing_utils_1.c
-int		is_meta_char(char c);
-int		is_wspace(char c);
-void	read_single_quotes(t_tok_info *info, char *s);
-void	read_double_quotes(t_tok_info *info, char *s);
-
 
 // parsing.c
 void	parse(t_tok **token_list, t_cmd **cmd_list);
 // parsing_utils_1.c
 char	**append_cmds(char **cmds, char *str);
-int		get_num_of_cmds(t_cmd *cmd_list);
 void	assign_infile_fd(t_cmd *cmd_list);
 void	assign_outfile_fd(t_cmd *cmd_list);
 // parsing_utils_2.c
+int		is_pipe(char *str);
+int		is_meta_char(char c);
 int		is_input_redir(char *redir);
 int		is_output_redir(char *redir);
 int		is_heredoc(char *redir);

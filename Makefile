@@ -24,12 +24,11 @@ SRCS = main \
 		printing_msg \
 		shell_utils_1 \
 		shell_utils_2 \
+		metachar_check \
 		tokenizing/tokenizing \
-		tokenizing/tokenizing_utils_1 \
 		tokenizing/token_list_utils_1 \
 		parsing/parsing \
 		parsing/parsing_utils_1 \
-		parsing/parsing_utils_2 \
 		parsing/cmd_list_utils_1 \
 		parsing/heredoc \
 		executing/executing \
