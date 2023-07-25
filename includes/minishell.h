@@ -86,6 +86,7 @@ void	parse(t_tok **token_list, t_cmd **cmd_list);
 char	**append_cmds(char **cmds, char *str);
 void	assign_infile_fd(t_cmd *cmd_list);
 void	assign_outfile_fd(t_cmd *cmd_list);
+void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
 // parsing_utils_2.c
 int		is_pipe(char *str);
 int		is_meta_char(char c);

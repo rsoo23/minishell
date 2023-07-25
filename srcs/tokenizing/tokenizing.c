@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/24 20:06:54 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/25 16:55:30 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,15 @@ static void	tokenize_word(t_tok_info *info, char *s)
 		read_quotes(info, s, 34);
 	else
 	{
-		while (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])
+		while (!is_wspace(s[info->i]) && \
+		!is_meta_char(s[info->i]) && s[info->i])
 		{
 			info->i++;
 			info->temp_word_len++;
 		}
 	}
-	temp_tok_str = ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
+	temp_tok_str = \
+	ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
 	new_token = init_token(temp_tok_str, info->tok_i++);
 	add_token_to_back(&info->token_list, new_token);
 }
@@ -73,7 +75,8 @@ static void	tokenize_meta_char(t_tok_info *info, char *s)
 		info->i++;
 		info->temp_word_len++;
 	}
-	temp_tok_str = ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
+	temp_tok_str = \
+	ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
 	new_token = init_token(temp_tok_str, info->tok_i++);
 	add_token_to_back(&info->token_list, new_token);
 }

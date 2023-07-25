@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 12:48:43 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/25 11:07:59 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/25 17:06:30 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_cmd	*init_cmd(void)
 {
 	t_cmd	*new_cmd;
-	
+
 	new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);
@@ -47,7 +47,7 @@ t_cmd	*find_last_cmd(t_cmd *cmd_list)
 void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd)
 {
 	t_cmd	*last_cmd;
-	
+
 	if (!new_cmd)
 		return ;
 	if (!cmd_list || !(*cmd_list))
@@ -76,4 +76,3 @@ void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd)
 // 	}
 // 	*cmd_list = NULL;
 // }
-

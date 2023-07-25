@@ -43,9 +43,9 @@ int	is_output_redir(char *redir)
 		return (0);
 	redir_len = ft_strlen(redir);
 	if (!ft_strncmp(redir, ">", redir_len))
-		return (1);	
+		return (1);
 	else if (!ft_strncmp(redir, ">>", redir_len))
-		return (2);	
+		return (2);
 	return (0);
 }
 

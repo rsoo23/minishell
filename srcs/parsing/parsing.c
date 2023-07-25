@@ -12,25 +12,18 @@
 
 #include "../../includes/minishell.h"
 
-void	get_fd(t_cmd *new_cmd, char *redir, char *file_name)
+void	get_cmd_flag(t_tok **token_list, t_cmd *new_cmd, t_tok *temp)
 {
-	if (is_input_redir(redir))
+	while (temp && !is_pipe(temp->str))
 	{
-		new_cmd->fd_in = open(file_name, O_RDONLY);
-		if (new_cmd->fd_in < 0)
-			return ;
-	}
-	else if (is_output_redir(redir) == 1)
-	{
-		new_cmd->fd_out = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-		if (new_cmd->fd_out < 0)
-			return ;
-	}
-	else if (is_output_redir(redir) == 2)
-	{
-		new_cmd->fd_out = open(file_name, O_CREAT | O_WRONLY | O_APPEND, 0666);
-		if (new_cmd->fd_out < 0)
-			return ;
+		if (!ft_strncmp(&temp->str[0], "-", 1))
+		{
+			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
+			delete_token(token_list, temp->str);
+			temp = *token_list;
+			continue ;
+		}
+		temp = temp->next;
 	}
 }
 
@@ -50,20 +43,59 @@ void	get_cmds(t_tok **token_list, t_cmd *new_cmd)
 			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
 			delete_token(token_list, temp->str);
 			temp = *token_list;
-			while (temp && !is_pipe(temp->str))
-			{
-				if (!ft_strncmp(&temp->str[0], "-", 1))
-				{
-					new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
-					delete_token(token_list, temp->str);
-					temp = *token_list;
-					continue ;
-				}
-				temp = temp->next;
-			}
+			get_cmd_flag(token_list, new_cmd, temp);
 			if (temp && !ft_strncmp(temp->str, "|", 1))
 				delete_token(token_list, temp->str);
 			break ;
+		}
+		temp = temp->next;
+	}
+}
+
+static void	get_inputs(t_tok **token_list, t_cmd *new_cmd)
+{
+	t_tok	*temp;
+	char	*redir;
+
+	if (!(*token_list))
+		return ;
+	temp = *token_list;
+	while (temp && !is_pipe(temp->str))
+	{
+		redir = temp->str;
+		if ((is_heredoc(redir) || is_input_redir(redir)) && temp->next)
+		{
+			if (is_heredoc(redir))
+				get_heredoc(new_cmd, temp->next->str);
+			else
+				get_fd(new_cmd, redir, temp->next->str);
+			delete_token(token_list, redir);
+			delete_token(token_list, temp->next->str);
+			temp = *token_list;
+			continue ;
+		}
+		temp = temp->next;
+	}
+}
+
+static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
+{
+	t_tok	*temp;
+	char	*redir;
+
+	if (!(*token_list))
+		return ;
+	temp = *token_list;
+	while (temp && !is_pipe(temp->str))
+	{
+		redir = temp->str;
+		if (is_output_redir(redir) && temp->next)
+		{
+			get_fd(new_cmd, redir, temp->next->str);
+			delete_token(token_list, redir);
+			delete_token(token_list, temp->next->str);
+			temp = *token_list;
+			continue ;
 		}
 		temp = temp->next;
 	}
@@ -75,63 +107,6 @@ void	print_tok(t_tok *token_list)
 	while (temp)
 	{
 		printf("%d: %s\n", temp->index, temp->str);
-		temp = temp->next;
-	}
-}
-
-static void	get_inputs(t_tok **token_list, t_cmd *new_cmd)
-{
-	t_tok	*temp;
-	char	*str;
-	char	*redir;
-
-	if (!(*token_list))
-		return ;
-	temp = *token_list;
-	while (temp && !is_pipe(temp->str))
-	{
-		redir = temp->str;
-		if (temp->next)
-			str = temp->next->str;
-		else 
-			return ;
-		if (is_heredoc(redir) || is_input_redir(redir))
-		{
-			if (is_heredoc(redir))
-				get_heredoc(new_cmd, str);
-			else
-				get_fd(new_cmd, redir, str);
-			delete_token(token_list, redir);
-			delete_token(token_list, str);
-			temp = *token_list;
-			continue ;
-		}
-		temp = temp->next;
-	}
-}
-
-static void get_outputs(t_tok **token_list, t_cmd *new_cmd)
-{
-	t_tok	*temp;
-	char	*str;
-	char	*redir;
-
-	if (!(*token_list))
-		return ;
-	temp = *token_list;
-	while (temp && !is_pipe(temp->str))
-	{
-		redir = temp->str;
-		if (temp->next)
-			str = temp->next->str;
-		if (is_output_redir(redir))
-		{
-			get_fd(new_cmd, redir, str);
-			delete_token(token_list, redir);
-			delete_token(token_list, str);
-			temp = *token_list;
-			continue ;
-		}
 		temp = temp->next;
 	}
 }
@@ -149,6 +124,7 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 		add_cmd_to_back(cmd_list, new_cmd);
 	}
 }
+
 
 void	print_cmd_list(t_cmd *cmd_list)
 {

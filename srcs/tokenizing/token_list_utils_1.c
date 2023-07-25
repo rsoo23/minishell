@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/25 10:18:22 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/25 16:55:48 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_tok	*init_token(char *temp_tok_str, int tok_i)
 {
 	t_tok	*new_tok;
-	
+
 	new_tok = malloc(sizeof(t_tok));
 	if (!new_tok)
 		return (NULL);
@@ -38,10 +38,10 @@ t_tok	*find_last_token(t_tok *token_list)
 	return (temp);
 }
 
-void    add_token_to_back(t_tok **token_list, t_tok *new_token)
+void	add_token_to_back(t_tok **token_list, t_tok *new_token)
 {
 	t_tok	*last_token;
-	
+
 	if (!new_token)
 		return ;
 	if (!*token_list)
@@ -76,4 +76,3 @@ void	delete_token(t_tok **token_list, char *content)
 		temp = temp->next;
 	}
 }
-
