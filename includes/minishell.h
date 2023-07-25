@@ -50,10 +50,9 @@ typedef struct s_tok_info
 
 typedef struct s_cmd
 {
-	int				index;
 	char			**cmds;
-	int				infile_fd;
-	int				outfile_fd;
+	int				fd_in;
+	int				fd_out;
 	int				pipe[2];
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
@@ -99,7 +98,7 @@ t_cmd	*find_last_cmd(t_cmd *cmd_list);
 void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd);
 void	clear_cmds(t_cmd **cmd_list);
 // heredoc.c
-void	get_heredoc(t_cmd **cmd_list, char *limiter);
+void	get_heredoc(t_cmd *new_cmd, char *limiter);
 
 // executing.c
 int		execute(t_cmd *cmd_list);

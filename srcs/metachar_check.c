@@ -53,7 +53,7 @@ int	is_pipe(char *str)
 {
 	if (!str)
 		return (0);
-	if (ft_strncmp(str, "|", 1))
+	if (!ft_strncmp(str, "|", 1))
 		return (1);
 	return (0);
 }

@@ -12,33 +12,37 @@
 
 #include "../../includes/minishell.h"
 
-static void create_heredoc_cmd(t_cmd **cmd_list, char *limiter)
+static void	heredoc_child(int hd_pipe[2], char *limiter)
 {
-	t_cmd	*new_cmd;
+    char    *temp;
 
-	new_cmd = init_cmd();
-	new_cmd->redirection = ft_strdup("<<");
-	new_cmd->limiter = ft_strjoin(limiter, "\n");
-	add_cmd_to_back(cmd_list, new_cmd);
+    temp = get_next_line(0);
+    close(hd_pipe[0]);
+    while (temp && ft_strncmp(temp, limiter, ft_strlen(temp) - 1))
+    {
+        write(hd_pipe[1], temp, ft_strlen(temp));
+        free(temp);
+        temp = get_next_line(0);
+    }
+	exit(EXIT_SUCCESS);
 }
 
-static void	create_heredoc_pipe(t_cmd **cmd_list)
+void	get_heredoc(t_cmd *new_cmd, char *limiter)
 {
-	t_cmd	*new_cmd;
+	int      hd_pipe[2];
+    pid_t    pid;
 
-	new_cmd = init_cmd();
-	if (pipe(new_cmd->heredoc_pipe) == -1)
-		return ;
-	add_cmd_to_back(cmd_list, new_cmd);
-}
-
-void	get_heredoc(t_cmd **cmd_list, char *limiter)
-{
-	if (!limiter)
-	{
-		printf("<< error\n");
-		return ;
+    if (pipe(hd_pipe) == -1)
+        return ;
+    pid = fork();
+    if (pid == -1)
+        return ;
+    if (pid == 0)
+        heredoc_child(hd_pipe, limiter);
+    else
+    {
+        close(hd_pipe[1]);
+		new_cmd->fd_in = hd_pipe[0];
+        wait(NULL);
 	}
-	create_heredoc_cmd(cmd_list, limiter);
-	create_heredoc_pipe(cmd_list);
 }

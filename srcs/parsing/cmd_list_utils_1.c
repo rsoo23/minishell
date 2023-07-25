@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 12:48:43 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/19 13:24:14 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/25 11:07:59 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,13 @@ t_cmd	*init_cmd(void)
 	if (!new_cmd)
 		return (NULL);
 	new_cmd->cmds = NULL;
-	new_cmd->redirection = NULL;
-	new_cmd->file_name = NULL;
-	new_cmd->limiter = NULL;
+	new_cmd->fd_in = 0;
+	new_cmd->fd_out = 1;
+	if (pipe(new_cmd->pipe) == -1)
+	{
+		free(new_cmd);
+		return (NULL);
+	}
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
 	return (new_cmd);
@@ -46,7 +50,7 @@ void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd)
 	
 	if (!new_cmd)
 		return ;
-	if (!*cmd_list)
+	if (!cmd_list || !(*cmd_list))
 		*cmd_list = new_cmd;
 	else
 	{
