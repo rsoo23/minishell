@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:13:10 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/19 13:42:15 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/26 11:41:33 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,29 @@ int	changing_dir(char **arr)
 // we finish the $sign so we can call the envp variable
 void	shell_echo(char **a)
 {
+	int	i;
+
 	if (array2d_y(a) == 1)
 		return ((void)printf("\n"));
-	if (array2d_y(a) == 2)
-		return ((void)printf("%s\n", a[1]));
-	if (array2d_y(a) == 3 && !ft_strncmp(a[1], "-n", 3))
-		printf("%s", a[2]);
+	else if (!ft_strncmp(a[1], "-n", ft_strlen(a[1])))
+	{
+		i = 2;
+		while (a[i])
+		{
+			printf("%s", a[i]);
+			if (a[i + 1])
+				printf(" ");
+		}
+	}
+	else
+	{
+		i = 1;
+		while (a[i])
+		{
+			printf("%s", a[i]);
+			if (a[i + 1])
+				printf(" ");
+		}
+		printf("\n");
+	}
 }
