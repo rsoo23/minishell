@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 16:12:00 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/26 17:12:25 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 t_main	g_main;
 
-// de init function first duplicates the envp and saves it to a 2d char array
-// den we just get the pointer that points to the PWD and the HOME 
+// the init function first duplicates the envp and saves it to a 2d char array
+// then we just get the pointer that points to the PWD and the HOME 
 // variables and save it to char pointers for easier use for later
 // (shell_getenv is equivalent to getenv but for our global struct)
 void	main_init(char **envp)
@@ -36,7 +36,7 @@ void	sig_handler(int signum)
 	if (signum == SIGINT)
 		printf("\n");
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_redisplay();
 }
 
@@ -49,7 +49,7 @@ void	sig_handler_child(int signum)
 	(void)signum;
 	printf("\n");
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	return ;
 }
 

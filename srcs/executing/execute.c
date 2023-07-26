@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 16:19:27 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/26 17:16:50 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	error_temp(void)
 {
-	printf("ERROR cmd not found\n");
+	printf("Error: cmd not found\n");
 	exit(EXIT_FAILURE);
 }
 
-void	execute_child(t_cmd *inst)
+void	execute_child(t_cmd *cmd_list)
 {
 	pid_t	pid;
 	char	*temp;
@@ -28,25 +28,25 @@ void	execute_child(t_cmd *inst)
 		return ;
 	if (pid == 0)
 	{
-		ft_putstr_fd("in  fd ", 2);
-		ft_putnbr_fd(inst->fd_in, 2);
-		ft_putchar_fd('\n', 2);
-		ft_putstr_fd("out fd ", 2);
-		ft_putnbr_fd(inst->fd_out, 2);
-		ft_putchar_fd('\n', 2);
-		if (inst->fd_out != 1)
-			dup2(inst->fd_out, STDOUT_FILENO);
-		if (inst->fd_in != 0)
-			dup2(inst->fd_in, STDIN_FILENO);
-		if (inst->next != NULL)
-			close(inst->next->pipe[0]);
-		temp = merge_path(ft_strjoin("/", inst->cmds[0]));
-		execve(temp, inst->cmds, g_main.envp);
+		// ft_putstr_fd("in  fd ", 2);
+		// ft_putnbr_fd(cmd_list->fd_in, 2);
+		// ft_putchar_fd('\n', 2);
+		// ft_putstr_fd("out fd ", 2);
+		// ft_putnbr_fd(cmd_list->fd_out, 2);
+		// ft_putchar_fd('\n', 2);
+		if (cmd_list->fd_in != 0)
+			dup2(cmd_list->fd_in, STDIN_FILENO);
+		if (cmd_list->fd_out != 1)
+			dup2(cmd_list->fd_out, STDOUT_FILENO);
+		if (cmd_list->next != NULL)
+			close(cmd_list->next->pipe[0]);
+		temp = merge_path(ft_strjoin("/", cmd_list->cmds[0]));
+		execve(temp, cmd_list->cmds, g_main.envp);
 		error_temp();
 	}
 	else
-		if (inst->next != NULL)
-			close(inst->next->pipe[1]);
+		if (cmd_list->next != NULL)
+			close(cmd_list->next->pipe[1]);
 }
 
 int	execute_builtins1(char **cmd_arr, int cmd_len)
@@ -77,50 +77,50 @@ int	execute_builtins1(char **cmd_arr, int cmd_len)
 
 int	execute_builtins(char **cmd, int cmd_listlen)
 {
-	int	cmdl;
+	int	cmd_len;
 
-	cmdl = ft_strlen(cmd[0]);
+	cmd_len = ft_strlen(cmd[0]);
 	if (cmd_listlen == 1)
 	{
-		if (!ft_strncmp(cmd[0], "cd", cmdl))
+		if (!ft_strncmp(cmd[0], "cd", cmd_len))
 		{
 			changing_dir(cmd);
 			return (1);
 		}
-		else if (!ft_strncmp(cmd[0], "unset", cmdl)
+		else if (!ft_strncmp(cmd[0], "unset", cmd_len)
 			&& array2d_y(cmd) == 2)
 		{
 			remove_envp(cmd[1]);
 			return (1);
 		}
-		else if (!ft_strncmp(cmd[0], "exit", cmdl) && array2d_y(cmd) == 1)
+		else if (!ft_strncmp(cmd[0], "exit", cmd_len) && array2d_y(cmd) == 1)
 			return (2);
-		else if (!ft_strncmp(cmd[0], "export", cmdl) && array2d_y(cmd) == 2)
+		else if (!ft_strncmp(cmd[0], "export", cmd_len) && array2d_y(cmd) == 2)
 		{
 			add_to_envp(cmd[1]);
 			return (1);
 		}
 	}
-	return (execute_builtins1(cmd, cmd_listlen));
+	return (execute_builtins1(cmd, cmd_len));
 }
 
-int	execute(t_cmd *inst)
+int	execute(t_cmd *cmd_list)
 {
 	t_cmd	*temp;
-	int		n;
+	int		exit_status;
 
-	init_fds(inst);
-	temp = inst;
-	n = 0;
+	init_fds(cmd_list);
+	temp = cmd_list;
+	exit_status = 0;
 	while (temp)
 	{
-		n = execute_builtins(temp->cmds, cmd_list_len(inst));
-		if (n <= 1)
+		exit_status = execute_builtins(temp->cmds, cmd_list_len(cmd_list));
+		if (exit_status <= 1)
 			execute_child(temp);
 		temp = temp->next;
 	}
 	wait(NULL);
-	return (n);
+	return (exit_status);
 }
 
 // t_cmd	*init_struct(char *f1, char *f2, char *cmd)

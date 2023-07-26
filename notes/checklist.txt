@@ -64,3 +64,8 @@ resets the env variable you set
 shows all environmental variables
 
 18. [ ] exit
+
+--------------------------------------------------------------
+Problems
+
+exit
