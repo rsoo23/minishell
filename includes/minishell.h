@@ -128,4 +128,8 @@ void	freeing_2darray(char **s);
 char	*merge_path(char *c);
 // void	clear_cmds(t_cmd **cmd_list);
 
+// execute_utils.c
+void	init_fds(t_cmd *lst);
+int		cmd_list_len(t_cmd *lst);
+
 #endif
