@@ -103,7 +103,7 @@ void	clear_cmds(t_cmd **cmd_list);
 void	get_heredoc(t_cmd *new_cmd, char *limiter);
 
 // executing.c
-int		execute(t_cmd *cmd_list);
+// int		execute(t_cmd *cmd_list);
 // printing_msg.c
 int		finishing_up(void);
 void	print_welcome(void);
@@ -132,4 +132,6 @@ char	*merge_path(char *c);
 void	init_fds(t_cmd *lst);
 int		cmd_list_len(t_cmd *lst);
 
+// execute.c
+int		execute(t_cmd *inst);
 #endif

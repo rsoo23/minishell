@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 12:43:05 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/26 16:19:27 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	error_temp(void)
 	exit(EXIT_FAILURE);
 }
 
-void	execute(t_cmd *inst)
+void	execute_child(t_cmd *inst)
 {
 	pid_t	pid;
 	char	*temp;
@@ -28,16 +28,20 @@ void	execute(t_cmd *inst)
 		return ;
 	if (pid == 0)
 	{
+		ft_putstr_fd("in  fd ", 2);
+		ft_putnbr_fd(inst->fd_in, 2);
+		ft_putchar_fd('\n', 2);
+		ft_putstr_fd("out fd ", 2);
+		ft_putnbr_fd(inst->fd_out, 2);
+		ft_putchar_fd('\n', 2);
 		if (inst->fd_out != 1)
 			dup2(inst->fd_out, STDOUT_FILENO);
 		if (inst->fd_in != 0)
 			dup2(inst->fd_in, STDIN_FILENO);
 		if (inst->next != NULL)
 			close(inst->next->pipe[0]);
-		temp = merge_path(ft_strjoin("/", inst->cmd[0]));
-		if (!temp)
-			return ;
-		execve(temp, inst->cmd, g_main.envp);
+		temp = merge_path(ft_strjoin("/", inst->cmds[0]));
+		execve(temp, inst->cmds, g_main.envp);
 		error_temp();
 	}
 	else
@@ -90,7 +94,7 @@ int	execute_builtins(char **cmd, int cmd_listlen)
 			return (1);
 		}
 		else if (!ft_strncmp(cmd[0], "exit", cmdl) && array2d_y(cmd) == 1)
-			exit(0);
+			return (2);
 		else if (!ft_strncmp(cmd[0], "export", cmdl) && array2d_y(cmd) == 2)
 		{
 			add_to_envp(cmd[1]);
@@ -100,30 +104,30 @@ int	execute_builtins(char **cmd, int cmd_listlen)
 	return (execute_builtins1(cmd, cmd_listlen));
 }
 
-void	execute_temp(t_cmd *inst)
+int	execute(t_cmd *inst)
 {
 	t_cmd	*temp;
-	int		d_in;
-	int		d_out;
+	int		n;
 
-	d_in = dup(STDIN_FILENO);
-	d_out = dup(STDOUT_FILENO);
 	init_fds(inst);
 	temp = inst;
+	n = 0;
 	while (temp)
 	{
-		if (execute_builtins(temp->cmd, cmd_list_len(inst)) != 1)
-			execute(temp);
+		n = execute_builtins(temp->cmds, cmd_list_len(inst));
+		if (n <= 1)
+			execute_child(temp);
 		temp = temp->next;
 	}
 	wait(NULL);
+	return (n);
 }
 
 // t_cmd	*init_struct(char *f1, char *f2, char *cmd)
 // {
 // 	t_cmd	*head = malloc(sizeof(t_cmd));
 
-// 	head->cmd = ft_split(cmd, ' ');
+// 	head->cmds = ft_split(cmd, ' ');
 // 	if (!f1)
 // 		head->fd_in = 0;
 // 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_list_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 12:48:43 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/25 17:06:30 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/26 15:47:19 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_cmd	*find_last_cmd(t_cmd *cmd_list)
 	if (!cmd_list)
 		return (NULL);
 	temp = cmd_list;
-	while (temp->next)
+	while (temp && temp->next)
 		temp = temp->next;
 	return (temp);
 }

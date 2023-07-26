@@ -67,7 +67,7 @@ static void	get_inputs(t_tok **token_list, t_cmd *new_cmd)
 				get_heredoc(new_cmd, temp->next->str);
 			else
 				get_fd(new_cmd, redir, temp->next->str);
-			printf("inredir: %s %s\n", redir, temp->next->str);
+			// printf("inredir: %s %s\n", redir, temp->next->str);
 			delete_token(token_list, temp->next->str);
 			temp = *token_list;
 			delete_token(token_list, redir);
@@ -91,7 +91,7 @@ static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
 		if (is_output_redir(redir) && temp->next)
 		{
 			get_fd(new_cmd, redir, temp->next->str);
-			printf("outredir: %s %s\n", redir, temp->next->str);
+			// printf("outredir: %s %s\n", redir, temp->next->str);
 			delete_token(token_list, temp->next->str);
 			temp = *token_list;
 			delete_token(token_list, redir);
@@ -115,6 +115,7 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 {
 	t_cmd	*new_cmd;
 
+	new_cmd = NULL;
 	while (*token_list)
 	{
 		new_cmd = init_cmd();

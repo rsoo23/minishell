@@ -12,7 +12,7 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -lreadline
+CFLAGS = -Wall -Werror -Wextra
 CSAN = -fsanitize=address -g3
 RDLINE = -L /usr/local/Cellar/readline/8.2.1/lib -I /usr/local/Cellar/readline/8.2.1/include -lreadline
 RM = rm -rf
@@ -31,16 +31,16 @@ SRCS = main \
 		parsing/parsing_utils_1 \
 		parsing/cmd_list_utils_1 \
 		parsing/heredoc \
-		executing/executing \
-		executing/executing_utils_1
+		executing/execute \
+		executing/execute_utils
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
 
 LIBFT_DIR = libft
 LIBFT = libft.a
-
+# -L /usr/local/Cellar/readline/8.2.1/lib 
 %.o: %.c ./Makefile
-	$(CC) $(CFLAGS) $(CSAN) $(RDLINE) -c $< -o $@
+	$(CC) $(CFLAGS) $(CSAN) -I /usr/local/Cellar/readline/8.2.1/include -c $< -o $@
 
 all: $(NAME)
 

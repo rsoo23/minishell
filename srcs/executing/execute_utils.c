@@ -6,11 +6,11 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 12:42:09 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 12:43:09 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/26 12:51:25 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishel.h"
+#include "../../includes/minishell.h"
 
 int	cmd_list_len(t_cmd *lst)
 {

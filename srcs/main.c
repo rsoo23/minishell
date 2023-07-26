@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/21 11:00:57 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/26 16:12:00 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,26 @@ void	sig_handler(int signum)
 // then at wait pid area you set the signal to sig_handler_child
 void	sig_handler_child(int signum)
 {
+	(void)signum;
 	printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	return ;
+}
+
+void	cmd_clear(t_cmd *cmd_list)
+{
+	t_cmd	*temp;
+
+	if (!cmd_list)
+		return ;
+	while (cmd_list)
+	{
+		temp = cmd_list;
+		cmd_list = cmd_list->next;
+		freeing_2darray(temp->cmds);
+		free(temp);
+	}
 }
 
 // the main where we initialize the g_main variable and print the welcome msg
@@ -69,8 +85,8 @@ int	main(int ac, char **av, char **envp)
 	print_welcome();
 	while (!in)
 	{
-		signal(SIGINT, sig_handler);
-		signal(SIGQUIT, sig_handler);
+		// signal(SIGINT, sig_handler);
+		// signal(SIGQUIT, sig_handler);
 		temp = name_finder(g_main.current_path);
 		g_main.user_input = readline(temp);
 		free(temp);
@@ -79,11 +95,12 @@ int	main(int ac, char **av, char **envp)
 		add_history(g_main.user_input);
 		tokenize(&g_main.tokens_info, g_main.user_input);
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
-		delete_all_tokens(&g_main.tokens_info.token_list);
-		execute(g_main.cmd_list);
+		in = execute(g_main.cmd_list);
+		cmd_clear(g_main.cmd_list);
+		g_main.cmd_list = NULL;
 		free(g_main.user_input);
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
+		// signal(SIGQUIT, SIG_DFL);
+		// signal(SIGINT, SIG_DFL);
 	}
 	return (finishing_up());
 }
