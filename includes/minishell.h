@@ -105,7 +105,7 @@ void	get_heredoc(t_cmd *new_cmd, char *limiter);
 // executing.c
 // int		execute(t_cmd *cmd_list);
 // printing_msg.c
-int		finishing_up(void);
+int		end_minishell(void);
 void	print_welcome(void);
 // envp_func.c
 char	*shell_getenv(char *s);

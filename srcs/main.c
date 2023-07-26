@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 17:12:25 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/26 20:45:31 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ void	cmd_clear(t_cmd *cmd_list)
 int	main(int ac, char **av, char **envp)
 {
 	char	*temp;
-	int		in;
+	int		exit_status;
 
 	(void)ac;
 	(void)av;
+	exit_status = 0;
 	main_init(envp);
-	in = 0;
 	print_welcome();
-	while (!in)
+	while (!exit_status)
 	{
 		// signal(SIGINT, sig_handler);
 		// signal(SIGQUIT, sig_handler);
@@ -95,12 +95,13 @@ int	main(int ac, char **av, char **envp)
 		add_history(g_main.user_input);
 		tokenize(&g_main.tokens_info, g_main.user_input);
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
-		in = execute(g_main.cmd_list);
+		exit_status = execute(g_main.cmd_list);
+		printf("in: %d\n", exit_status);
 		cmd_clear(g_main.cmd_list);
 		g_main.cmd_list = NULL;
 		free(g_main.user_input);
 		// signal(SIGQUIT, SIG_DFL);
 		// signal(SIGINT, SIG_DFL);
 	}
-	return (finishing_up());
+	return (end_minishell());
 }

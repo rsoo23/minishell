@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:05:40 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 09:42:43 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/26 20:37:30 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // frees the envp(thats the only one we malloced)
 // then it prints out the end msg
-int	finishing_up(void)
+int	end_minishell(void)
 {
 	freeing_2darray(g_main.envp);
 	printf("\n\033[96m╔═════════════════════════════════════");
