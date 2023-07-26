@@ -78,4 +78,4 @@ Special:
     - [ ] wc -w << stop << boom << hi |
         - pipe left hanging, waits for input of cmd to read from pipe
 
-cc -Wall -Wextra -Werror parsing/*.c tokenizing/*.c metachar_check.c ../libft/libft.a
+cc -Wall -Wextra -Werror parsing/*.c tokenizing/*.c metachar_check.c ../libft/libft.a -lreadline -fsanitize=address -ggdb

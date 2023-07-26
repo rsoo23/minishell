@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/16 11:41:07 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/16 11:41:07 by rsoo             ###   ########.fr       */
+/*   Created: 2023/07/26 10:21:44 by rsoo              #+#    #+#             */
+/*   Updated: 2023/07/26 10:21:44 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void	get_cmds(t_tok **token_list, t_cmd *new_cmd)
 			delete_token(token_list, temp->str);
 			temp = *token_list;
 			get_cmd_flag(token_list, new_cmd, temp);
-			if (temp && !ft_strncmp(temp->str, "|", 1))
-				delete_token(token_list, temp->str);
 			break ;
 		}
 		temp = temp->next;
@@ -69,9 +67,10 @@ static void	get_inputs(t_tok **token_list, t_cmd *new_cmd)
 				get_heredoc(new_cmd, temp->next->str);
 			else
 				get_fd(new_cmd, redir, temp->next->str);
-			delete_token(token_list, redir);
+			printf("inredir: %s %s\n", redir, temp->next->str);
 			delete_token(token_list, temp->next->str);
 			temp = *token_list;
+			delete_token(token_list, redir);
 			continue ;
 		}
 		temp = temp->next;
@@ -92,24 +91,25 @@ static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
 		if (is_output_redir(redir) && temp->next)
 		{
 			get_fd(new_cmd, redir, temp->next->str);
-			delete_token(token_list, redir);
+			printf("outredir: %s %s\n", redir, temp->next->str);
 			delete_token(token_list, temp->next->str);
 			temp = *token_list;
+			delete_token(token_list, redir);
 			continue ;
 		}
 		temp = temp->next;
 	}
 }
 
-void	print_tok(t_tok *token_list)
-{
-	t_tok *temp = token_list;
-	while (temp)
-	{
-		printf("%d: %s\n", temp->index, temp->str);
-		temp = temp->next;
-	}
-}
+// void	print_tok(t_tok *token_list)
+// {
+// 	t_tok *temp = token_list;
+// 	while (temp)
+// 	{
+// 		printf("%d: %s\n", temp->index, temp->str);
+// 		temp = temp->next;
+// 	}
+// }
 
 void	parse(t_tok **token_list, t_cmd **cmd_list)
 {
@@ -122,34 +122,39 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 		get_outputs(token_list, new_cmd);
 		get_cmds(token_list, new_cmd);
 		add_cmd_to_back(cmd_list, new_cmd);
+		if (*token_list && !ft_strncmp((*token_list)->str, "|", 1) \
+		&& !(*token_list)->next)
+			hanging_pipe(cmd_list, new_cmd, token_list);
+		else if (*token_list && !ft_strncmp((*token_list)->str, "|", 1) \
+		&& (*token_list)->next)
+			delete_token(token_list, (*token_list)->str);
 	}
 }
 
+// void	print_cmd_list(t_cmd *cmd_list)
+// {
+// 	t_cmd	*temp = cmd_list;
+// 	while (temp)
+// 	{
+// 		int i = -1;
+// 		if (temp->cmds)
+// 			while (temp->cmds[++i])
+// 				printf("cmd %d: %s\n", i, temp->cmds[i]);
+// 		printf("fd_in: %d\n", temp->fd_in);
+// 		printf("fd_out: %d\n", temp->fd_out);
+// 		temp = temp->next;
+// 	}
+// }
 
-void	print_cmd_list(t_cmd *cmd_list)
-{
-	t_cmd	*temp = cmd_list;
-	while (temp)
-	{
-		int i = -1;
-		if (temp->cmds)
-			while (temp->cmds[++i])
-				printf("cmd %d: %s\n", i, temp->cmds[i]);
-		printf("fd_in: %d\n", temp->fd_in);
-		printf("fd_out: %d\n", temp->fd_out);
-		temp = temp->next;
-	}
-}
+// int main(int ac, char **av)
+// {
+// 	(void)ac;
+// 	t_tok_info	info;
+// 	t_cmd		*cmd_list;
 
-int main(int ac, char **av)
-{
-	(void)ac;
-	t_tok_info	info;
-	t_cmd		*cmd_list;
-
-	tokenize(&info, av[1]);
-	print_tok(info.token_list);
-	cmd_list = NULL;
-	parse(&info.token_list, &cmd_list);
-	print_cmd_list(cmd_list);		
-}
+// 	tokenize(&info, av[1]);
+// 	print_tok(info.token_list);
+// 	cmd_list = NULL;
+// 	parse(&info.token_list, &cmd_list);
+// 	print_cmd_list(cmd_list);
+// }

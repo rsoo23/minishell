@@ -81,12 +81,13 @@ void	add_token_to_back(t_tok **token_list, t_tok *new_token);
 void	delete_token(t_tok **token_list, char *content);
 
 // parsing.c
-void	parse(t_tok **token_list, t_cmd **cmd_list);
+void	parse(t_tok **tok_lst, t_cmd **cmd_lst);
 // parsing_utils_1.c
 char	**append_cmds(char **cmds, char *str);
 void	assign_infile_fd(t_cmd *cmd_list);
 void	assign_outfile_fd(t_cmd *cmd_list);
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
+void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst);
 // parsing_utils_2.c
 int		is_pipe(char *str);
 int		is_meta_char(char c);

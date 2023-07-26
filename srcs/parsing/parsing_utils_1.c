@@ -59,3 +59,14 @@ void	get_fd(t_cmd *new_cmd, char *redir, char *file_name)
 	else if (is_output_redir(redir) == 2)
 		new_cmd->fd_out = open(file_name, O_CREAT | O_WRONLY | O_APPEND, 0666);
 }
+
+void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst)
+{
+	char	*pending_cmd;
+
+	new_cmd = init_cmd();
+	pending_cmd = readline("> ");
+	new_cmd->cmds = ft_split(pending_cmd, ' ');
+	add_cmd_to_back(cmd_list, new_cmd);
+	delete_token(tok_lst, (*tok_lst)->str);
+}
