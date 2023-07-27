@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:13:10 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 11:41:33 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/27 10:13:24 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	shell_echo(char **a)
 		while (a[i])
 		{
 			printf("%s", a[i]);
-			if (a[i + 1])
+			if (a[++i])
 				printf(" ");
 		}
 	}
@@ -59,7 +59,7 @@ void	shell_echo(char **a)
 		while (a[i])
 		{
 			printf("%s", a[i]);
-			if (a[i + 1])
+			if (a[++i])
 				printf(" ");
 		}
 		printf("\n");

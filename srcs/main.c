@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 23:46:31 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/27 10:13:00 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,12 @@ int	main(int ac, char **av, char **envp)
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		exit_status = execute(g_main.cmd_list);
 		
-		if (exit_status == DISPLAY_BUILTIN)
-			printf("display builtin executed\n");
-		else if (exit_status == ACTION_BUILTIN)
-			printf("action builtin executed\n");
-		else
-			printf("in: %d\n", exit_status);
+		// if (exit_status == DISPLAY_BUILTIN)
+		// 	printf("display builtin executed\n");
+		// else if (exit_status == ACTION_BUILTIN)
+		// 	printf("action builtin executed\n");
+		// else
+		// 	printf("in: %d\n", exit_status);
 
 		cmd_clear(g_main.cmd_list);
 		g_main.cmd_list = NULL;

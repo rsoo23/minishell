@@ -12,21 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-void	get_cmd_flag(t_tok **token_list, t_cmd *new_cmd, t_tok *temp)
-{
-	while (temp && !is_pipe(temp->str))
-	{
-		if (!ft_strncmp(&temp->str[0], "-", 1))
-		{
-			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
-			delete_token(token_list, temp->str);
-			temp = *token_list;
-			continue ;
-		}
-		temp = temp->next;
-	}
-}
-
 // Get any commands while searching for any corresponding flags,
 // assigning it into a 2d array
 
@@ -43,8 +28,7 @@ void	get_cmds(t_tok **token_list, t_cmd *new_cmd)
 			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
 			delete_token(token_list, temp->str);
 			temp = *token_list;
-			get_cmd_flag(token_list, new_cmd, temp);
-			break ;
+			continue ;
 		}
 		temp = temp->next;
 	}
