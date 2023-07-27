@@ -114,11 +114,13 @@ static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
 void	parse(t_tok **token_list, t_cmd **cmd_list)
 {
 	t_cmd	*new_cmd;
+	int		pipe_stat;
 
 	new_cmd = NULL;
+	pipe_stat = 0;
 	while (*token_list)
 	{
-		new_cmd = init_cmd();
+		new_cmd = init_cmd(pipe_stat);
 		get_inputs(token_list, new_cmd);
 		get_outputs(token_list, new_cmd);
 		get_cmds(token_list, new_cmd);
@@ -129,6 +131,7 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 		else if (*token_list && !ft_strncmp((*token_list)->str, "|", 1) \
 		&& (*token_list)->next)
 			delete_token(token_list, (*token_list)->str);
+		pipe_stat = 1;
 	}
 }
 

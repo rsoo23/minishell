@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 23:46:31 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/27 10:30:08 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	sig_handler(int signum)
 	if (signum == SIGINT)
 		printf("\n");
 	rl_on_new_line();
-	// rl_replace_line("", 0);
 	rl_redisplay();
 }
 
@@ -49,20 +48,19 @@ void	sig_handler_child(int signum)
 	(void)signum;
 	printf("\n");
 	rl_on_new_line();
-	// rl_replace_line("", 0);
 	return ;
 }
 
-void	cmd_clear(t_cmd *cmd_list)
+void	cmd_clear(t_cmd **cmd_list)
 {
 	t_cmd	*temp;
 
 	if (!cmd_list)
 		return ;
-	while (cmd_list)
+	while (*cmd_list)
 	{
-		temp = cmd_list;
-		cmd_list = cmd_list->next;
+		temp = *cmd_list;
+		*cmd_list = (*cmd_list)->next;
 		freeing_2darray(temp->cmds);
 		free(temp);
 	}
@@ -83,7 +81,7 @@ int	main(int ac, char **av, char **envp)
 	exit_status = 0;
 	main_init(envp);
 	print_welcome();
-	while (exit_status != 1)
+	while (exit_status != EXIT_SHELL)
 	{
 		// signal(SIGINT, sig_handler);
 		// signal(SIGQUIT, sig_handler);
@@ -97,14 +95,14 @@ int	main(int ac, char **av, char **envp)
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		exit_status = execute(g_main.cmd_list);
 		
-		if (exit_status == DISPLAY_BUILTIN)
-			printf("display builtin executed\n");
-		else if (exit_status == ACTION_BUILTIN)
-			printf("action builtin executed\n");
-		else
-			printf("in: %d\n", exit_status);
+		// if (exit_status == DISPLAY_BUILTIN)
+		// 	printf("display builtin executed\n");
+		// else if (exit_status == ACTION_BUILTIN)
+		// 	printf("action builtin executed\n");
+		// else
+		// 	printf("in: %d\n", exit_status);
 
-		cmd_clear(g_main.cmd_list);
+		cmd_clear(&g_main.cmd_list);
 		g_main.cmd_list = NULL;
 		free(g_main.user_input);
 		// signal(SIGQUIT, SIG_DFL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 12:42:09 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 00:12:01 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/27 09:36:52 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_fds(t_cmd *lst)
 	temp = lst;
 	while (temp)
 	{
-		if (temp->fd_in == 0 && temp->prev != NULL)
+		if (temp->fd_in == 0 && temp->prev != NULL && temp->pipe_stat == 1)
 			temp->fd_in = temp->pipe[0];
 		if (temp->fd_out == 1 && temp->next != NULL)
 			temp->fd_out = temp->next->pipe[1];

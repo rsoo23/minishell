@@ -57,6 +57,7 @@ typedef struct s_cmd
 	char			**cmds;
 	int				fd_in;
 	int				fd_out;
+	int				pipe_stat;
 	int				pipe[2];
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
@@ -78,6 +79,7 @@ extern t_main	g_main;
 //tokenizing.c
 void	tokenize(t_tok_info *info, char *s);
 int		is_wspace(char c);
+
 // token_list_utils_1.c
 t_tok	*init_token(char *temp_tok_str, int tok_i);
 t_tok	*last_token(t_tok *token_list);
@@ -86,51 +88,57 @@ void	delete_token(t_tok **token_list, char *content);
 
 // parsing.c
 void	parse(t_tok **tok_lst, t_cmd **cmd_lst);
+
 // parsing_utils_1.c
 char	**append_cmds(char **cmds, char *str);
 void	assign_infile_fd(t_cmd *cmd_list);
 void	assign_outfile_fd(t_cmd *cmd_list);
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
 void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst);
+
 // parsing_utils_2.c
 int		is_pipe(char *str);
 int		is_meta_char(char c);
 int		is_input_redir(char *redir);
 int		is_output_redir(char *redir);
 int		is_heredoc(char *redir);
+
 // cmd_list_utils_1.c
-t_cmd	*init_cmd(void);
+t_cmd	*init_cmd(int pipe_stat);
 t_cmd	*find_last_cmd(t_cmd *cmd_list);
 void	add_cmd_to_back(t_cmd **cmd_list, t_cmd *new_cmd);
 void	clear_cmds(t_cmd **cmd_list);
+
 // heredoc.c
 void	get_heredoc(t_cmd *new_cmd, char *limiter);
 
-// executing.c
-// int		execute(t_cmd *cmd_list);
 // printing_msg.c
 int		end_minishell(void);
 void	print_welcome(void);
+
 // envp_func.c
 char	*shell_getenv(char *s);
 void	add_to_envp(char *s);
 void	remove_envp(char *s);
 void	unset_envp(char *s);
 char	**envp_dup(char **envp);
+
 // builtins.c
 int		changing_dir(char **arr);
 void	shell_echo(char **a);
+
 // shell_utils1.c
 char	*shell_strjoin(char const *s1, char *s2, char const *s3, int num);
 char	*name_finder(char *s);
 char	**array_append(char **a, char *line);
 int		array2d_y(char **a);
+
 // shell_utils2.c
 int		find_char(char *s, char c);
 void	print_envp(void);
 void	freeing_2darray(char **s);
 char	*merge_path(char *c);
-// void	clear_cmds(t_cmd **cmd_list);
+void	cmd_clear(t_cmd **cmd_list);
 
 // execute_utils.c
 void	init_fds(t_cmd *lst);

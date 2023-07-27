@@ -3,21 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 00:12:11 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/27 10:30:50 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	error_temp(void)
+void	cmd_error(char *cmd_path, t_cmd *cmd_lst)
 {
-	printf("Error: cmd not found\n");
+	t_cmd	*temp;
+
+	temp = cmd_lst;
+	printf("\033[95mminishell\033[0;37m: \033[0;31m%s", cmd_lst->cmds[0]);
+	printf("\033[0;37m: command not found\n");
+	free(cmd_path);
+	while (temp->prev)
+		temp = temp->prev;
+	cmd_clear(&cmd_lst);
+	freeing_2darray(g_main.envp);
 	exit(EXIT_FAILURE);
 }
 
+int	exec_action_builtins(char **cmd, int cmd_lst_len)
+{
+	int	cmd_wrd_len;
+
+	cmd_wrd_len = ft_strlen(cmd[0]);
+	if (!(cmd_lst_len >= 1 && cmd_lst_len <= 2))
+		return (0);
+	if (!ft_strncmp(cmd[0], "cd", cmd_wrd_len))
+		changing_dir(cmd);
+	else if (!ft_strncmp(cmd[0], "unset", cmd_wrd_len) && cmd_lst_len == 2)
+		remove_envp(cmd[1]);
+	else if (!ft_strncmp(cmd[0], "export", cmd_wrd_len) && cmd_lst_len == 2)
+		add_to_envp(cmd[1]);
+	else if (!ft_strncmp(cmd[0], "exit", cmd_wrd_len) && cmd_lst_len == 1)
+		return (EXIT_SHELL);
+	else
+		return (0);
+	return (ACTION_BUILTIN);
+}
+
+// used to execute display builtins like pwd for path or env for envp
+int	exec_display_builtins(char **cmd)
+{
+	int	cmd_wrd_len;
+
+	cmd_wrd_len = ft_strlen(cmd[0]);
+	if (!ft_strncmp(cmd[0], "pwd", cmd_wrd_len))
+		printf("%s\n", g_main.current_path);
+	else if (!ft_strncmp(cmd[0], "env", cmd_wrd_len))
+		print_envp();
+	else if (!ft_strncmp(cmd[0], "echo", cmd_wrd_len))
+		shell_echo(cmd);
+	else if (!ft_strncmp(cmd[0], "export", cmd_wrd_len))
+		add_to_envp(cmd[1]);
+	else
+		return (0);
+	return (DISPLAY_BUILTIN);
+}
+
+// --------- USED FOR DEBUGGING ---------
+// | ft_putstr_fd("in  fd ", 2);
+// | ft_putnbr_fd(cmd_list->fd_in, 2);
+// | ft_putchar_fd('\n', 2);		
+// | ft_putstr_fd("out fd ", 2);	
+// | ft_putnbr_fd(cmd_list->fd_out, 2);
+// | ft_putchar_fd('\n', 2);		
+// --------------\/----------------------
 void	execute_child(t_cmd *cmd_list)
 {
 	pid_t	pid;
@@ -28,68 +84,40 @@ void	execute_child(t_cmd *cmd_list)
 		return ;
 	if (pid == 0)
 	{
-		// ft_putstr_fd("in  fd ", 2);
-		// ft_putnbr_fd(cmd_list->fd_in, 2);
-		// ft_putchar_fd('\n', 2);
-		// ft_putstr_fd("out fd ", 2);
-		// ft_putnbr_fd(cmd_list->fd_out, 2);
-		// ft_putchar_fd('\n', 2);
 		if (cmd_list->fd_in != 0)
 			dup2(cmd_list->fd_in, STDIN_FILENO);
 		if (cmd_list->fd_out != 1)
 			dup2(cmd_list->fd_out, STDOUT_FILENO);
 		if (cmd_list->next != NULL)
 			close(cmd_list->next->pipe[0]);
+		if (exec_display_builtins(cmd_list->cmds) == DISPLAY_BUILTIN)
+			exit(EXIT_SUCCESS);
 		temp = merge_path(ft_strjoin("/", cmd_list->cmds[0]));
 		execve(temp, cmd_list->cmds, g_main.envp);
-		error_temp();
+		cmd_error(temp, cmd_list);
 	}
 	else
 		if (cmd_list->next != NULL)
 			close(cmd_list->next->pipe[1]);
 }
 
-int	exec_action_builtins(char **cmd, int cmd_len)
+void	cleaning_unused_fd(t_cmd *cmd_lst, int *default_std)
 {
-	if (!ft_strncmp(cmd[0], "cd", cmd_len))
-		changing_dir(cmd);
-	else if (!ft_strncmp(cmd[0], "unset", cmd_len) && array2d_y(cmd) == 2)
-		remove_envp(cmd[1]);
-	else if (!ft_strncmp(cmd[0], "export", cmd_len) && array2d_y(cmd) == 2)
-		add_to_envp(cmd[1]);
-	else if (!ft_strncmp(cmd[0], "exit", cmd_len) && array2d_y(cmd) == 1)
-		return (EXIT_SHELL);
-	else
-		return (0);
-	return (ACTION_BUILTIN);
-}
+	t_cmd	*temp;
 
-int	exec_display_builtins(char **cmd, int cmd_len)
-{
-	if (!ft_strncmp(cmd[0], "pwd", cmd_len))
-		printf("%s\n", g_main.current_path);
-	else if (!ft_strncmp(cmd[0], "env", cmd_len))
-		print_envp();
-	else if (!ft_strncmp(cmd[0], "echo", cmd_len))
-		shell_echo(cmd);
-	else if (!ft_strncmp(cmd[0], "export", cmd_len))
-		add_to_envp(cmd[1]);
-	else
-		return (0);
-	return (DISPLAY_BUILTIN);
-}
-
-int	execute_builtins(char **cmd, int cmd_list_len)
-{
-	int	cmd_len;
-	int	exit_status;
-
-	cmd_len = ft_strlen(cmd[0]);
-	exit_status = 0;
-	if (cmd_list_len == 1)
-		exit_status = exec_action_builtins(cmd, cmd_len);
-	exit_status = exec_display_builtins(cmd, cmd_len);
-	return (exit_status);
+	if (!cmd_lst)
+		return ;
+	temp = cmd_lst;
+	while (temp)
+	{
+		if (temp->pipe_stat == 1)
+			close(temp->pipe[0]);
+		temp = temp->next;
+	}
+	dup2(default_std[0], STDIN_FILENO);
+	dup2(default_std[1], STDOUT_FILENO);
+	close(default_std[0]);
+	close(default_std[1]);
 }
 
 int	execute(t_cmd *cmd_list)
@@ -97,14 +125,21 @@ int	execute(t_cmd *cmd_list)
 	t_cmd	*temp;
 	int		exit_status;
 	int		cmd_list_len;
+	int		default_std[2];
 
 	init_fds(cmd_list);
 	temp = cmd_list;
 	exit_status = 0;
 	cmd_list_len = get_cmd_list_len(cmd_list);
+	default_std[0] = dup(STDIN_FILENO);
+	default_std[1] = dup(STDOUT_FILENO);
+	// ft_putnbr_fd(d_in, 2);
+	// ft_putchar_fd('\n', 2);
+	// ft_putnbr_fd(d_out, 2);
+	// ft_putchar_fd('\n', 2);
 	while (temp)
 	{
-		exit_status = execute_builtins(temp->cmds, cmd_list_len);
+		exit_status = exec_action_builtins(temp->cmds, cmd_list_len);
 		if (exit_status == EXIT_SHELL || exit_status == ACTION_BUILTIN)
 			break ;
 		if (exit_status == 0 || (exit_status == DISPLAY_BUILTIN && cmd_list_len > 1))
@@ -112,6 +147,7 @@ int	execute(t_cmd *cmd_list)
 		temp = temp->next;
 	}
 	wait(NULL);
+	cleaning_unused_fd(cmd_list, default_std);
 	return (exit_status);
 }
 

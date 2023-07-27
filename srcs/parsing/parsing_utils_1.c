@@ -64,7 +64,7 @@ void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst)
 {
 	char	*pending_cmd;
 
-	new_cmd = init_cmd();
+	new_cmd = init_cmd(1);
 	pending_cmd = readline("> ");
 	new_cmd->cmds = ft_split(pending_cmd, ' ');
 	add_cmd_to_back(cmd_list, new_cmd);

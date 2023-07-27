@@ -6,13 +6,13 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 12:48:43 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/26 15:47:19 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/27 09:33:36 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_cmd	*init_cmd(void)
+t_cmd	*init_cmd(int pipe_stat)
 {
 	t_cmd	*new_cmd;
 
@@ -22,10 +22,14 @@ t_cmd	*init_cmd(void)
 	new_cmd->cmds = NULL;
 	new_cmd->fd_in = 0;
 	new_cmd->fd_out = 1;
-	if (pipe(new_cmd->pipe) == -1)
+	new_cmd->pipe_stat = pipe_stat;
+	if (pipe_stat == 1)
 	{
-		free(new_cmd);
-		return (NULL);
+		if (pipe(new_cmd->pipe) == -1)
+		{
+			free(new_cmd);
+			return (NULL);
+		}
 	}
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
