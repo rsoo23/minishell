@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 20:45:31 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/26 23:46:31 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	main(int ac, char **av, char **envp)
 	exit_status = 0;
 	main_init(envp);
 	print_welcome();
-	while (!exit_status)
+	while (exit_status != 1)
 	{
 		// signal(SIGINT, sig_handler);
 		// signal(SIGQUIT, sig_handler);
@@ -96,7 +96,14 @@ int	main(int ac, char **av, char **envp)
 		tokenize(&g_main.tokens_info, g_main.user_input);
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		exit_status = execute(g_main.cmd_list);
-		printf("in: %d\n", exit_status);
+		
+		if (exit_status == DISPLAY_BUILTIN)
+			printf("display builtin executed\n");
+		else if (exit_status == ACTION_BUILTIN)
+			printf("action builtin executed\n");
+		else
+			printf("in: %d\n", exit_status);
+
 		cmd_clear(g_main.cmd_list);
 		g_main.cmd_list = NULL;
 		free(g_main.user_input);

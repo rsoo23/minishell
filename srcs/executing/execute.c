@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 17:16:50 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/27 00:12:11 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,79 +49,82 @@ void	execute_child(t_cmd *cmd_list)
 			close(cmd_list->next->pipe[1]);
 }
 
-int	execute_builtins1(char **cmd_arr, int cmd_len)
+int	exec_action_builtins(char **cmd, int cmd_len)
 {
-	if (!ft_strncmp(cmd_arr[0], "pwd", cmd_len))
-	{
-		printf("%s\n", g_main.current_path);
-		return (1);
-	}
-	else if (!ft_strncmp(cmd_arr[0], "env", cmd_len))
-	{
-		print_envp();
-		return (1);
-	}
-	else if (!ft_strncmp(cmd_arr[0], "echo", cmd_len))
-	{
-		shell_echo(cmd_arr);
-		return (1);
-	}
-	else if (!ft_strncmp(cmd_arr[0], "export", cmd_len) \
-	&& array2d_y(cmd_arr) == 1)
-	{
-		add_to_envp(cmd_arr[1]);
-		return (1);
-	}
-	return (0);
+	if (!ft_strncmp(cmd[0], "cd", cmd_len))
+		changing_dir(cmd);
+	else if (!ft_strncmp(cmd[0], "unset", cmd_len) && array2d_y(cmd) == 2)
+		remove_envp(cmd[1]);
+	else if (!ft_strncmp(cmd[0], "export", cmd_len) && array2d_y(cmd) == 2)
+		add_to_envp(cmd[1]);
+	else if (!ft_strncmp(cmd[0], "exit", cmd_len) && array2d_y(cmd) == 1)
+		return (EXIT_SHELL);
+	else
+		return (0);
+	return (ACTION_BUILTIN);
 }
 
-int	execute_builtins(char **cmd, int cmd_listlen)
+int	exec_display_builtins(char **cmd, int cmd_len)
+{
+	if (!ft_strncmp(cmd[0], "pwd", cmd_len))
+		printf("%s\n", g_main.current_path);
+	else if (!ft_strncmp(cmd[0], "env", cmd_len))
+		print_envp();
+	else if (!ft_strncmp(cmd[0], "echo", cmd_len))
+		shell_echo(cmd);
+	else if (!ft_strncmp(cmd[0], "export", cmd_len))
+		add_to_envp(cmd[1]);
+	else
+		return (0);
+	return (DISPLAY_BUILTIN);
+}
+
+int	execute_builtins(char **cmd, int cmd_list_len)
 {
 	int	cmd_len;
+	int	exit_status;
 
 	cmd_len = ft_strlen(cmd[0]);
-	if (cmd_listlen == 1)
-	{
-		if (!ft_strncmp(cmd[0], "cd", cmd_len))
-		{
-			changing_dir(cmd);
-			return (1);
-		}
-		else if (!ft_strncmp(cmd[0], "unset", cmd_len)
-			&& array2d_y(cmd) == 2)
-		{
-			remove_envp(cmd[1]);
-			return (1);
-		}
-		else if (!ft_strncmp(cmd[0], "exit", cmd_len) && array2d_y(cmd) == 1)
-			return (2);
-		else if (!ft_strncmp(cmd[0], "export", cmd_len) && array2d_y(cmd) == 2)
-		{
-			add_to_envp(cmd[1]);
-			return (1);
-		}
-	}
-	return (execute_builtins1(cmd, cmd_len));
+	exit_status = 0;
+	if (cmd_list_len == 1)
+		exit_status = exec_action_builtins(cmd, cmd_len);
+	exit_status = exec_display_builtins(cmd, cmd_len);
+	return (exit_status);
 }
 
 int	execute(t_cmd *cmd_list)
 {
 	t_cmd	*temp;
 	int		exit_status;
+	int		cmd_list_len;
 
 	init_fds(cmd_list);
 	temp = cmd_list;
 	exit_status = 0;
+	cmd_list_len = get_cmd_list_len(cmd_list);
 	while (temp)
 	{
-		exit_status = execute_builtins(temp->cmds, cmd_list_len(cmd_list));
-		if (exit_status <= 1)
+		exit_status = execute_builtins(temp->cmds, cmd_list_len);
+		if (exit_status == EXIT_SHELL || exit_status == ACTION_BUILTIN)
+			break ;
+		if (exit_status == 0 || (exit_status == DISPLAY_BUILTIN && cmd_list_len > 1))
 			execute_child(temp);
 		temp = temp->next;
 	}
 	wait(NULL);
 	return (exit_status);
 }
+
+// display
+// 	pwd
+// 	env
+// 	echo [string]
+// 	export
+// action
+// 	cd [path]
+// 	unset [var]
+// 	exit
+// 	export [var]
 
 // t_cmd	*init_struct(char *f1, char *f2, char *cmd)
 // {

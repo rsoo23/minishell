@@ -32,6 +32,10 @@
 # include <sys/wait.h>               // wait, waitpid, wait3, wait4
 # include <termios.h>                // tcsetattr, tcgetattr
 
+# define DISPLAY_BUILTIN 2
+# define ACTION_BUILTIN 3
+# define EXIT_SHELL 4
+
 typedef struct s_tok
 {
     int				index;
@@ -130,7 +134,7 @@ char	*merge_path(char *c);
 
 // execute_utils.c
 void	init_fds(t_cmd *lst);
-int		cmd_list_len(t_cmd *lst);
+int		get_cmd_list_len(t_cmd *lst);
 
 // execute.c
 int		execute(t_cmd *inst);
