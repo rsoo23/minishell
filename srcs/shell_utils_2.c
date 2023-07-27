@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:19:17 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/26 09:43:03 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/27 11:05:18 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,28 @@ void	print_envp(void)
 	i = 0;
 	while (g_main.envp[i])
 		printf("%s\n", g_main.envp[i++]);
+}
+
+void	print_export(void)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (g_main.envp[i])
+	{
+		printf("declare -x ");
+		j = 0;
+		while (g_main.envp[i][j])
+		{
+			printf("%c", g_main.envp[i][j]);
+			if (g_main.envp[i][j] == '=')
+				printf("\"");
+			j++;
+		}
+		printf("\"\n");
+		i++;
+	}
 }
 
 void	freeing_2darray(char **s)

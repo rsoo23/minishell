@@ -1,6 +1,5 @@
 1. [ ] Prompt
 Parent + Child 
-Lexing and Parsing done in Child
 Ctrl + C kills the child and returns to parent
 Ctrl + D kills the parent
 Ctrl + \ can’t do anything 
@@ -54,7 +53,7 @@ Absolute and relative paths
 Print working directory (absolute)
 
 15. [ ] export
-generate or display all exported variables 
+    - generate or display all exported variables (with declare -x)
 But we do not need to set variables
 
 16. [ ] unset

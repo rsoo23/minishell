@@ -136,6 +136,7 @@ int		array2d_y(char **a);
 // shell_utils2.c
 int		find_char(char *s, char c);
 void	print_envp(void);
+void	print_export(void);
 void	freeing_2darray(char **s);
 char	*merge_path(char *c);
 void	cmd_clear(t_cmd **cmd_list);

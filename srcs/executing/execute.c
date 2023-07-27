@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 10:30:50 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/27 11:20:16 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,19 @@ void	cmd_error(char *cmd_path, t_cmd *cmd_lst)
 
 int	exec_action_builtins(char **cmd, int cmd_lst_len)
 {
-	int	cmd_wrd_len;
+	int	i;
 
-	cmd_wrd_len = ft_strlen(cmd[0]);
+	i = 1;
 	if (!(cmd_lst_len >= 1 && cmd_lst_len <= 2))
 		return (0);
-	if (!ft_strncmp(cmd[0], "cd", cmd_wrd_len))
+	if (!ft_strncmp(cmd[0], "cd", 3))
 		changing_dir(cmd);
-	else if (!ft_strncmp(cmd[0], "unset", cmd_wrd_len) && cmd_lst_len == 2)
+	else if (!ft_strncmp(cmd[0], "unset", 6) && cmd_lst_len == 2)
 		remove_envp(cmd[1]);
-	else if (!ft_strncmp(cmd[0], "export", cmd_wrd_len) && cmd_lst_len == 2)
-		add_to_envp(cmd[1]);
-	else if (!ft_strncmp(cmd[0], "exit", cmd_wrd_len) && cmd_lst_len == 1)
+	else if (!ft_strncmp(cmd[0], "export", 7) && array2d_y(cmd) > 1)
+		while (cmd[i])
+			add_to_envp(cmd[i++]);
+	else if (!ft_strncmp(cmd[0], "exit", 5) && cmd_lst_len == 1)
 		return (EXIT_SHELL);
 	else
 		return (0);
@@ -50,17 +51,14 @@ int	exec_action_builtins(char **cmd, int cmd_lst_len)
 // used to execute display builtins like pwd for path or env for envp
 int	exec_display_builtins(char **cmd)
 {
-	int	cmd_wrd_len;
-
-	cmd_wrd_len = ft_strlen(cmd[0]);
-	if (!ft_strncmp(cmd[0], "pwd", cmd_wrd_len))
+	if (!ft_strncmp(cmd[0], "pwd", 4))
 		printf("%s\n", g_main.current_path);
-	else if (!ft_strncmp(cmd[0], "env", cmd_wrd_len))
+	else if (!ft_strncmp(cmd[0], "env", 4))
 		print_envp();
-	else if (!ft_strncmp(cmd[0], "echo", cmd_wrd_len))
+	else if (!ft_strncmp(cmd[0], "echo", 5))
 		shell_echo(cmd);
-	else if (!ft_strncmp(cmd[0], "export", cmd_wrd_len))
-		add_to_envp(cmd[1]);
+	else if (!ft_strncmp(cmd[0], "export", 7) && !cmd[1])
+		print_export();
 	else
 		return (0);
 	return (DISPLAY_BUILTIN);

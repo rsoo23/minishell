@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:08:13 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/19 10:37:23 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/27 10:45:05 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void	add_to_envp(char *s)
 	int	i;
 	int	pos;
 
-	if (!s)
-		return (print_envp());
 	i = 0;
 	pos = find_char(s, '=');
 	if (pos == (int)ft_strlen(s))
