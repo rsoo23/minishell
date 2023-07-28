@@ -6,12 +6,14 @@ Double Quotes Outside
 
 [x] "hello""hello": hellohello
 [x] "hello''hello": hello''hello
+[ ] ""hi''hi"": hihi
 
 ----------------------------------------------
 Single Quotes Outside
 
 [x] 'hello''hello''hello': hellohellohello
 [x] 'hello"hello"hello': hello"hello"hello
+[ ] ''hi''hi''hi'': hihihi
 
 ----------------------------------------------
 Mixed Quotes

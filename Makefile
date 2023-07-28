@@ -26,12 +26,13 @@ SRCS = main \
 		metachar_check \
 		tokenizing/tokenizing \
 		tokenizing/token_list_utils_1 \
+		tokenizing/expansion \
 		parsing/parsing \
 		parsing/parsing_utils_1 \
 		parsing/cmd_list_utils_1 \
 		parsing/heredoc \
 		executing/execute \
-		executing/execute_utils_1
+		executing/execute_utils_1 
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
 

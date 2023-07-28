@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:16:47 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/28 14:54:47 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/28 23:47:39 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,14 @@ char	*name_finder(char *s)
 	int		s_index;
 
 	i = 0;
-	temp = NULL;
-	if (!ft_strncmp(s, shell_getenv("HOME"), ft_strlen(s) + 1))
+	temp = shell_getenv("HOME");
+	if (!ft_strncmp(s, temp, ft_strlen(s) + 1))
 	{
 		r_str = shell_strjoin("minishell: ", \
 		ft_strdup("~"), "$ ", 1);
 		return (r_str);
 	}
+	free(temp);
 	while (s[i])
 		if (s[i++] == '/')
 			s_index = i;

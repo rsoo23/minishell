@@ -6,32 +6,24 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:08:13 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 10:45:05 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/28 23:41:37 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// this func returns a pointer to the variable from the envp
 char	*shell_getenv(char *s)
 {
 	int	i;
-	int	j;
 	int	len;
 
-	i = 0;
+	i = -1;
 	if (!s)
 		return (NULL);
 	len = ft_strlen(s);
-	while (g_main.envp[i])
-	{
-		j = 0;
-		while (s[j] == g_main.envp[i][j] && j < len)
-			j++;
-		if (!s[j])
-			return (g_main.envp[i] + j + 1);
-		i++;
-	}
+	while (g_main.envp[++i])
+		if (!ft_strncmp(g_main.envp[i], s, len))
+			return (ft_substr(g_main.envp[i], len + 1, 9999));
 	return (NULL);
 }
 

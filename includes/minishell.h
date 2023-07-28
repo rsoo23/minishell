@@ -86,6 +86,10 @@ t_tok	*last_token(t_tok *token_list);
 void	add_token_to_back(t_tok **token_list, t_tok *new_token);
 void	delete_token(t_tok **token_list, char *content);
 
+// expansion.c
+char	*expand_env_vars(char *str);
+char	*ft_strjoin_free_all(const char *s1, const char *s2);
+
 // parsing.c
 void	parse(t_tok **tok_lst, t_cmd **cmd_lst);
 
@@ -96,7 +100,7 @@ void	assign_outfile_fd(t_cmd *cmd_list);
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
 void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst);
 
-// parsing_utils_2.c
+// metachar_check.c
 int		is_pipe(char *str);
 int		is_meta_char(char c);
 int		is_input_redir(char *redir);

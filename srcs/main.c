@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/28 11:29:51 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/28 23:44:44 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	main_init(char **envp)
 	g_main.current_path = malloc(PATH_MAX);
 	ft_strlcpy(g_main.current_path, pwd, ft_strlen(pwd) + 1);
 	g_main.user_path = shell_getenv("HOME");
+	free(pwd);
 	pwd = NULL;
 	pwd = ft_strjoin("SHELL=", g_main.current_path);
 	add_to_envp(pwd);
@@ -114,7 +115,6 @@ int	main(int ac, char **av, char **envp)
 
 		cmd_clear(&g_main.cmd_list);
 		g_main.cmd_list = NULL;
-		free(g_main.user_input);
 		// signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 	}

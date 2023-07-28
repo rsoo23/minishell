@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/25 16:55:30 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/28 23:17:02 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	is_wspace(char c)
 	return (0);
 }
 
-// single quote: ' (ascii: 39)
-// double quote: " (ascii: 34)
 static void	read_quotes(t_tok_info *info, char *s, char q)
 {
 	info->i++;
@@ -37,6 +35,10 @@ static void	read_quotes(t_tok_info *info, char *s, char q)
 	}
 	info->i++;
 	info->temp_word_len++;
+	if (s[info->i] == '\'')
+		read_quotes(info, s, 39);
+	else if (s[info->i] == '"')
+		read_quotes(info, s, 34);
 }
 
 static void	tokenize_word(t_tok_info *info, char *s)
@@ -45,12 +47,13 @@ static void	tokenize_word(t_tok_info *info, char *s)
 	char	*temp_tok_str;
 
 	info->temp_word_len = 0;
-	if (s[info->i] == 39)
+	if (s[info->i] == '\'')
 		read_quotes(info, s, 39);
-	else if (s[info->i] == 34)
+	else if (s[info->i] == '"')
 		read_quotes(info, s, 34);
 	else
 	{
+		printf("reading word\n");
 		while (!is_wspace(s[info->i]) && \
 		!is_meta_char(s[info->i]) && s[info->i])
 		{
@@ -81,22 +84,24 @@ static void	tokenize_meta_char(t_tok_info *info, char *s)
 	add_token_to_back(&info->token_list, new_token);
 }
 
-void	tokenize(t_tok_info *info, char *s)
+void	tokenize(t_tok_info *info, char *str)
 {
-	if (!s)
+	char	*s;
+
+	if (!str)
 		return ;
 	info->i = 0;
 	info->tok_i = 0;
 	info->token_list = NULL;
+	s = expand_env_vars(str);
 	while (s[info->i])
 	{
 		while (is_wspace(s[info->i]) && s[info->i])
 			info->i++;
 		if (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])
 			tokenize_word(info, s);
-		while (is_wspace(s[info->i]) && s[info->i])
-			info->i++;
 		if (is_meta_char(s[info->i]) && s[info->i])
 			tokenize_meta_char(info, s);
 	}
+	free(s);
 }
