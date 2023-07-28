@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 10:45:08 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/27 11:17:43 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,17 @@ t_main	g_main;
 // (shell_getenv is equivalent to getenv but for our global struct)
 void	main_init(char **envp)
 {
+	char	*pwd;
+
 	g_main.envp = envp_dup(envp);
-	g_main.current_path = shell_getenv("PWD");
+	pwd = shell_getenv("PWD");
+	g_main.current_path = malloc(PATH_MAX);
+	ft_strlcpy(g_main.current_path, pwd, ft_strlen(pwd) + 1);
 	g_main.user_path = shell_getenv("HOME");
+	pwd = NULL;
+	pwd = ft_strjoin("SHELL=", g_main.current_path);
+	add_to_envp(pwd);
+	free(pwd);
 }
 
 // this is the signal handler where when a signal is pass through and check if 

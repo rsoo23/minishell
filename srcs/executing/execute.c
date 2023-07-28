@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 11:20:16 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/28 08:41:57 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ void	cmd_error(char *cmd_path, t_cmd *cmd_lst)
 	t_cmd	*temp;
 
 	temp = cmd_lst;
-	printf("\033[95mminishell\033[0;37m: \033[0;31m%s", cmd_lst->cmds[0]);
-	printf("\033[0;37m: command not found\n");
+	ft_putstr_fd("\033[95mminishell\033[0;37m: \033[0;31m", 2);
+	ft_putstr_fd(cmd_lst->cmds[0], 2);
+	ft_putstr_fd("\033[0;37m: command not found\n", 2);
 	free(cmd_path);
 	while (temp->prev)
 		temp = temp->prev;
@@ -90,6 +91,7 @@ void	execute_child(t_cmd *cmd_list)
 			close(cmd_list->next->pipe[0]);
 		if (exec_display_builtins(cmd_list->cmds) == DISPLAY_BUILTIN)
 			exit(EXIT_SUCCESS);
+		execve(cmd_list->cmds[0], cmd_list->cmds, g_main.envp);
 		temp = merge_path(ft_strjoin("/", cmd_list->cmds[0]));
 		execve(temp, cmd_list->cmds, g_main.envp);
 		cmd_error(temp, cmd_list);
@@ -124,6 +126,7 @@ int	execute(t_cmd *cmd_list)
 	int		exit_status;
 	int		cmd_list_len;
 	int		default_std[2];
+	int		child_count;
 
 	init_fds(cmd_list);
 	temp = cmd_list;
@@ -131,6 +134,7 @@ int	execute(t_cmd *cmd_list)
 	cmd_list_len = get_cmd_list_len(cmd_list);
 	default_std[0] = dup(STDIN_FILENO);
 	default_std[1] = dup(STDOUT_FILENO);
+	child_count = 0;
 	// ft_putnbr_fd(d_in, 2);
 	// ft_putchar_fd('\n', 2);
 	// ft_putnbr_fd(d_out, 2);
@@ -142,9 +146,11 @@ int	execute(t_cmd *cmd_list)
 			break ;
 		if (exit_status == 0 || (exit_status == DISPLAY_BUILTIN && cmd_list_len > 1))
 			execute_child(temp);
+		child_count++;
 		temp = temp->next;
 	}
-	wait(NULL);
+	while (child_count--)
+		wait(NULL);
 	cleaning_unused_fd(cmd_list, default_std);
 	return (exit_status);
 }
