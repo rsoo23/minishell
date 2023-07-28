@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:16:47 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/21 10:22:05 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/28 14:54:47 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*name_finder(char *s)
 	temp = NULL;
 	if (!ft_strncmp(s, shell_getenv("HOME"), ft_strlen(s) + 1))
 	{
-		r_str = shell_strjoin("\033[95mminishell\033[0;37m: ", \
+		r_str = shell_strjoin("minishell: ", \
 		ft_strdup("~"), "$ ", 1);
 		return (r_str);
 	}
@@ -88,7 +88,7 @@ char	*name_finder(char *s)
 		if (!temp)
 			return (NULL);
 	}
-	r_str = shell_strjoin("\033[95mminishell\033[0;37m: ", temp, "$ ", 1);
+	r_str = shell_strjoin("minishell: ", temp, "$ ", 1);
 	return (r_str);
 }
 

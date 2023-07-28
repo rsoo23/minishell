@@ -129,7 +129,7 @@ cd
   right directory with /bin/ls
 [x] - Repeat multiple times with working and not working cd
 [x] - try '.' '..' as arguments too
-[ ] - cd notes or srcs
+[x] - cd notes or srcs
  Yes No
 
 pwd
@@ -140,14 +140,14 @@ pwd
 
 Relative Path
 -------------
-[ ] - Execute commands but this time use a relative path
+[x] - Execute commands but this time use a relative path
 [ ] - Repeat multiple times in multiple directories with a complex relative path
   (lots of ..)
  Yes No
 
 Environment Path
 ----------------
-[ ] - Execute commands but this time without any path. (ls, wc, awk etc...)
+[x] - Execute commands but this time without any path. (ls, wc, awk etc...)
 [ ] - Unset the $PATH and check if it is not working anymore
 [ ] - Set the $PATH to a multiple directory value (directory1:directory2) and
   check that directories are checked in order from left to right
@@ -155,7 +155,7 @@ Environment Path
 
 Redirection
 -----------
-[ ] - Execute commands with redirections < and/or >
+[x] - Execute commands with redirections < and/or >
 [ ] - Repeat multiple times with different commands and arguments and sometimes
   change > with >>
 [ ] - Check if multiple of the same redirections fail
@@ -164,9 +164,9 @@ Redirection
 
 Pipes
 -----
-[ ] - Execute commands with pipes like 'cat file | grep bla | more'
-[ ] - Repeat multiple times with different commands and arguments
-[ ] - Try some failing commands like 'ls filethatdoesntexist | grep bla | more'
+[x] - Execute commands with pipes like 'cat file | grep bla | more'
+[x] - Repeat multiple times with different commands and arguments
+[x] - Try some failing commands like 'ls filethatdoesntexist | grep bla | more'
 [ ] - Try to mix pipes and redirections.
  Yes No
 
@@ -174,10 +174,10 @@ Go Crazy and history
 --------------------
 [ ] - type a command line then use ctrl-C then press enter the buffer should be
   clean and nothing try to execute.
-[ ] - Can we navigate through history with up and down and retry some command
-[ ] - Execute commands that should not work like 'dsbksdgbksdghsd' and check if
+[x] - Can we navigate through history with up and down and retry some command
+[x] - Execute commands that should not work like 'dsbksdgbksdghsd' and check if
   the shell doesn't crash and prints an error
-[ ] - cat | cat | ls behave "normally"
+[x] - cat | cat | ls behave "normally"
 [ ] - Try to execute a long command with a ton of arguments
 [ ] - Have fun with that beautiful minishell and enjoy it
  Yes No

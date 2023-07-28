@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 11:17:43 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/28 11:29:51 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	sig_handler(int signum)
 	if (signum == SIGINT)
 		printf("\n");
 	rl_on_new_line();
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
@@ -55,6 +56,7 @@ void	sig_handler_child(int signum)
 {
 	(void)signum;
 	printf("\n");
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	return ;
 }
@@ -91,17 +93,17 @@ int	main(int ac, char **av, char **envp)
 	print_welcome();
 	while (exit_status != EXIT_SHELL)
 	{
-		// signal(SIGINT, sig_handler);
+		signal(SIGINT, sig_handler);
 		// signal(SIGQUIT, sig_handler);
 		temp = name_finder(g_main.current_path);
 		g_main.user_input = readline(temp);
-		free(temp);
 		if (!g_main.user_input)
 			break ;
 		add_history(g_main.user_input);
 		tokenize(&g_main.tokens_info, g_main.user_input);
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		exit_status = execute(g_main.cmd_list);
+		free(temp);
 		
 		// if (exit_status == DISPLAY_BUILTIN)
 		// 	printf("display builtin executed\n");
@@ -114,7 +116,7 @@ int	main(int ac, char **av, char **envp)
 		g_main.cmd_list = NULL;
 		free(g_main.user_input);
 		// signal(SIGQUIT, SIG_DFL);
-		// signal(SIGINT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 	}
 	return (end_minishell());
 }

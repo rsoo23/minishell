@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/28 08:41:57 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/28 10:46:35 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	cmd_error(char *cmd_path, t_cmd *cmd_lst)
 	t_cmd	*temp;
 
 	temp = cmd_lst;
-	ft_putstr_fd("\033[95mminishell\033[0;37m: \033[0;31m", 2);
+	ft_putstr_fd("minishell\033[0;37m: \033[0;31m", 2);
 	ft_putstr_fd(cmd_lst->cmds[0], 2);
 	ft_putstr_fd("\033[0;37m: command not found\n", 2);
 	free(cmd_path);

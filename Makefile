@@ -14,7 +14,6 @@ NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 CSAN = -fsanitize=address -g3
-RDLINE = -lreadline
 RM = rm -rf
 
 SRCS_DIR = srcs/
@@ -38,24 +37,29 @@ OBJS = $(SRCS_CFILES:.c=.o)
 
 LIBFT_DIR = libft
 LIBFT = libft.a
-# -L /usr/local/Cellar/readline/8.2.1/lib
+
+# getting the readline path
+RDLINE_PATH := $(shell find /usr -name "readline" | grep "opt")
+READ_LIB = $(addprefix -L, $(addsuffix /lib, $(RDLINE_PATH)))
+READ_INC = $(addprefix -I, $(addsuffix /include, $(RDLINE_PATH)))
+
 %.o: %.c ./Makefile
-	$(CC) $(CFLAGS) $(CSAN) -c $< -o $@
+	@$(CC) $(CFLAGS) $(CSAN) $(READ_INC) -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	make bonus -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(CSAN) $(RDLINE) $^ -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
+	@make bonus -C $(LIBFT_DIR)
+	$(CC) $(CFLAGS) $(CSAN) -v $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT) $()
 
 clean:
-	make clean -C $(LIBFT_DIR)
-	$(RM) $(OBJS) 
+	@make clean -C $(LIBFT_DIR)
+	@$(RM) $(OBJS) 
 
 fclean: clean
-	make fclean -C $(LIBFT_DIR)
-	$(RM) $(NAME)
+	@make fclean -C $(LIBFT_DIR)
+	@$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY = clean fclean re all
+.PHONY = RDLINE_PATH clean fclean re all

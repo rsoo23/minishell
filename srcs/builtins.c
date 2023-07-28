@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:13:10 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 10:13:24 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/28 10:47:43 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	changing_dir(char **arr)
 		chdir(shell_getenv("HOME"));
 	else if (chdir(arr[1]) == -1)
 	{
-		printf("\033[95mminishell\033[0;37m: cd: \033[0;31m%s", arr[1]);
+		printf("minishell\033[0;37m: cd: \033[0;31m%s", arr[1]);
 		printf("\033[0;37m: No such file or directory\n");
 	}
 	else
