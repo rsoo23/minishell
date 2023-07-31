@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:19:17 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/27 11:05:18 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/31 10:48:40 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	freeing_2darray(char **s)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return ;
 	while (s[i])
 		free(s[i++]);
 	free(s);
@@ -70,13 +72,14 @@ char	*merge_path(char *c)
 	int		i;
 	char	*r_str;
 	char	**paths;
+	char	*temp;
 
 	if (!c)
 		return (NULL);
-	paths = ft_split(shell_getenv("PATH"), ':');
+	temp = shell_getenv("PATH");
+	paths = ft_split(temp, ':');
+	free(temp);
 	i = -1;
-	if (!paths || !*paths)
-		return (NULL);
 	while (paths[++i])
 	{
 		r_str = ft_strjoin(paths[i], c);

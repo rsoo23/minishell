@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void	get_quotes(t_cmd *new_cmd, char *str)
+void	intepret_quotes(t_cmd *new_cmd, char *str)
 {
 	char	*temp_str;
 	char	*res;
@@ -50,10 +50,7 @@ void	get_quotes(t_cmd *new_cmd, char *str)
 	free(res);
 }
 
-// "HELLO"'HELLO'
-// 012345678
-
-// Get any commands while searching for any corresponding flags,
+// Get any commands while searching for any corresponding flags / arguments,
 // assigning it into a 2d array
 
 // ex: wc < in -l > out -w | gives: wc -l -w
@@ -66,7 +63,7 @@ void	get_cmds(t_tok **token_list, t_cmd *new_cmd)
 	{
 		if (temp->str[0] == '\'' || temp->str[0] == '"')
 		{
-			get_quotes(new_cmd, temp->str);
+			intepret_quotes(new_cmd, temp->str);
 			delete_token(token_list, temp->str);
 			temp = *token_list;
 			continue ;
@@ -103,6 +100,7 @@ static void	get_inputs(t_tok **token_list, t_cmd *new_cmd)
 			delete_token(token_list, temp->next->str);
 			temp = *token_list;
 			delete_token(token_list, redir);
+			temp = *token_list;
 			continue ;
 		}
 		temp = temp->next;

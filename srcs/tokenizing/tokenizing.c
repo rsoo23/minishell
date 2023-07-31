@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/28 23:17:02 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/28 23:57:27 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static void	tokenize_word(t_tok_info *info, char *s)
 		read_quotes(info, s, 34);
 	else
 	{
-		printf("reading word\n");
 		while (!is_wspace(s[info->i]) && \
 		!is_meta_char(s[info->i]) && s[info->i])
 		{

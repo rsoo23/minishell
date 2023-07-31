@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/28 10:46:35 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/07/31 10:46:46 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,8 @@ int	execute(t_cmd *cmd_list)
 	// ft_putchar_fd('\n', 2);
 	while (temp)
 	{
+		if (!temp->cmds)
+			break ;
 		exit_status = exec_action_builtins(temp->cmds, cmd_list_len);
 		if (exit_status == EXIT_SHELL || exit_status == ACTION_BUILTIN)
 			break ;
