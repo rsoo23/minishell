@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:08:13 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/28 23:41:37 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/07/31 21:32:00 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,24 @@
 
 char	*shell_getenv(char *s)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
+	char	*temp;
 
 	i = -1;
 	if (!s)
 		return (NULL);
-	len = ft_strlen(s);
+	len = ft_strlen(s) + 1;
+	temp = ft_strjoin(s, "=");
 	while (g_main.envp[++i])
-		if (!ft_strncmp(g_main.envp[i], s, len))
-			return (ft_substr(g_main.envp[i], len + 1, 9999));
+	{
+		if (!ft_strncmp(g_main.envp[i], temp, len))
+		{
+			free(temp);
+			return (ft_substr(g_main.envp[i], len, 9999));
+		}
+	}
+	free(temp);
 	return (NULL);
 }
 

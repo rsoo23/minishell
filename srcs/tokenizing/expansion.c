@@ -53,6 +53,7 @@ char	*expand_env_vars(char *str)
 	char	*env_var;
 	char	*temp;
     int     i;
+	int		len;
 	
 	if (!env_var_exist(str))
 		return (str);
@@ -62,26 +63,32 @@ char	*expand_env_vars(char *str)
     i = 0;
     while (str[i])
     {
-        str += i;
-        i = 0;
+    	len = 0;
         while (str[i] && str[i] != '$')
+		{
             i++;
-		res = ft_strjoin_free_all(res, ft_substr(str, 0, i));
-	
-		// printf("word: %s %d\n", res, i);
-        str += i;
-        i = 0;
-		// printf("	%s\n", str);
+			len++;
+		}
+		res = ft_strjoin_free_all(res, ft_substr(str, i - len, len));
+		printf("	res: %s@\n", res);
+		len = 0;
         if (str[i] == '$')
 		{
 			i++;
 			while (str[i] && str[i] != '$' && !is_wspace(str[i]))
+			{
 				i++;
-			temp = ft_substr(str, 1, i);
+				len++;
+			}
+			printf("		%d, %d\n", i - len, i);
+			temp = ft_substr(str, i - len, len);
+			printf("	temp:%s\n", temp);
 			env_var = shell_getenv(temp);
 			free(temp);
+			printf("	env_var:%s\n", env_var);
+			if (!env_var)
+				continue ;
 			res = ft_strjoin_free_all(res, env_var);
-			// printf("env_var: %s %d\n", res, i);
 		}
     }
 	return (res);
