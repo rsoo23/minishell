@@ -36,27 +36,40 @@ char	*ft_strjoin_free_all(const char *s1, const char *s2)
 	return (res);
 }
 
-int env_var_exist(char *str)
+void	read_single_quotes(char *str, int *i, int *word_len)
 {
-    int i;
-
-    i = -1;
-    while (str[++i])
-        if (str[i] == '$')
-            return (1);
-    return (0);
+    if (str[*i] == '\'')
+    {
+        (*i)++;
+        while (str[*i] && str[*i] != '\'')
+        {
+            (*i)++;
+            (*word_len)++;
+        }
+    }
 }
 
-char	*expand_env_vars(char *str)
+void    read_double_quotes(char *str, int *i, int *word_len)
+{
+    if (str[*i] == '"')
+    {
+        (*i)++;
+        while (str[*i] && str[*i] != '"')
+        {
+            (*i)++;
+            (*word_len)++;
+        }
+    }
+}
+
+char	*expand_and_intepret_quotes(char *str)
 {
     char    *res;
 	char	*env_var;
 	char	*temp;
     int     i;
 	int		len;
-	
-	if (!env_var_exist(str))
-		return (str);
+
 	res = ft_strdup("");
 	env_var = NULL;
 	temp = NULL;
@@ -68,11 +81,11 @@ char	*expand_env_vars(char *str)
 		{
 			read_single_quotes(str, &i, &len);
 			res = ft_strjoin_free_all(res, ft_substr(str, i - len, len));
-			printf("res1: %s$ %d %d\n", res, i-len, len);
+			// printf("res1: %s$ %d %d\n", res, i-len, len);
 			i++;
 		}
 		else if (str[i] == '"')
-			i++ ;
+			i++;
         else if (str[i] == '$')
 		{
 			i++;
@@ -88,7 +101,7 @@ char	*expand_env_vars(char *str)
 			if (!env_var)
 				continue ;
 			res = ft_strjoin_free_all(res, env_var);
-			printf("res3: %s$\n", res);
+			// printf("res3: %s$\n", res);
 		}
 		else
 		{
@@ -98,7 +111,7 @@ char	*expand_env_vars(char *str)
 				len++;
 			}
 			res = ft_strjoin_free_all(res, ft_substr(str, i - len, len));
-			printf("res2: %s$ %d %d\n", res, i-len, len);
+			// printf("res2: %s$ %d %d\n", res, i-len, len);
 		}
     }
 	return (res);

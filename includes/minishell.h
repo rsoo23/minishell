@@ -85,12 +85,8 @@ void	add_token_to_back(t_tok **token_list, t_tok *new_token);
 void	delete_token(t_tok **token_list, char *content);
 
 // expansion.c
-char	*expand_env_vars(char *str);
+char	*expand_and_intepret_quotes(char *str);
 char	*ft_strjoin_free_all(const char *s1, const char *s2);
-
-// quote_reading.c
-void	read_single_quotes(char *str, int *i, int *word_len);
-void	read_double_quotes(char *str, int *i, int *word_len);
 
 // parsing.c
 void	parse(t_tok **tok_lst, t_cmd **cmd_lst);
@@ -153,4 +149,5 @@ int		get_cmd_list_len(t_cmd *lst);
 
 // execute.c
 int		execute(t_cmd *inst);
+
 #endif

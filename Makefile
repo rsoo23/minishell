@@ -27,7 +27,6 @@ SRCS = main \
 		tokenizing/tokenizing \
 		tokenizing/token_list_utils_1 \
 		tokenizing/expansion \
-		tokenizing/quote_reading \
 		parsing/parsing \
 		parsing/parsing_utils_1 \
 		parsing/cmd_list_utils_1 \

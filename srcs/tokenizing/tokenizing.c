@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/01 13:02:28 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/01 17:36:38 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,46 +19,16 @@ int	is_wspace(char c)
 	return (0);
 }
 
-void	read_quotes_recursively(t_tok_info *info, char *s, char q)
-{
-	info->i++;
-	info->temp_word_len++;
-	while (s[info->i] != q)
-	{
-		if (!s[info->i])
-		{
-			printf("quotes not closed\n");
-			return ;
-		}
-		info->i++;
-		info->temp_word_len++;
-	}
-	info->i++;
-	info->temp_word_len++;
-	if (s[info->i] == '\'')
-		read_quotes_recursively(info, s, 39);
-	else if (s[info->i] == '"')
-		read_quotes_recursively(info, s, 34);
-}
-
 static void	tokenize_word(t_tok_info *info, char *s)
 {
 	t_tok	*new_token;
 	char	*temp_tok_str;
 
 	info->temp_word_len = 0;
-	if (s[info->i] == '\'')
-		read_quotes_recursively(info, s, 39);
-	else if (s[info->i] == '"')
-		read_quotes_recursively(info, s, 34);
-	else
+	while (!is_wspace(s[info->i]) && !is_meta_char(s[info->i]) && s[info->i])
 	{
-		while (!is_wspace(s[info->i]) && s[info->i] != '\'' && \
-		s[info->i] != '"' && !is_meta_char(s[info->i]) && s[info->i])
-		{
-			info->i++;
-			info->temp_word_len++;
-		}
+		info->i++;
+		info->temp_word_len++;
 	}
 	temp_tok_str = \
 	ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
@@ -91,8 +61,8 @@ void	tokenize(t_tok_info *info, char *str)
 		return ;
 	info->i = 0;
 	info->token_list = NULL;
-	s = expand_env_vars(str);
-	printf("str after expand: %s\n", s);
+	s = expand_and_intepret_quotes(str);
+	// printf("str after expand: %s\n", s);
 	while (s[info->i])
 	{
 		while (is_wspace(s[info->i]) && s[info->i])
