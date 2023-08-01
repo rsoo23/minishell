@@ -6,20 +6,19 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/25 16:55:48 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/01 09:50:19 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_tok	*init_token(char *temp_tok_str, int tok_i)
+t_tok	*init_token(char *temp_tok_str)
 {
 	t_tok	*new_tok;
 
 	new_tok = malloc(sizeof(t_tok));
 	if (!new_tok)
 		return (NULL);
-	new_tok->index = tok_i;
 	new_tok->str = temp_tok_str;
 	new_tok->next = NULL;
 	new_tok->prev = NULL;

@@ -17,33 +17,17 @@ void	intepret_quotes(t_cmd *new_cmd, char *str)
 	char	*temp_str;
 	char	*res;
 	int		i;
-	int		word_len;
+	int		len;
 
 	res = ft_strdup("");
 	i = -1;
 	while (str[++i])
 	{
-		word_len = 0;
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-			{
-				i++;
-				word_len++;
-			}
-		}
-		else if (str[i] == '"')
-		{
-			i++;
-			while (str[i] && str[i] != '"')
-			{
-				i++;
-				word_len++;
-			}
-		}
-		temp_str = ft_substr(str, i - word_len, word_len);
-		printf("i: %d, wlen: %d, tempstr: %s\n", i, word_len, temp_str);
+		len = 0;
+		read_single_quotes(str, &i, &len);
+		read_double_quotes(str, &i, &len);
+		temp_str = ft_substr(str, i - len, len);
+		printf("i: %d, wlen: %d, tempstr: %s\n", i, len, temp_str);
 		res = ft_strjoin_free_all(res, temp_str);
 	}
 	new_cmd->cmds = append_cmds(new_cmd->cmds, res);

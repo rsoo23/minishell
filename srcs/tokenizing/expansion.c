@@ -64,31 +64,41 @@ char	*expand_env_vars(char *str)
     while (str[i])
     {
     	len = 0;
-        while (str[i] && str[i] != '$')
+		if (str[i] == '\'')
 		{
-            i++;
-			len++;
+			read_single_quotes(str, &i, &len);
+			res = ft_strjoin_free_all(res, ft_substr(str, i - len, len));
+			printf("res1: %s$ %d %d\n", res, i-len, len);
+			i++;
 		}
-		res = ft_strjoin_free_all(res, ft_substr(str, i - len, len));
-		printf("	res: %s@\n", res);
-		len = 0;
-        if (str[i] == '$')
+		else if (str[i] == '"')
+			i++ ;
+        else if (str[i] == '$')
 		{
 			i++;
-			while (str[i] && str[i] != '$' && !is_wspace(str[i]))
+			while (str[i] && str[i] != '$' 
+			&& !is_wspace(str[i]) && str[i] != '"')
 			{
 				i++;
 				len++;
 			}
-			printf("		%d, %d\n", i - len, i);
 			temp = ft_substr(str, i - len, len);
-			printf("	temp:%s\n", temp);
 			env_var = shell_getenv(temp);
 			free(temp);
-			printf("	env_var:%s\n", env_var);
 			if (!env_var)
 				continue ;
 			res = ft_strjoin_free_all(res, env_var);
+			printf("res3: %s$\n", res);
+		}
+		else
+		{
+			while (str[i] && str[i] != '\'' && str[i] != '$' && str[i] != '"')
+			{
+				i++;
+				len++;
+			}
+			res = ft_strjoin_free_all(res, ft_substr(str, i - len, len));
+			printf("res2: %s$ %d %d\n", res, i-len, len);
 		}
     }
 	return (res);
