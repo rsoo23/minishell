@@ -36,6 +36,15 @@
 # define ACTION_BUILTIN 3
 # define EXIT_SHELL 4
 
+typedef struct s_exp
+{
+	char	*res;
+	char	*env_var;
+	char	*temp;
+	int		i;
+	int		len;
+}	t_exp;
+
 typedef struct s_tok
 {
 	char			*str;	

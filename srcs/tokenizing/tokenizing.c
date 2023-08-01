@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/01 17:36:38 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/01 18:02:25 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	tokenize(t_tok_info *info, char *str)
 	info->i = 0;
 	info->token_list = NULL;
 	s = expand_and_intepret_quotes(str);
-	// printf("str after expand: %s\n", s);
 	while (s[info->i])
 	{
 		while (is_wspace(s[info->i]) && s[info->i])
