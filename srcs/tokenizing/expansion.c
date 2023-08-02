@@ -12,77 +12,73 @@
 
 #include "../../includes/minishell.h"
 
-char	*ft_strjoin_free_all(const char *s1, const char *s2)
+void	init_expander_struct(t_exp *exp)
 {
-	char			*res;
-	unsigned int	i;
-	size_t			len1;
-	size_t			len2;
-
-	i = 0;
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	res = malloc(len1 + len2 + 1);
-	if (!res)
-		return (NULL);
-	while (i++ < len1)
-		res[i - 1] = s1[i - 1];
-	i = 0;
-	while (i++ < len2)
-		res[i - 1 + len1] = s2[i - 1];
-	res[i - 1 + len1] = '\0';
-	free((char *)s1);
-	free((char *)s2);
-	return (res);
+	exp->res = ft_strdup("");
+	exp->env_var = NULL;
+	exp->temp = NULL;
+	exp->i = 0;
 }
 
-int env_var_exist(char *str)
+void	read_single_quotes(char *s, t_exp *exp)
 {
-    int i;
-
-    i = -1;
-    while (str[++i])
-        if (str[i] == '$')
-            return (1);
-    return (0);
-}
-
-char	*expand_env_vars(char *str)
-{
-    char    *res;
-	char	*env_var;
-	char	*temp;
-    int     i;
-	
-	if (!env_var_exist(str))
-		return (str);
-	res = ft_strdup("");
-	env_var = NULL;
-	temp = NULL;
-    i = 0;
-    while (str[i])
+    if (s[exp->i] == '\'')
     {
-        str += i;
-        i = 0;
-        while (str[i] && str[i] != '$')
-            i++;
-		res = ft_strjoin_free_all(res, ft_substr(str, 0, i));
-	
-		// printf("word: %s %d\n", res, i);
-        str += i;
-        i = 0;
-		// printf("	%s\n", str);
-        if (str[i] == '$')
-		{
-			i++;
-			while (str[i] && str[i] != '$' && !is_wspace(str[i]))
-				i++;
-			temp = ft_substr(str, 1, i);
-			env_var = shell_getenv(temp);
-			free(temp);
-			res = ft_strjoin_free_all(res, env_var);
-			// printf("env_var: %s %d\n", res, i);
-		}
+        exp->i++;
+        while (s[exp->i] && s[exp->i] != '\'')
+        {
+            exp->i++;
+            exp->len++;
+        }
     }
+	exp->res = ft_strjoin_free_all(exp->res, ft_substr(s, \
+	exp->i - exp->len, exp->len));
+	exp->i++;
+}
+
+void	expand_env_var(char *s, t_exp *exp)
+{
+	exp->i++;
+	while (s[exp->i] && s[exp->i] != '$' && \
+	!is_wspace(s[exp->i]) && s[exp->i] != '"')
+	{
+		exp->i++;
+		exp->len++;
+	}
+	exp->temp = ft_substr(s, exp->i - exp->len, exp->len);
+	exp->env_var = shell_getenv(exp->temp);
+	free(exp->temp);
+	if (!exp->env_var)
+		continue ;
+	exp->res = ft_strjoin_free_all(exp->res, exp->env_var);
+}
+
+void	read_str(char *s, t_exp *exp)
+{
+	while (s[exp->i] && s[exp->i] != '\'' && s[exp->i] != '$' && s[exp->i] != '"')
+	{
+		exp->i++;
+		exp->len++;
+	}
+	res = ft_strjoin_free_all(res, ft_substr(str, exp->i - exp->len, exp->len));
+}
+
+char	*expand_and_intepret_quotes(char *str)
+{
+	t_exp	exp;
+
+	init_expander_struct(&exp);
+    while (str[exp->i])
+    {
+    	len = 0;
+		if (str[exp->i] == '\'')
+			read_single_quotes(str, &exp);
+		else if (str[exp->i] == '"')
+			exp->i++;
+        else if (str[exp->i] == '$')
+			expand_env_var(str, &exp);
+		else
+			read_str(str, &exp);
+	}
 	return (res);
 }

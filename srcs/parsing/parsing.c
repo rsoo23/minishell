@@ -12,44 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-void	intepret_quotes(t_cmd *new_cmd, char *str)
-{
-	char	*temp_str;
-	char	*res;
-	int		i;
-	int		word_len;
-
-	res = ft_strdup("");
-	i = -1;
-	while (str[++i])
-	{
-		word_len = 0;
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-			{
-				i++;
-				word_len++;
-			}
-		}
-		else if (str[i] == '"')
-		{
-			i++;
-			while (str[i] && str[i] != '"')
-			{
-				i++;
-				word_len++;
-			}
-		}
-		temp_str = ft_substr(str, i - word_len, word_len);
-		printf("i: %d, wlen: %d, tempstr: %s\n", i, word_len, temp_str);
-		res = ft_strjoin_free_all(res, temp_str);
-	}
-	new_cmd->cmds = append_cmds(new_cmd->cmds, res);
-	free(res);
-}
-
 // Get any commands while searching for any corresponding flags / arguments,
 // assigning it into a 2d array
 
@@ -61,13 +23,6 @@ void	get_cmds(t_tok **token_list, t_cmd *new_cmd)
 	temp = *token_list;
 	while (temp && !is_pipe(temp->str))
 	{
-		if (temp->str[0] == '\'' || temp->str[0] == '"')
-		{
-			intepret_quotes(new_cmd, temp->str);
-			delete_token(token_list, temp->str);
-			temp = *token_list;
-			continue ;
-		}
 		if (!is_meta_char(temp->str[0]))
 		{
 			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);

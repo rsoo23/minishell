@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/31 10:53:33 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/01 13:03:46 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ int	main(int ac, char **av, char **envp)
 
 		cmd_clear(&g_main.cmd_list);
 		g_main.cmd_list = NULL;
+		// free(g_main.user_input);
+		// g_main.user_input = NULL;
 		// signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 	}

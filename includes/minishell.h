@@ -36,9 +36,17 @@
 # define ACTION_BUILTIN 3
 # define EXIT_SHELL 4
 
+typedef struct s_exp
+{
+	char	*res;
+	char	*env_var;
+	char	*temp;
+	int		i;
+	int		len;
+}	t_exp;
+
 typedef struct s_tok
 {
-    int				index;
 	char			*str;	
 	struct  s_tok   *next;
     struct  s_tok   *prev;
@@ -47,7 +55,6 @@ typedef struct s_tok
 typedef struct s_tok_info
 {
 	int		i;
-	int		tok_i;
 	int		temp_word_len;
 	t_tok	*token_list;
 }	t_tok_info;
@@ -81,13 +88,13 @@ void	tokenize(t_tok_info *info, char *s);
 int		is_wspace(char c);
 
 // token_list_utils_1.c
-t_tok	*init_token(char *temp_tok_str, int tok_i);
+t_tok	*init_token(char *temp_tok_str);
 t_tok	*last_token(t_tok *token_list);
 void	add_token_to_back(t_tok **token_list, t_tok *new_token);
 void	delete_token(t_tok **token_list, char *content);
 
 // expansion.c
-char	*expand_env_vars(char *str);
+char	*expand_and_intepret_quotes(char *str);
 char	*ft_strjoin_free_all(const char *s1, const char *s2);
 
 // parsing.c
@@ -151,4 +158,5 @@ int		get_cmd_list_len(t_cmd *lst);
 
 // execute.c
 int		execute(t_cmd *inst);
+
 #endif
