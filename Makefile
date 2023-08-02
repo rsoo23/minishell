@@ -40,7 +40,7 @@ LIBFT_DIR = libft
 LIBFT = libft.a
 
 # getting the readline path
-RDLINE_PATH := $(shell find /usr -name "readline" | grep "opt")
+RDLINE_PATH := $(shell find /usr -name "readline" 2>/dev/null | grep "opt")
 READ_LIB = $(addprefix -L, $(addsuffix /lib, $(RDLINE_PATH)))
 READ_INC = $(addprefix -I, $(addsuffix /include, $(RDLINE_PATH)))
 
@@ -51,7 +51,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make bonus -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(CSAN) -v $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT) $()
+	@$(CC) $(CFLAGS) $(CSAN) $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT) $()
 
 clean:
 	@make clean -C $(LIBFT_DIR)
