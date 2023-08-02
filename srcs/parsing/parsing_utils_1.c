@@ -66,6 +66,8 @@ void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst)
 
 	new_cmd = init_cmd(1);
 	pending_cmd = readline("> ");
+	while (!pending_cmd[0])
+		pending_cmd = readline("> ");
 	new_cmd->cmds = ft_split(pending_cmd, ' ');
 	add_cmd_to_back(cmd_list, new_cmd);
 	delete_token(tok_lst, (*tok_lst)->str);

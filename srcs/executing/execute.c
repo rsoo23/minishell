@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/02 09:02:37 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/02 14:03:34 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,38 +66,6 @@ int	exec_display_builtins(char **cmd)
 	return (DISPLAY_BUILTIN);
 }
 
-// takes in the entire list and a node for ref
-// if it detects the node it will close the correct in's and out
-// else it will close the pipes
-void	closing_pipes(t_cmd *cmd_list, t_cmd *cmd_node)
-{
-	t_cmd	*temp;
-
-	temp = cmd_list;
-	while (temp->prev)
-		temp = temp->prev;
-	while (temp)
-	{
-		if (temp == cmd_node)
-		{
-			close(temp->pipe[1]);
-			if (temp->next)
-			{
-				temp = temp->next;
-				close(temp->pipe[0]);
-			}
-			temp = temp->next;
-			continue ;
-		}
-		if (temp->pipe_stat)
-		{
-			close(temp->pipe[0]);
-			close(temp->pipe[1]);
-		}
-		temp = temp->next;
-	}
-}
-
 // --------- USED FOR DEBUGGING ---------
 // | ft_putstr_fd("in  fd ", 2);
 // | ft_putnbr_fd(cmd_list->fd_in, 2);
@@ -136,20 +104,20 @@ int	execute(t_cmd *cmd_list)
 {
 	t_cmd	*temp;
 	int		exit_status;
-	int		cmd_list_len;
 	int		child_index;
 
 	init_fds(cmd_list);
 	temp = cmd_list;
 	exit_status = 0;
-	cmd_list_len = get_cmd_list_len(cmd_list);
 	child_index = 0;
 	while (temp)
 	{
-		exit_status = exec_action_builtins(temp->cmds, cmd_list_len);
+		exit_status = exec_action_builtins(temp->cmds, \
+		get_cmd_list_len(cmd_list));
 		if (exit_status == EXIT_SHELL || exit_status == ACTION_BUILTIN)
 			break ;
-		if (exit_status == 0 || (exit_status == DISPLAY_BUILTIN && cmd_list_len > 1))
+		if (exit_status == 0 || (exit_status == \
+		DISPLAY_BUILTIN && get_cmd_list_len(cmd_list) > 1))
 			execute_child(temp);
 		child_index++;
 		temp = temp->next;

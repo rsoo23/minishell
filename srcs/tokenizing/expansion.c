@@ -71,7 +71,7 @@ char	*expand_and_intepret_quotes(char *str)
 	init_expander_struct(&exp);
     while (str[exp.i])
     {
-    	len = 0;
+    	exp.len = 0;
 		if (str[exp.i] == '\'')
 			read_single_quotes(str, &exp);
 		else if (str[exp.i] == '"')
@@ -81,5 +81,5 @@ char	*expand_and_intepret_quotes(char *str)
 		else
 			read_str(str, &exp);
 	}
-	return (res);
+	return (exp.res);
 }
