@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/02 14:03:34 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/02 14:29:53 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ void	execute_child(t_cmd *cmd_node)
 		return ;
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		closing_pipes(cmd_node, cmd_node);
 		dup2(cmd_node->fd_in, STDIN_FILENO);
 		if (cmd_node->fd_in != 0)
@@ -128,58 +130,3 @@ int	execute(t_cmd *cmd_list)
 		wait(NULL);
 	return (exit_status);
 }
-
-// display
-// 	pwd
-// 	env
-// 	echo [string]
-// 	export
-// action
-// 	cd [path]
-// 	unset [var]
-// 	exit
-// 	export [var]
-
-// t_cmd	*init_struct(char *f1, char *f2, char *cmd)
-// {
-// 	t_cmd	*head = malloc(sizeof(t_cmd));
-
-// 	head->cmds = ft_split(cmd, ' ');
-// 	if (!f1)
-// 		head->fd_in = 0;
-// 	else
-// 		head->fd_in = open(f1, O_RDONLY, 0666);
-// 	if (!f2)
-// 		head->fd_out = 1;
-// 	else
-// 		head->fd_out = open(f2, O_CREAT | O_RDWR | O_TRUNC, 0666);
-// 	head->next = NULL;
-// 	head->prev = NULL;
-// 	pipe(head->pipe);
-// 	// printf("pipe of %s [%d, %d]\n", head->cmd[0], head->pipe[0], head->pipe[1]);
-// 	return (head);
-// }
-
-// // // PROBLEM
-// // // cat | cat | ls is suppose to stop with 2 enters but it does not
-
-// int main(int ac, char **av, char **envp)
-// {
-// 	g_main.envp = envp_dup(envp);
-// 	// init_struct(1 ,2 ,3);
-// 	// 1 = filename of input or NULL for default in
-// 	// 2 = filename of output or NULL for default out
-// 	// 3 = cmd with spaces separating cmd and flags(not working properly if got spaces in the arguments)
-// 	t_cmd *head = init_struct(NULL, NULL, "cat");
-// 	t_cmd *mid = init_struct(NULL, NULL, "cat");
-// 	t_cmd *end = init_struct(NULL, NULL, "ls");
-// 	head->next = mid;
-// 	mid->next = end;
-// 	mid->prev = head;
-// 	end->prev = mid;
-// 	// execve("/bin/cat", head->cmd, g_main.envp);
-// 	execute(head);
-// 	// char *temp = merge_path(ft_strjoin("/", ft_strdup("cat")));
-// 	// printf("%s\n", temp);
-// 	return (0);
-// 

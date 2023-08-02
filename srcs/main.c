@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/01 13:03:46 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/02 15:31:27 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void	main_init(char **envp)
 	ft_strlcpy(g_main.current_path, pwd, ft_strlen(pwd) + 1);
 	g_main.user_path = shell_getenv("HOME");
 	free(pwd);
-	pwd = NULL;
 	pwd = ft_strjoin("SHELL=", g_main.current_path);
 	add_to_envp(pwd);
 	free(pwd);
+	g_main.print_flag = 1;
 }
 
 // this is the signal handler where when a signal is pass through and check if 
@@ -43,10 +43,11 @@ void	main_init(char **envp)
 void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
-		printf("\n");
+		write(2, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	rl_redisplay();
+	if (g_main.print_flag)
+		rl_redisplay();
 }
 
 // this is for later when we have an executor ready
@@ -56,10 +57,11 @@ void	sig_handler(int signum)
 void	sig_handler_child(int signum)
 {
 	(void)signum;
-	printf("\n");
+	write(2, "\n", 1);
+	write(2, "im in here\n", 12);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	return ;
+	exit(0);
 }
 
 void	cmd_clear(t_cmd **cmd_list)
@@ -75,6 +77,7 @@ void	cmd_clear(t_cmd **cmd_list)
 		freeing_2darray(temp->cmds);
 		free(temp);
 	}
+	cmd_list = NULL;
 }
 
 // the main where we initialize the g_main variable and print the welcome msg
@@ -92,33 +95,23 @@ int	main(int ac, char **av, char **envp)
 	exit_status = 0;
 	main_init(envp);
 	print_welcome();
+	signal(SIGINT, sig_handler);
+	// signal(SIGQUIT, sig_handler);
 	while (exit_status != EXIT_SHELL)
 	{
-		signal(SIGINT, sig_handler);
-		// signal(SIGQUIT, sig_handler);
+		g_main.print_flag = 1;
 		temp = name_finder(g_main.current_path);
 		g_main.user_input = readline(temp);
 		free(temp);
+		g_main.print_flag = 0;
 		if (!g_main.user_input)
 			break ;
-		add_history(g_main.user_input);
+		if (g_main.user_input[0] != '\n')
+			add_history(g_main.user_input);
 		tokenize(&g_main.tokens_info, g_main.user_input);
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		exit_status = execute(g_main.cmd_list);
-		
-		// if (exit_status == DISPLAY_BUILTIN)
-		// 	printf("display builtin executed\n");
-		// else if (exit_status == ACTION_BUILTIN)
-		// 	printf("action builtin executed\n");
-		// else
-		// 	printf("in: %d\n", exit_status);
-
 		cmd_clear(&g_main.cmd_list);
-		g_main.cmd_list = NULL;
-		// free(g_main.user_input);
-		// g_main.user_input = NULL;
-		// signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
 	}
 	return (end_minishell());
 }

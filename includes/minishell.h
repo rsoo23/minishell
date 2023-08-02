@@ -15,22 +15,22 @@
 
 # include "../libft/libft.h"
 
-# include <errno.h>                  // perror
-# include <fcntl.h>                  // open
-# include <limits.h>                 // PATH_MAX
-# include <stdlib.h>                 // malloc, free
-# include <stdio.h>                  // printf
-# include <string.h>                 // strerror
-# include <unistd.h>                 // write, access, close, fork, execve, dup, dup2, pipe, unlink
+# include <errno.h>
+# include <fcntl.h>
+# include <limits.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
+# include <unistd.h>
 
-# include <dirent.h>                 // opendir, readdir, closedir
-# include <readline/readline.h>      // readline -> in stdio?
-# include <readline/history.h>       // add_history, rl_clear_history, rl_on_new_line, rl_replace_line, rl_redisplay
-# include <signal.h>                 // signal, sigaction, sigemptyset, sigaddset, kill
-# include <sys/stat.h>               // stat, lstat, fstat
-# include <sys/types.h>              // variables
-# include <sys/wait.h>               // wait, waitpid, wait3, wait4
-# include <termios.h>                // tcsetattr, tcgetattr
+# include <dirent.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <termios.h>
 
 # define DISPLAY_BUILTIN 2
 # define ACTION_BUILTIN 3
@@ -48,9 +48,9 @@ typedef struct s_exp
 typedef struct s_tok
 {
 	char			*str;	
-	struct  s_tok   *next;
-    struct  s_tok   *prev;
-}   t_tok;
+	struct s_tok	*next;
+	struct s_tok	*prev;
+}	t_tok;
 
 typedef struct s_tok_info
 {
@@ -79,6 +79,7 @@ typedef struct s_main
 	t_tok_info	tokens_info;
 	t_cmd		*cmd_list;
 	char		**envp;
+	int			print_flag;
 }	t_main;
 
 extern t_main	g_main;
@@ -155,8 +156,13 @@ void	cmd_clear(t_cmd **cmd_list);
 // execute_utils.c
 void	init_fds(t_cmd *lst);
 int		get_cmd_list_len(t_cmd *lst);
+void	closing_pipes(t_cmd *cmd_list, t_cmd *cmd_node);
 
 // execute.c
 int		execute(t_cmd *inst);
+
+// main.c
+void	sig_handler_child(int signum);
+void	sig_handler(int signum);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:19:17 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/31 10:48:40 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/02 14:10:43 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ char	*merge_path(char *c)
 	while (paths[++i])
 	{
 		r_str = ft_strjoin(paths[i], c);
-		if (!r_str)
-			continue ;
 		if (access(r_str, F_OK | X_OK) == 0)
 			break ;
 		free(r_str);
