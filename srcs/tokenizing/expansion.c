@@ -49,7 +49,7 @@ void	expand_env_var(char *s, t_exp *exp)
 	exp->env_var = shell_getenv(exp->temp);
 	free(exp->temp);
 	if (!exp->env_var)
-		continue ;
+		return ;
 	exp->res = ft_strjoin_free_all(exp->res, exp->env_var);
 }
 
@@ -60,7 +60,8 @@ void	read_str(char *s, t_exp *exp)
 		exp->i++;
 		exp->len++;
 	}
-	res = ft_strjoin_free_all(res, ft_substr(str, exp->i - exp->len, exp->len));
+	exp->res = ft_strjoin_free_all(exp->res, \
+	ft_substr(s, exp->i - exp->len, exp->len));
 }
 
 char	*expand_and_intepret_quotes(char *str)
@@ -68,14 +69,14 @@ char	*expand_and_intepret_quotes(char *str)
 	t_exp	exp;
 
 	init_expander_struct(&exp);
-    while (str[exp->i])
+    while (str[exp.i])
     {
     	len = 0;
-		if (str[exp->i] == '\'')
+		if (str[exp.i] == '\'')
 			read_single_quotes(str, &exp);
-		else if (str[exp->i] == '"')
-			exp->i++;
-        else if (str[exp->i] == '$')
+		else if (str[exp.i] == '"')
+			exp.i++;
+        else if (str[exp.i] == '$')
 			expand_env_var(str, &exp);
 		else
 			read_str(str, &exp);
