@@ -67,4 +67,4 @@ shows all environmental variables
 --------------------------------------------------------------
 Problems
 
-exit
+- [ ] program hangs if you input redirect a non-existing file

@@ -95,7 +95,7 @@ void	add_token_to_back(t_tok **token_list, t_tok *new_token);
 void	delete_token(t_tok **token_list, char *content);
 
 // expansion.c
-char	*expand_and_intepret_quotes(char *str);
+char	*expand_tokens_and_intepret_quotes(char *s);
 char	*ft_strjoin_free_all(const char *s1, const char *s2);
 
 // parsing.c

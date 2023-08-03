@@ -12,32 +12,9 @@
 
 #include "../../includes/minishell.h"
 
-void	init_expander_struct(t_exp *exp)
-{
-	exp->res = ft_strdup("");
-	exp->env_var = NULL;
-	exp->temp = NULL;
-	exp->i = 0;
-}
-
-void	read_single_quotes(char *s, t_exp *exp)
-{
-    if (s[exp->i] == '\'')
-    {
-        exp->i++;
-        while (s[exp->i] && s[exp->i] != '\'')
-        {
-            exp->i++;
-            exp->len++;
-        }
-    }
-	exp->res = ft_strjoin_free_all(exp->res, ft_substr(s, \
-	exp->i - exp->len, exp->len));
-	exp->i++;
-}
-
 void	expand_env_var(char *s, t_exp *exp)
 {
+	printf("len %d\n", exp->len);
 	exp->i++;
 	while (s[exp->i] && s[exp->i] != '$' && \
 	!is_wspace(s[exp->i]) && s[exp->i] != '"')
@@ -53,33 +30,61 @@ void	expand_env_var(char *s, t_exp *exp)
 	exp->res = ft_strjoin_free_all(exp->res, exp->env_var);
 }
 
+void	read_quotes(char *s, t_exp *exp, char q)
+{
+	if (s[exp->i] == q)
+	{
+		exp->i++;
+		if (q == '"' && s[exp->i] == '$')
+			expand_env_var(s, exp);
+		while (s[exp->i] && s[exp->i] != q)
+		{
+			exp->i++;
+			exp->len++;
+		}
+	}
+	exp->res = ft_strjoin_free_all(exp->res, \
+	ft_substr(s, exp->i - exp->len, exp->len));
+	exp->i++;
+}
+
+
 void	read_str(char *s, t_exp *exp)
 {
-	while (s[exp->i] && s[exp->i] != '\'' && s[exp->i] != '$' && s[exp->i] != '"')
+	while (s[exp->i] && s[exp->i] != '\'' \
+	&& s[exp->i] != '$' && s[exp->i] != '"')
 	{
 		exp->i++;
 		exp->len++;
+	}
+	if (s[exp->i] == '$' && s[exp->i + 1] == '?')
+	{
+		exp->i += 2;
+		exp->len += 2;
 	}
 	exp->res = ft_strjoin_free_all(exp->res, \
 	ft_substr(s, exp->i - exp->len, exp->len));
 }
 
-char	*expand_and_intepret_quotes(char *str)
+char	*expand_tokens_and_intepret_quotes(char *s)
 {
 	t_exp	exp;
 
-	init_expander_struct(&exp);
-    while (str[exp.i])
-    {
-    	exp.len = 0;
-		if (str[exp.i] == '\'')
-			read_single_quotes(str, &exp);
-		else if (str[exp.i] == '"')
-			exp.i++;
-        else if (str[exp.i] == '$')
-			expand_env_var(str, &exp);
+	exp.res = ft_strdup("");
+	exp.env_var = NULL;
+	exp.temp = NULL;
+	exp.i = 0;
+	while (s[exp.i])
+	{
+		exp.len = 0;
+		if (s[exp.i] == '\'')
+			read_quotes(s, &exp, '\'');
+		else if (s[exp.i] == '"')
+			read_quotes(s, &exp, '"');
+		else if (s[exp.i] == '$' && s[exp.i + 1] != '?')
+			expand_env_var(s, &exp);
 		else
-			read_str(str, &exp);
+			read_str(s, &exp);
 	}
 	return (exp.res);
 }
