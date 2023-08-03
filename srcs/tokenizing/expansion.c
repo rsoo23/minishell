@@ -14,10 +14,9 @@
 
 void	expand_env_var(char *s, t_exp *exp)
 {
-	printf("len %d\n", exp->len);
 	exp->i++;
 	while (s[exp->i] && s[exp->i] != '$' && \
-	!is_wspace(s[exp->i]) && s[exp->i] != '"')
+	!is_wspace(s[exp->i]) && s[exp->i] != '"' && s[exp->i] != '\'')
 	{
 		exp->i++;
 		exp->len++;
@@ -30,24 +29,51 @@ void	expand_env_var(char *s, t_exp *exp)
 	exp->res = ft_strjoin_free_all(exp->res, exp->env_var);
 }
 
-void	read_quotes(char *s, t_exp *exp, char q)
+void	read_single_quotes(char *s, t_exp *exp)
 {
-	if (s[exp->i] == q)
+	exp->i++;
+	while (s[exp->i] != '\'')
 	{
-		exp->i++;
-		if (q == '"' && s[exp->i] == '$')
-			expand_env_var(s, exp);
-		while (s[exp->i] && s[exp->i] != q)
+		if (!s[exp->i])
 		{
-			exp->i++;
-			exp->len++;
+			printf("Error: Single quote not closed\n");
+			return ;
 		}
+		exp->i++;
+		exp->len++;
 	}
 	exp->res = ft_strjoin_free_all(exp->res, \
 	ft_substr(s, exp->i - exp->len, exp->len));
 	exp->i++;
 }
 
+void	read_double_quotes(char *s, t_exp *exp)
+{
+	exp->i++;
+	while (s[exp->i] != '"')
+	{
+		exp->len = 0;
+		if (!s[exp->i])
+			break ;
+		else if (s[exp->i] == '$' && s[exp->i + 1] != '?')
+			expand_env_var(s, exp);
+		else
+		{
+			while (s[exp->i] != '$' && s[exp->i] != '"')
+			{
+				exp->i++;
+				exp->len++;
+			}
+			if (s[exp->i] == '$' && s[exp->i + 1] == '?')
+			{
+				exp->i += 2;
+				exp->len += 2;
+			}
+			exp->res = ft_strjoin_free_all(exp->res, \
+			ft_substr(s, exp->i - exp->len, exp->len));
+		}
+	}
+}
 
 void	read_str(char *s, t_exp *exp)
 {
@@ -74,13 +100,15 @@ char	*expand_tokens_and_intepret_quotes(char *s)
 	exp.env_var = NULL;
 	exp.temp = NULL;
 	exp.i = 0;
+	if (!check_if_quotes_closed(s))
+		return (NULL);
 	while (s[exp.i])
 	{
 		exp.len = 0;
 		if (s[exp.i] == '\'')
-			read_quotes(s, &exp, '\'');
+			read_single_quotes(s, &exp);
 		else if (s[exp.i] == '"')
-			read_quotes(s, &exp, '"');
+			read_double_quotes(s, &exp);
 		else if (s[exp.i] == '$' && s[exp.i + 1] != '?')
 			expand_env_var(s, &exp);
 		else

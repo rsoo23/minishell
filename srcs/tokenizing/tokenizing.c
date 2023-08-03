@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/03 09:50:08 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/03 14:50:40 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,6 @@ int	is_wspace(char c)
 	return (0);
 }
 
-static void	read_quotes(t_tok_info *info, char *s, char q)
-{
-	info->i++;
-	info->temp_word_len++;
-	while (s[info->i] != q)
-	{
-		info->i++;
-		info->temp_word_len++;
-	}
-}
-
 static void	tokenize_word(t_tok_info *info, char *s)
 {
 	t_tok	*new_token;
@@ -37,8 +26,6 @@ static void	tokenize_word(t_tok_info *info, char *s)
 
 	while (s[info->i] && !is_wspace(s[info->i]) && !is_meta_char(s[info->i]))
 	{
-		if (s[info->i] == '\'' || s[info->i] == '"')
-			read_quotes(info, s, s[info->i]);
 		info->i++;
 		info->temp_word_len++;
 	}
@@ -64,15 +51,15 @@ static void	tokenize_meta_char(t_tok_info *info, char *s)
 	add_token_to_back(&info->token_list, new_token);
 }
 
-void	print_tok(t_tok *token_list)
-{
-	t_tok *temp = token_list;
-	while (temp)
-	{
-		printf("%s\n", temp->str);
-		temp = temp->next;
-	}
-}
+// void	print_tok(t_tok *token_list)
+// {
+// 	t_tok *temp = token_list;
+// 	while (temp)
+// 	{
+// 		printf("%s\n", temp->str);
+// 		temp = temp->next;
+// 	}
+// }
 
 void	tokenize(t_tok_info *info, char *s)
 {
@@ -92,12 +79,10 @@ void	tokenize(t_tok_info *info, char *s)
 		else if (is_meta_char(s[info->i]) && s[info->i])
 			tokenize_meta_char(info, s);
 	}
-	print_tok(info->token_list);
 	temp = info->token_list;
 	while (temp)
 	{
 		temp->str = expand_tokens_and_intepret_quotes(temp->str);
 		temp = temp->next;
 	}
-	print_tok(info->token_list);
 }

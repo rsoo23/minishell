@@ -87,6 +87,7 @@ extern t_main	g_main;
 //tokenizing.c
 void	tokenize(t_tok_info *info, char *s);
 int		is_wspace(char c);
+int		check_if_quotes_closed(char *s);
 
 // token_list_utils_1.c
 t_tok	*init_token(char *temp_tok_str);
@@ -97,6 +98,9 @@ void	delete_token(t_tok **token_list, char *content);
 // expansion.c
 char	*expand_tokens_and_intepret_quotes(char *s);
 char	*ft_strjoin_free_all(const char *s1, const char *s2);
+
+// expansion_utils_1.c
+int	check_if_quotes_closed(char *s);
 
 // parsing.c
 void	parse(t_tok **tok_lst, t_cmd **cmd_lst);

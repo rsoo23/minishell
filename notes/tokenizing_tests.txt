@@ -4,6 +4,7 @@ Double Quotes Outside
 [x] "hello""hello": hellohello
 [x] "hello''hello": hello''hello
 [x] ""hi''hi"": hihi
+[x] echo "'$USER'": 'rsoo'
 
 ----------------------------------------------
 Single Quotes Outside
@@ -11,6 +12,7 @@ Single Quotes Outside
 [x] 'hello''hello''hello': hellohellohello
 [x] 'hello"hello"hello': hello"hello"hello
 [x] ''hi''hi''hi'': hihihi
+[x] echo '"$USER"': "$USER"
 
 ----------------------------------------------
 Mixed Quotes
@@ -21,12 +23,14 @@ Mixed Quotes
 ----------------------------------------------
 Single Quotes + Meta Char
 
+[ ] ls -la | '< infile | wc -w > outfile': command not found
+[ ] '< infile | wc -w > outfile' | ls -la: ls executes then command not found
 [x] 'echo $USER hi'
 [x] echo 'hi $USER hi'
 
 ----------------------------------------------
 Double Quotes + Meta Char (except $)
 
-[x] ls -la | "< infile | wc -w > outfile"
+[ ] ls -la | "< infile | wc -w > outfile"
 [x] echo "$USER"
 [x] "echo '$USER'"

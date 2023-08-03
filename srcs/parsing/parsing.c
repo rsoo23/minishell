@@ -23,7 +23,7 @@ void	get_cmds(t_tok **token_list, t_cmd *new_cmd)
 	temp = *token_list;
 	while (temp && !is_pipe(temp->str))
 	{
-		if (!is_meta_char(temp->str[0]))
+		if (temp->str && !is_meta_char(temp->str[0]))
 		{
 			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
 			delete_token(token_list, temp->str);
@@ -108,11 +108,11 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 		get_outputs(token_list, new_cmd);
 		get_cmds(token_list, new_cmd);
 		add_cmd_to_back(cmd_list, new_cmd);
-		if (*token_list && !ft_strncmp((*token_list)->str, "|", 1) \
-		&& !(*token_list)->next)
+		if (*token_list && (*token_list)->str && \
+		!ft_strncmp((*token_list)->str, "|", 1) && !(*token_list)->next)
 			hanging_pipe(cmd_list, new_cmd, token_list);
-		else if (*token_list && !ft_strncmp((*token_list)->str, "|", 1) \
-		&& (*token_list)->next)
+		else if (*token_list && (*token_list)->str && \
+		!ft_strncmp((*token_list)->str, "|", 1) && (*token_list)->next)
 			delete_token(token_list, (*token_list)->str);
 		pipe_stat = 1;
 	}
