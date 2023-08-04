@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/04 13:53:50 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/04 15:03:16 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,19 @@ int	is_wspace(char c)
 	return (0);
 }
 
+static void	read_quote(t_tok_info *info, char *s, char q)
+{
+	info->i++;
+	info->temp_word_len++;
+	while (s[info->i] != q)
+	{
+		info->i++;
+		info->temp_word_len++;
+	}
+	info->i++;
+	info->temp_word_len++;
+}
+
 static void	tokenize_word(t_tok_info *info, char *s)
 {
 	t_tok	*new_token;
@@ -26,11 +39,17 @@ static void	tokenize_word(t_tok_info *info, char *s)
 
 	while (s[info->i] && !is_wspace(s[info->i]) && !is_meta_char(s[info->i]))
 	{
-		info->i++;
-		info->temp_word_len++;
+		if (s[info->i] == '\'' || s[info->i] == '"')
+			read_quote(info, s, s[info->i]);
+		else
+		{
+			info->temp_word_len++;
+			info->i++;
+		}
 	}
 	temp_tok_str = \
 	ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
+	printf("temptokstr: %s\n", temp_tok_str);
 	new_token = init_token(temp_tok_str);
 	free(temp_tok_str);
 	add_token_to_back(&info->token_list, new_token);
@@ -69,6 +88,8 @@ int	tokenize(t_tok_info *info, char *s)
 
 	info->i = 0;
 	info->token_list = NULL;
+	if (!check_if_quotes_closed(s))
+		return (0);
 	while (s[info->i])
 	{
 		info->temp_word_len = 0;

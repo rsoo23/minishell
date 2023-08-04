@@ -101,8 +101,8 @@ void	delete_token_list(t_tok **token_list);
 char	*expand_tokens_and_intepret_quotes(char *s);
 char	*ft_strjoin_free_all(const char *s1, const char *s2);
 
-// expansion_utils_1.c
-int	check_if_quotes_closed(char *s);
+// quote_checking.c
+int		check_if_quotes_closed(char *s);
 
 // parsing.c
 void	parse(t_tok **tok_lst, t_cmd **cmd_lst);

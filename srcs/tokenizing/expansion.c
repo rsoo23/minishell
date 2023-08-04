@@ -95,8 +95,6 @@ char	*expand_tokens_and_intepret_quotes(char *s)
 	exp.env_var = NULL;
 	exp.temp = NULL;
 	exp.i = 0;
-	if (!check_if_quotes_closed(s))
-		return (NULL);
 	while (s[exp.i])
 	{
 		exp.len = 0;
