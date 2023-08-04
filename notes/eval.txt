@@ -84,7 +84,7 @@ Signals
 Double Quotes
 -------------
 [ ] - Execute a simple command with arguments but this time double quotes (you
-  should include whitespaces) (echo "cat srcs/main.c | sort > out)
+  should include whitespaces) (echo "cat srcs/main.c | sort > out")
 [ ] - a command like : echo "cat lol.c | cat > lol.c"
 [ ] - anything except $.
 - if something crashes use the crash flag.

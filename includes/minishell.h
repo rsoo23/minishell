@@ -85,7 +85,7 @@ typedef struct s_main
 extern t_main	g_main;
 
 //tokenizing.c
-void	tokenize(t_tok_info *info, char *s);
+int		tokenize(t_tok_info *info, char *s);
 int		is_wspace(char c);
 int		check_if_quotes_closed(char *s);
 

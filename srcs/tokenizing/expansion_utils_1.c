@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-static int find_closing_quote(char *s, int *i, char q)
+static int	find_closing_quote(char *s, int *i, char q)
 {
 	(*i)++;
 	while (s[*i] != q)
@@ -27,6 +27,7 @@ static int find_closing_quote(char *s, int *i, char q)
 		}
 		(*i)++;
 	}
+	(*i)++;
 	return (1);
 }
 
@@ -36,14 +37,16 @@ int	check_if_quotes_closed(char *s)
 	int	status;
 
 	i = 0;
-	status = 0;
+	status = 1;
 	while (s[i])
 	{
 		if (s[i] == '\'')
 			status = find_closing_quote(s, &i, '\'');
-		if (s[i] == '"')
+		else if (s[i] == '"')
 			status = find_closing_quote(s, &i, '"');
-		if (status == 0)
+		else
+			i++;
+		if (!status)
 			return (0);
 	}
 	return (1);

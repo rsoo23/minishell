@@ -34,11 +34,6 @@ void	read_single_quotes(char *s, t_exp *exp)
 	exp->i++;
 	while (s[exp->i] != '\'')
 	{
-		if (!s[exp->i])
-		{
-			printf("Error: Single quote not closed\n");
-			return ;
-		}
 		exp->i++;
 		exp->len++;
 	}

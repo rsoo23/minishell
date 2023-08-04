@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/03 14:50:40 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/04 10:54:16 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,10 @@ static void	tokenize_meta_char(t_tok_info *info, char *s)
 // 	}
 // }
 
-void	tokenize(t_tok_info *info, char *s)
+int	tokenize(t_tok_info *info, char *s)
 {
 	t_tok	*temp;
 
-	if (!s)
-		return ;
 	info->i = 0;
 	info->token_list = NULL;
 	while (s[info->i])
@@ -83,6 +81,9 @@ void	tokenize(t_tok_info *info, char *s)
 	while (temp)
 	{
 		temp->str = expand_tokens_and_intepret_quotes(temp->str);
+		if (!temp->str)
+			return (0);
 		temp = temp->next;
 	}
+	return (1);
 }
