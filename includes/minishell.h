@@ -80,6 +80,7 @@ typedef struct s_main
 	t_cmd		*cmd_list;
 	char		**envp;
 	int			print_flag;
+	int			exit_code;
 }	t_main;
 
 extern t_main	g_main;
@@ -94,6 +95,7 @@ t_tok	*init_token(char *temp_tok_str);
 t_tok	*last_token(t_tok *token_list);
 void	add_token_to_back(t_tok **token_list, t_tok *new_token);
 void	delete_token(t_tok **token_list, char *content);
+void	delete_token_list(t_tok **token_list);
 
 // expansion.c
 char	*expand_tokens_and_intepret_quotes(char *s);

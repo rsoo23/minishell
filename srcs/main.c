@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/04 10:53:44 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/04 13:47:27 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,10 @@ int	main(int ac, char **av, char **envp)
 		if (g_main.user_input[0] != '\n')
 			add_history(g_main.user_input);
 		if (!tokenize(&g_main.tokens_info, g_main.user_input))
+		{
+			delete_token_list(&g_main.tokens_info.token_list);
 			continue ;
+		}
 		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		exit_status = execute(g_main.cmd_list);
 		cmd_clear(&g_main.cmd_list);

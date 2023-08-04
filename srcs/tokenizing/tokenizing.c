@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/04 10:54:16 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/04 13:53:50 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void	tokenize_word(t_tok_info *info, char *s)
 	temp_tok_str = \
 	ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
 	new_token = init_token(temp_tok_str);
+	free(temp_tok_str);
 	add_token_to_back(&info->token_list, new_token);
 }
 
@@ -48,6 +49,7 @@ static void	tokenize_meta_char(t_tok_info *info, char *s)
 	temp_tok_str = \
 	ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
 	new_token = init_token(temp_tok_str);
+	free(temp_tok_str);
 	add_token_to_back(&info->token_list, new_token);
 }
 
