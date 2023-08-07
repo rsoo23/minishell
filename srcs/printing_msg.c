@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing_msg.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:05:40 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/01 13:48:24 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/07 10:53:32 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // then it prints out the end msg
 int	end_minishell(void)
 {
+	tcsetattr(0, TCSANOW, &g_main.origi_attri);
 	freeing_2darray(g_main.envp);
 	rl_clear_history();
 	printf("\n\033[96m╔═════════════════════════════════════");

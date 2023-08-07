@@ -72,15 +72,17 @@ typedef struct s_cmd
 
 typedef struct s_main
 {
-	char		*current_path;
-	char		*user_path;
-	char		*user_input;
-	int			num_of_cmds;
-	t_tok_info	tokens_info;
-	t_cmd		*cmd_list;
-	char		**envp;
-	int			print_flag;
-	int			exit_code;
+	char			*current_path;
+	char			*user_path;
+	char			*user_input;
+	int				num_of_cmds;
+	t_tok_info		tokens_info;
+	t_cmd			*cmd_list;
+	char			**envp;
+	int				print_flag;
+	int				exit_code;
+	struct termios	origi_attri;
+	struct termios	new_attri;
 }	t_main;
 
 extern t_main	g_main;

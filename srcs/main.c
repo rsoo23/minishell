@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/04 13:47:27 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/07 16:54:39 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,6 @@ void	sig_handler(int signum)
 		rl_redisplay();
 }
 
-// this is for later when we have an executor ready
-// set signal as default first
-// then only create child
-// then at wait pid area you set the signal to sig_handler_child
-void	sig_handler_child(int signum)
-{
-	(void)signum;
-	write(2, "\n", 1);
-	write(2, "im in here\n", 12);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	exit(0);
-}
-
 void	cmd_clear(t_cmd **cmd_list)
 {
 	t_cmd	*temp;
@@ -80,6 +66,18 @@ void	cmd_clear(t_cmd **cmd_list)
 	cmd_list = NULL;
 }
 
+void	initialize(char	**envp)
+{
+	print_welcome();
+	main_init(envp);
+	tcgetattr(0, &g_main.origi_attri);
+	tcgetattr(0, &g_main.new_attri);
+	g_main.new_attri.c_lflag &= ~ECHOCTL;
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
+	tcsetattr(0, TCSANOW, &g_main.new_attri);
+}
+
 // the main where we initialize the g_main variable and print the welcome msg
 // the while loop inside is checking if the return value of the parsing func
 // to see if the user inputed "exit" and will stop the loop when the user does
@@ -87,16 +85,13 @@ void	cmd_clear(t_cmd **cmd_list)
 // clean up the envp variable and also print out the end msg
 int	main(int ac, char **av, char **envp)
 {
-	char	*temp;
-	int		exit_status;
+	char			*temp;
+	int				exit_status;
 
 	(void)ac;
 	(void)av;
 	exit_status = 0;
-	main_init(envp);
-	print_welcome();
-	signal(SIGINT, sig_handler);
-	// signal(SIGQUIT, sig_handler);
+	initialize(envp);
 	while (exit_status != EXIT_SHELL)
 	{
 		g_main.print_flag = 1;
