@@ -6,31 +6,11 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/04 15:03:16 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/07 18:21:54 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	is_wspace(char c)
-{
-	if ((c >= '\t' && c <= '\r') || c == ' ')
-		return (1);
-	return (0);
-}
-
-static void	read_quote(t_tok_info *info, char *s, char q)
-{
-	info->i++;
-	info->temp_word_len++;
-	while (s[info->i] != q)
-	{
-		info->i++;
-		info->temp_word_len++;
-	}
-	info->i++;
-	info->temp_word_len++;
-}
 
 static void	tokenize_word(t_tok_info *info, char *s)
 {
@@ -49,7 +29,6 @@ static void	tokenize_word(t_tok_info *info, char *s)
 	}
 	temp_tok_str = \
 	ft_substr(s, info->i - info->temp_word_len, info->temp_word_len);
-	printf("temptokstr: %s\n", temp_tok_str);
 	new_token = init_token(temp_tok_str);
 	free(temp_tok_str);
 	add_token_to_back(&info->token_list, new_token);
@@ -82,14 +61,8 @@ static void	tokenize_meta_char(t_tok_info *info, char *s)
 // 	}
 // }
 
-int	tokenize(t_tok_info *info, char *s)
+static void	tokenize(t_tok_info *info, char *s)
 {
-	t_tok	*temp;
-
-	info->i = 0;
-	info->token_list = NULL;
-	if (!check_if_quotes_closed(s))
-		return (0);
 	while (s[info->i])
 	{
 		info->temp_word_len = 0;
@@ -100,13 +73,28 @@ int	tokenize(t_tok_info *info, char *s)
 		else if (is_meta_char(s[info->i]) && s[info->i])
 			tokenize_meta_char(info, s);
 	}
+}
+
+void	intepret_quotes_in_tokens(t_tok_info *info)
+{
+	t_tok	*temp;
+
 	temp = info->token_list;
 	while (temp)
 	{
-		temp->str = expand_tokens_and_intepret_quotes(temp->str);
-		if (!temp->str)
-			return (0);
+		temp->str = intepret_quotes(temp->str);
 		temp = temp->next;
 	}
+}
+
+int	intepret_input(t_tok_info *info, char *s)
+{
+	info->i = 0;
+	info->token_list = NULL;
+	if (!check_if_quotes_closed(s))
+		return (0);
+	s = expansion(s);
+	tokenize(info, s);
+	intepret_quotes_in_tokens(info);
 	return (1);
 }

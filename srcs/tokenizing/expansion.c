@@ -14,6 +14,7 @@
 
 void	expand_env_var(char *s, t_exp *exp)
 {
+	exp->len = 0;
 	exp->i++;
 	while (s[exp->i] && s[exp->i] != '$' && \
 	!is_wspace(s[exp->i]) && s[exp->i] != '"' && s[exp->i] != '\'')
@@ -32,42 +33,44 @@ void	expand_env_var(char *s, t_exp *exp)
 void	read_single_quotes(char *s, t_exp *exp)
 {
 	exp->i++;
+	exp->len++;
 	while (s[exp->i] != '\'')
 	{
 		exp->i++;
 		exp->len++;
 	}
 	exp->res = ft_strjoin_free_all(exp->res, \
-	ft_substr(s, exp->i - exp->len, exp->len));
+	ft_substr(s, exp->i - exp->len, exp->len + 1));
 	exp->i++;
 }
 
 void	read_double_quotes(char *s, t_exp *exp)
 {
 	exp->i++;
+	exp->res = ft_strjoin(exp->res, "\"");
 	while (s[exp->i] != '"')
 	{
-		exp->len = 0;
-		if (!s[exp->i])
-			break ;
-		else if (s[exp->i] == '$' && s[exp->i + 1] != '?')
+		if (s[exp->i] == '$' && s[exp->i + 1] != '?')
 			expand_env_var(s, exp);
 		else
 		{
-			while (s[exp->i] != '$' && s[exp->i] != '"')
-			{
-				exp->i++;
-				exp->len++;
-			}
 			if (s[exp->i] == '$' && s[exp->i + 1] == '?')
 			{
 				exp->i += 2;
 				exp->len += 2;
 			}
+			while (s[exp->i] != '$' && s[exp->i] != '"')
+			{
+				exp->i++;
+				exp->len++;
+			}
 			exp->res = ft_strjoin_free_all(exp->res, \
 			ft_substr(s, exp->i - exp->len, exp->len));
 		}
+		exp->len = 0;
 	}
+	exp->i++;
+	exp->res = ft_strjoin(exp->res, "\"");
 }
 
 void	read_str(char *s, t_exp *exp)
@@ -87,7 +90,7 @@ void	read_str(char *s, t_exp *exp)
 	ft_substr(s, exp->i - exp->len, exp->len));
 }
 
-char	*expand_tokens_and_intepret_quotes(char *s)
+char	*expansion(char *s)
 {
 	t_exp	exp;
 
@@ -107,5 +110,6 @@ char	*expand_tokens_and_intepret_quotes(char *s)
 		else
 			read_str(s, &exp);
 	}
+	free(s);
 	return (exp.res);
 }

@@ -25,9 +25,10 @@ SRCS = main \
 		shell_utils_2 \
 		metachar_check \
 		tokenizing/tokenizing \
+		tokenizing/tokenizing_utils_1 \
 		tokenizing/token_list_utils_1 \
 		tokenizing/expansion \
-		tokenizing/quote_checking \
+		tokenizing/quote_handling \
 		parsing/parsing \
 		parsing/parsing_utils_1 \
 		parsing/cmd_list_utils_1 \

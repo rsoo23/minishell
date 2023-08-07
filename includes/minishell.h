@@ -88,9 +88,12 @@ typedef struct s_main
 extern t_main	g_main;
 
 //tokenizing.c
-int		tokenize(t_tok_info *info, char *s);
-int		is_wspace(char c);
+int		intepret_input(t_tok_info *info, char *s);
 int		check_if_quotes_closed(char *s);
+
+//tokenizing_utils_1.c
+int		is_wspace(char c);
+void	read_quote(t_tok_info *info, char *s, char q);
 
 // token_list_utils_1.c
 t_tok	*init_token(char *temp_tok_str);
@@ -100,10 +103,11 @@ void	delete_token(t_tok **token_list, char *content);
 void	delete_token_list(t_tok **token_list);
 
 // expansion.c
-char	*expand_tokens_and_intepret_quotes(char *s);
-char	*ft_strjoin_free_all(const char *s1, const char *s2);
+char	*expansion(char *s);
+char	*intepret_quotes(char *s);
+void	read_str(char *s, t_exp *exp);
 
-// quote_checking.c
+// quote_handling.c
 int		check_if_quotes_closed(char *s);
 
 // parsing.c

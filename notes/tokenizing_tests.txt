@@ -1,6 +1,8 @@
 
 Double Quotes Outside
 
+[x] export test='ho hi'
+
 [x] "hello""hello": hellohello
 [x] "hello''hello": hello''hello
 [x] ""hi''hi"": hihi
@@ -32,5 +34,3 @@ Single Quotes + Meta Char
 Double Quotes + Meta Char (except $)
 
 [ ] ls -la | "< infile | wc -w > outfile"
-[x] echo "$USER"
-[x] "echo '$USER'"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/07 16:54:39 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/07 18:20:38 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ void	initialize(char	**envp)
 // clean up the envp variable and also print out the end msg
 int	main(int ac, char **av, char **envp)
 {
-	char			*temp;
-	int				exit_status;
+	char	*temp;
+	int		exit_status;
 
 	(void)ac;
 	(void)av;
@@ -103,7 +103,7 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		if (g_main.user_input[0] != '\n')
 			add_history(g_main.user_input);
-		if (!tokenize(&g_main.tokens_info, g_main.user_input))
+		if (!intepret_input(&g_main.tokens_info, g_main.user_input))
 		{
 			delete_token_list(&g_main.tokens_info.token_list);
 			continue ;
