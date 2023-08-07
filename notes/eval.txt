@@ -15,7 +15,7 @@ Simple Command & global
 - How many global variables? why? Give a concrete example of why it feels
   mandatory or logical.
 [x] - Test an empty command.
-[ ] - Test only spaces or tabs.
+[x] - Test only spaces or tabs.
 - if something crashes use the crash flag.
 - if something is not working use the incomplete work flag.
  Yes No
@@ -93,11 +93,11 @@ Double Quotes
 
 Single Quotes
 -------------
-[ ] - Execute commands with single quotes as an argument
-[ ] - Try empty arguments
-[ ] - Try environment variables, whitespaces, pipes, redirection in the single
+[x] - Execute commands with single quotes as an argument
+[x] - Try empty arguments
+[x] - Try environment variables, whitespaces, pipes, redirection in the single
   quotes
-[ ] - echo '$USER' must print $USER
+[x] - echo '$USER' must print $USER
 - Nothing should be interpreted
  Yes No
 
@@ -111,15 +111,15 @@ export
 [x] - Export environment variables, create new ones and replace old ones
 [x] - Check them with env
 
-[ ] - Double quotes
-[ ] - Single quotes
+[x] - Double quotes
+[x] - Single quotes
  Yes No
 
 unset
 -----
 [x] - Export environment variables, create new ones and replace old ones
 [x] - Use unset to remove some of them
-[ ] - Mulitple variables
+[x] - Multiple variables
 - Check the result with env
  Yes No
  

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/07 16:50:21 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/07 20:29:44 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ int	exec_action_builtins(char **cmd, int cmd_lst_len)
 		return (0);
 	if (!ft_strncmp(cmd[0], "cd", 3))
 		changing_dir(cmd);
-	else if (!ft_strncmp(cmd[0], "unset", 6) && cmd_lst_len == 1)
-		remove_envp(cmd[1]);
+	else if (!ft_strncmp(cmd[0], "unset", 6) && array2d_y(cmd) > 1)
+		while (cmd[i])
+			remove_envp(cmd[i++]);
 	else if (!ft_strncmp(cmd[0], "export", 7) && array2d_y(cmd) > 1)
 		while (cmd[i])
 			add_to_envp(cmd[i++]);
