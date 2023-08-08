@@ -53,7 +53,10 @@ char	**append_cmds(char **cmds, char *str)
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name)
 {
 	if (is_input_redir(redir))
+	{
 		new_cmd->fd_in = open(file_name, O_RDONLY);
+		new_cmd->infile_name = ft_strdup(file_name);
+	}
 	else if (is_output_redir(redir) == 1)
 		new_cmd->fd_out = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	else if (is_output_redir(redir) == 2)

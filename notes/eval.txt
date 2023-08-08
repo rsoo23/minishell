@@ -61,32 +61,32 @@ Return value of a process
 
 Signals
 -------
-[ ] - Try ctrl-C in an empty prompt should show a new line with a new prompt (no ^C)
-[ ] - Try ctrl-\ in an empty prompt should not do anything
+[x] - Try ctrl-C in an empty prompt should show a new line with a new prompt (no ^C)
+[x] - Try ctrl-\ in an empty prompt should not do anything
 [x] - Try ctrl-D in an empty prompt should quit minishell --> RELAUNCH!
-[ ] - Try ctrl-C in a prompt after you wrote some stuff should show a new line
+[x] - Try ctrl-C in a prompt after you wrote some stuff should show a new line
   with a new prompt (no ^C)
 [x] - The buffer should be clean too, press "enter" to make sure nothing from the
   old line is executed.
 [x] - Try ctrl-D in a prompt after you wrote some stuff should not do anything
-[ ] - Try ctrl-\ in a prompt after you wrote some stuff should not do anything! (kills program)
-[ ] - Try ctrl-C after running a blocking command like cat without arguments or
+[x] - Try ctrl-\ in a prompt after you wrote some stuff should not do anything!
+[x] - Try ctrl-C after running a blocking command like cat without arguments or
   grep “something“
-[ ] - Try ctrl-\ after running a blocking command like cat without arguments or
+[x] - Try ctrl-\ after running a blocking command like cat without arguments or
   grep “something“
-[ ] - Try ctrl-D after running a blocking command like cat without arguments or
+[x] - Try ctrl-D after running a blocking command like cat without arguments or
   grep “something“
-[ ] - Repeat multiple times with different commands
+[x] - Repeat multiple times with different commands
 - if something crashes use the crash flag.
 - if something is not working use the incomplete work flag.
  Yes No
  
 Double Quotes
 -------------
-[ ] - Execute a simple command with arguments but this time double quotes (you
+[x] - Execute a simple command with arguments but this time double quotes (you
   should include whitespaces) (echo "cat srcs/main.c | sort > out")
-[ ] - a command like : echo "cat lol.c | cat > lol.c"
-[ ] - anything except $.
+[x] - a command like : echo "cat lol.c | cat > lol.c"
+[x] - anything except $.
 - if something crashes use the crash flag.
 - if something is not working use the incomplete work flag.
  Yes No
@@ -148,7 +148,7 @@ Relative Path
 Environment Path
 ----------------
 [x] - Execute commands but this time without any path. (ls, wc, awk etc...)
-[ ] - Unset the $PATH and check if it is not working anymore
+[x] - Unset the $PATH and check if it is not working anymore
 [ ] - Set the $PATH to a multiple directory value (directory1:directory2) and
   check that directories are checked in order from left to right
  Yes No
@@ -156,10 +156,10 @@ Environment Path
 Redirection
 -----------
 [x] - Execute commands with redirections < and/or >
-[ ] - Repeat multiple times with different commands and arguments and sometimes
+[x] - Repeat multiple times with different commands and arguments and sometimes
   change > with >>
-[ ] - Check if multiple of the same redirections fail
-[ ] - Test << redirection (it doesn't need to update history).
+[x] - Check if multiple of the same redirections fail
+[x] - Test << redirection (it doesn't need to update history).
  Yes No
 
 Pipes
@@ -167,28 +167,28 @@ Pipes
 [x] - Execute commands with pipes like 'cat file | grep bla | more'
 [x] - Repeat multiple times with different commands and arguments
 [x] - Try some failing commands like 'ls filethatdoesntexist | grep bla | more'
-[ ] - Try to mix pipes and redirections.
+[x] - Try to mix pipes and redirections.
  Yes No
 
 Go Crazy and history
 --------------------
-[ ] - type a command line then use ctrl-C then press enter the buffer should be
+[x] - type a command line then use ctrl-C then press enter the buffer should be
   clean and nothing try to execute.
 [x] - Can we navigate through history with up and down and retry some command
 [x] - Execute commands that should not work like 'dsbksdgbksdghsd' and check if
   the shell doesn't crash and prints an error
 [x] - cat | cat | ls behave "normally"
-[ ] - Try to execute a long command with a ton of arguments
-[ ] - Have fun with that beautiful minishell and enjoy it
+- Try to execute a long command with a ton of arguments
+- Have fun with that beautiful minishell and enjoy it
  Yes No
 
 Environment Variables
 ---------------------
-- Execute echo with some $ variables as arguments
-- Check that $ is interpreted as an environment variable
-- Check that double quotes interpolate $
-- Check that $USER exists or set it.
-- echo "$USER" should print the value of $USER
+- [x] Execute echo with some $ variables as arguments
+- [x] Check that $ is interpreted as an environment variable
+- [x] Check that double quotes interpolate $
+- [x] Check that $USER exists or set it.
+- [x] echo "$USER" should print the value of $USER
  Yes No
 
 Bonus

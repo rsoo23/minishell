@@ -42,15 +42,15 @@ Tests
         - last heredoc takes precedence for wc -w
         - prev heredocs still execute
 
-    - [ ] wc -w << stop | wc -w << hi
+    - [x] wc -w << stop | wc -w << hi
     
-    - [ ] wc -w << stop < srcs/main.c
+    - [x] wc -w << stop < srcs/main.c
         - < takes precedence for wc -w but heredoc still works
 
-    - [ ] wc -w << stop < srcs/main.c << hi
+    - [x] wc -w << stop < srcs/main.c << hi
         - 1st heredoc works, 2nd heredoc takes precedence and inputs to wc -w
 
-    - [ ] wc -w < srcs/main.c << stop
+    - [x] wc -w < srcs/main.c << stop
         - heredoc takes precedence
 
     - Notes:
@@ -75,7 +75,7 @@ Tests
         - behaves like: wc -w -l < main.c > hi > a
 
 Special:
-    - [ ] wc -w << stop << boom << hi |
+    - [x] wc -w << stop << boom << hi |
         - pipe left hanging, waits for input of cmd to read from pipe
 
 cc -Wall -Wextra -Werror parsing/*.c tokenizing/*.c metachar_check.c ../libft/libft.a -lreadline -fsanitize=address -ggdb

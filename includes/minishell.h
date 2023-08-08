@@ -62,6 +62,7 @@ typedef struct s_tok_info
 typedef struct s_cmd
 {
 	char			**cmds;
+	char			*infile_name;
 	int				fd_in;
 	int				fd_out;
 	int				pipe_stat;
