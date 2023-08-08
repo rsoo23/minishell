@@ -169,6 +169,7 @@ void	cmd_clear(t_cmd **cmd_list);
 void	init_fds(t_cmd *lst);
 int		get_cmd_list_len(t_cmd *lst);
 void	closing_pipes(t_cmd *cmd_list, t_cmd *cmd_node);
+void	sig_init_or_end(int type);
 
 // execute.c
 int		execute(t_cmd *inst);

@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:13:10 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/28 10:47:43 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/08 08:59:19 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ int	changing_dir(char **arr)
 		free(temp);
 	}
 	getcwd(g_main.current_path, PATH_MAX);
+	temp = ft_strjoin("PWD=", g_main.current_path);
+	add_to_envp(temp);
+	free(temp);
 	return (0);
 }
 

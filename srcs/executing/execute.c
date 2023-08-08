@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/07 20:29:44 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/08 08:51:27 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	execute_child(t_cmd *cmd_node)
 		return ;
 	if (pid == 0)
 	{
-		// signal(SIGQUIT, sig_handler_child);
+		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		closing_pipes(cmd_node, cmd_node);
 		dup2(cmd_node->fd_in, STDIN_FILENO);
@@ -112,8 +112,7 @@ int	execute(t_cmd *cmd_list)
 	temp = cmd_list;
 	exit_status = 0;
 	child_index = 0;
-	g_main.new_attri.c_lflag |= ECHOCTL;
-	tcsetattr(0, TCSANOW, &g_main.new_attri);
+	sig_init_or_end(0);
 	while (temp)
 	{
 		exit_status = exec_action_builtins(temp->cmds, \
@@ -130,7 +129,6 @@ int	execute(t_cmd *cmd_list)
 		closing_pipes(cmd_list, NULL);
 	while (child_index--)
 		wait(&g_main.exit_code);
-	g_main.new_attri.c_lflag &= ~(ECHOCTL);
-	tcsetattr(0, TCSANOW, &g_main.new_attri);
+	sig_init_or_end(1);
 	return (exit_status);
 }

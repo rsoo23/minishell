@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/07 18:20:38 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/08 09:26:12 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,11 @@ void	main_init(char **envp)
 void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
+	{
 		write(2, "\n", 1);
+		rl_replace_line("", 0);
+	}
 	rl_on_new_line();
-	rl_replace_line("", 0);
 	if (g_main.print_flag)
 		rl_redisplay();
 }
