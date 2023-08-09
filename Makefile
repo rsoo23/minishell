@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+         #
+#    By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/02 00:10:03 by rsoo              #+#    #+#              #
-#    Updated: 2023/08/09 12:38:19 by lewlee           ###   ########.fr        #
+#    Updated: 2023/08/09 17:31:08 by rsoo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ LIBFT = libft.a
 
 all: find_path $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(RDLINE_PATH)
 	@make bonus -C $(LIBFT_DIR)
 	@$(CC) $(CFLAGS) $(CSAN) $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
 
@@ -60,9 +60,8 @@ else
 	@echo "\033[96mUsing existing \033[0;93mreadline_path.txt\033[0;37m"
 endif
 
-RDLINE_PATH := $(shell cat readline_path.txt)
-READ_LIB = $(addprefix -L, $(subst /libreadline.a,, $(RDLINE_PATH)))
-READ_INC = $(subst /lib/libreadline.a,/include, $(addprefix -I, $(RDLINE_PATH)))
+READ_LIB = -L/usr/local/Cellar/readline/8.2.1/lib
+READ_INC = -I/usr/local/Cellar/readline/8.2.1/include
 
 clean:
 	@make clean -C $(LIBFT_DIR)

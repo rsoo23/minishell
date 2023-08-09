@@ -117,10 +117,10 @@ int		check_if_quotes_closed(char *s);
 void	parse(t_tok **tok_lst, t_cmd **cmd_lst);
 
 // parsing_utils_1.c
+void	freeing_2darray(char **s);
 char	**append_cmds(char **cmds, char *str);
-void	assign_infile_fd(t_cmd *cmd_list);
-void	assign_outfile_fd(t_cmd *cmd_list);
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
+int		is_input_redir_valid(t_tok **token_list, t_tok **temp);
 void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst);
 
 // metachar_check.c
@@ -164,7 +164,6 @@ int		array2d_y(char **a);
 int		find_char(char *s, char c);
 void	print_envp(void);
 void	print_export(void);
-void	freeing_2darray(char **s);
 char	*merge_path(char *c);
 void	cmd_clear(t_cmd **cmd_list);
 

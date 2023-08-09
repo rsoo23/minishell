@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 12:42:09 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 12:04:29 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 17:34:39 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,14 @@ void	sig_init_or_end(int type)
 	{
 		g_main.new_attri.c_lflag |= ECHOCTL;
 		tcsetattr(0, TCSANOW, &g_main.new_attri);
-		signal(SIGQUIT, sig_handler_child);
-		signal(SIGINT, sig_handler_child);
+		// signal(SIGQUIT, sig_handler_child);
+		// signal(SIGINT, sig_handler_child);
 	}
 	else
 	{
 		g_main.new_attri.c_lflag &= ~(ECHOCTL);
 		tcsetattr(0, TCSANOW, &g_main.new_attri);
-		signal(SIGQUIT, sig_handler);
-		signal(SIGINT, sig_handler);
+		// signal(SIGQUIT, sig_handler);
+		// signal(SIGINT, sig_handler);
 	}
 }

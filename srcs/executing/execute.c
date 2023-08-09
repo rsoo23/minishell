@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 12:29:24 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 17:41:06 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	execute_child(t_cmd *cmd_node)
 			exit(EXIT_SUCCESS);
 		if (cmd_node->fd_in == -1 || cmd_node->fd_out == -1)
 			cmd_error(NULL, cmd_node, 1);
+		if (!cmd_node->cmds)
+			exit(EXIT_SUCCESS);
 		execve(cmd_node->cmds[0], cmd_node->cmds, g_main.envp);
 		temp = merge_path(ft_strjoin("/", cmd_node->cmds[0]));
 		execve(temp, cmd_node->cmds, g_main.envp);

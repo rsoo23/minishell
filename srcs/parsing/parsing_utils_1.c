@@ -75,3 +75,24 @@ void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst)
 	add_cmd_to_back(cmd_list, new_cmd);
 	delete_token(tok_lst, (*tok_lst)->str);
 }
+
+int	is_input_redir_valid(t_tok **token_list, t_tok **temp)
+{
+	if ((*token_list)->next && !is_meta_char((*token_list)->next->str[0]))
+		return (1);
+	else if (!(*token_list)->next)
+		ft_putstr_fd("bash: syntax error near unexpected token 'newline'\n", 2);
+	else if (is_input_redir((*token_list)->next->str) \
+	|| is_meta_char((*token_list)->next->str[0]))
+	{
+		ft_putstr_fd("bash: syntax error near unexpected token ", 2);
+		ft_putstr_fd("'", 2);
+		ft_putstr_fd((*token_list)->next->str, 2);
+		ft_putstr_fd("'\n", 2);
+		delete_token(token_list, (*token_list)->next->str);
+		*temp = (*token_list);
+	}
+	delete_token(token_list, (*token_list)->str);
+	*temp = (*token_list);
+	return (0);
+}
