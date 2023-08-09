@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing_utils_1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 17:47:41 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/09 09:57:03 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 11:07:31 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ void	read_quote(t_tok_info *info, char *s, char q)
 
 void	handle_exit_code(t_exp *exp)
 {
-	printf("HI\n");
 	exp->i += 2;
-	printf("exit code %d\n", g_main.exit_code);
 	exp->res = ft_strjoin_gnl(exp->res, ft_itoa(g_main.exit_code));
 }
 

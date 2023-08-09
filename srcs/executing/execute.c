@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/08 13:21:29 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 12:03:09 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,14 @@ int	exec_display_builtins(char **cmd)
 	return (DISPLAY_BUILTIN);
 }
 
+void	sig_smt(int signum)
+{
+	if (signum == SIGQUIT)
+		exit(131);
+	else
+		exit(130);
+}
+
 // --------- USED FOR DEBUGGING ---------
 // | ft_putstr_fd("in  fd ", 2);
 // | ft_putnbr_fd(cmd_list->fd_in, 2);
@@ -140,10 +148,6 @@ int	execute(t_cmd *cmd_list)
 		child_index++;
 		temp = temp->next;
 	}
-	if (cmd_list)
-		closing_pipes(cmd_list, NULL);
-	while (child_index--)
-		wait(&g_main.exit_code);
-	sig_init_or_end(1);
+	finishing_up_cmd(child_index, cmd_list);
 	return (exit_status);
 }

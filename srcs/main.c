@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 09:22:29 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 10:52:22 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void	initialize(char	**envp)
 	tcgetattr(0, &g_main.origi_attri);
 	tcgetattr(0, &g_main.new_attri);
 	g_main.new_attri.c_lflag &= ~ECHOCTL;
-	// signal(SIGINT, sig_handler);
-	// signal(SIGQUIT, sig_handler);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	tcsetattr(0, TCSANOW, &g_main.new_attri);
 }
 

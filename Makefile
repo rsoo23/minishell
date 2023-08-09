@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+         #
+#    By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/02 00:10:03 by rsoo              #+#    #+#              #
-#    Updated: 2023/07/02 00:10:03 by rsoo             ###   ########.fr        #
+#    Updated: 2023/08/09 11:03:51 by lewlee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,26 +34,35 @@ SRCS = main \
 		parsing/cmd_list_utils_1 \
 		parsing/heredoc \
 		executing/execute \
-		executing/execute_utils_1 
+		executing/execute_utils_1 \
+		executing/execute_utils_2
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
+file_check = $(shell if [ -e readline_path.txt ]; then echo "yes"; else echo "no"; fi)
 
 LIBFT_DIR = libft
 LIBFT = libft.a
 
-# getting the readline path
-RDLINE_PATH := $(shell find /usr -name "readline" 2>/dev/null | grep "opt")
-READ_LIB = $(addprefix -L, $(addsuffix /lib, $(RDLINE_PATH)))
-READ_INC = $(addprefix -I, $(addsuffix /include, $(RDLINE_PATH)))
-
 %.o: %.c ./Makefile
 	@$(CC) $(CFLAGS) $(CSAN) $(READ_INC) -c $< -o $@
 
-all: $(NAME)
+all: find_path $(NAME)
 
 $(NAME): $(OBJS)
 	@make bonus -C $(LIBFT_DIR)
-	@$(CC) $(CFLAGS) $(CSAN) $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT) $()
+	@$(CC) $(CFLAGS) $(CSAN) $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
+
+find_path:
+ifeq ($(call file_check),no)
+	@echo "\033[96mFinding \033[0;93mlibreadline.a...\033[0;37m"
+	@find / -name "libreadline.a" 2>/dev/null | head -n 1 > readline_path.txt
+else
+	@echo "\033[96mUsing existing \033[0;93mreadline_path.txt\033[0;37m"
+endif
+
+RDLINE_PATH := $(shell cat readline_path.txt)
+READ_LIB = $(addprefix -L, $(subst /libreadline.a,, $(RDLINE_PATH)))
+READ_INC = $(subst /lib/libreadline.a,/include, $(addprefix -I, $(RDLINE_PATH)))
 
 clean:
 	@make clean -C $(LIBFT_DIR)

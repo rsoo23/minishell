@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_list_utils_1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 13:14:50 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/04 13:54:58 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 11:07:23 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	delete_token(t_tok **token_list, char *content)
 
 void	delete_token_list(t_tok **token_list)
 {
-	t_tok   *temp;
+	t_tok	*temp;
 
 	if (!token_list || !*token_list)
 		return ;
