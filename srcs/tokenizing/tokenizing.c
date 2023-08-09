@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/09 10:09:21 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 11:39:35 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,12 @@ static void	tokenize(t_tok_info *info, char *s)
 void	intepret_quotes_in_tokens(t_tok_info *info)
 {
 	t_tok	*temp;
-	int		i;
 
 	temp = info->token_list;
-	i = 0;
 	while (temp)
 	{
-		printf("	%d: %s\n", i, temp->str);
 		temp->str = intepret_quotes(temp->str);
 		temp = temp->next;
-		i++;
 	}
 }
 
@@ -98,7 +94,6 @@ int	intepret_input(t_tok_info *info, char *s)
 	if (!check_if_quotes_closed(s))
 		return (0);
 	s = expansion(s);
-	printf("after expansion: %s\n", s);
 	tokenize(info, s);
 	intepret_quotes_in_tokens(info);
 	return (1);
