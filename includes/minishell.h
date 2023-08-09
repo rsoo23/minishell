@@ -177,6 +177,7 @@ void	sig_init_or_end(int type);
 // execute_utils_2.c
 void	finishing_up_cmd(int child_amount, t_cmd *cmd_list);
 void	print_exit_error_msg(char *str);
+void	child_init(t_cmd *cmd_node);
 
 // execute.c
 int		execute(t_cmd *inst);

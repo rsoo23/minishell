@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 17:41:06 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 20:58:03 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,7 @@ void	execute_child(t_cmd *cmd_node)
 		return ;
 	if (pid == 0)
 	{
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
-		closing_pipes(cmd_node, cmd_node);
-		dup2(cmd_node->fd_in, STDIN_FILENO);
-		if (cmd_node->fd_in != 0)
-			close(cmd_node->fd_in);
-		dup2(cmd_node->fd_out, STDOUT_FILENO);
-		if (cmd_node->fd_out != 1)
-			close(cmd_node->fd_out);
+		child_init(cmd_node);
 		if (exec_display_builtins(cmd_node->cmds) == DISPLAY_BUILTIN)
 			exit(EXIT_SUCCESS);
 		if (cmd_node->fd_in == -1 || cmd_node->fd_out == -1)
