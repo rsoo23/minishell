@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 18:53:47 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 20:58:01 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void	initialize(char	**envp)
 	tcgetattr(0, &g_main.origi_attri);
 	tcgetattr(0, &g_main.new_attri);
 	g_main.new_attri.c_lflag &= ~ECHOCTL;
-	// signal(SIGINT, sig_handler);
-	// signal(SIGQUIT, sig_handler);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	tcsetattr(0, TCSANOW, &g_main.new_attri);
 }
 
@@ -89,7 +89,6 @@ void	initialize(char	**envp)
 // clean up the envp variable and also print out the end msg
 int	main(int ac, char **av, char **envp)
 {
-	char	*temp;
 	int		exit_status;
 
 	(void)ac;
@@ -98,15 +97,8 @@ int	main(int ac, char **av, char **envp)
 	initialize(envp);
 	while (exit_status != EXIT_SHELL)
 	{
-		g_main.print_flag = 1;
-		temp = name_finder(g_main.current_path);
-		g_main.user_input = readline(temp);
-		free(temp);
-		g_main.print_flag = 0;
-		if (!g_main.user_input)
+		if (!get_input())
 			break ;
-		if (g_main.user_input[0] != '\n')
-			add_history(g_main.user_input);
 		if (!intepret_input(&g_main.tokens_info, g_main.user_input))
 		{
 			delete_token_list(&g_main.tokens_info.token_list);

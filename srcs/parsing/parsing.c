@@ -138,7 +138,6 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 	}
 }
 
-
 // int main()
 // {
 // 	t_tok_info	info;

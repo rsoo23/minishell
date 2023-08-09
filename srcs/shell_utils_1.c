@@ -6,11 +6,27 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:16:47 by lewlee            #+#    #+#             */
-/*   Updated: 2023/07/28 23:47:39 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 20:58:32 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	get_input(void)
+{
+	char	*temp;
+
+	g_main.print_flag = 1;
+	temp = name_finder(g_main.current_path);
+	g_main.user_input = readline(temp);
+	free(temp);
+	g_main.print_flag = 0;
+	if (!g_main.user_input)
+		return (0);
+	if (g_main.user_input[0] != '\n')
+		add_history(g_main.user_input);
+	return (1);
+}
 
 char	*ft_strndup(char *s, int len)
 {

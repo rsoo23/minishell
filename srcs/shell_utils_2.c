@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:19:17 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/08 10:40:38 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 20:51:03 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ char	*merge_path(char *c)
 		if (access(r_str, F_OK | X_OK) == 0)
 			break ;
 		free(r_str);
-		r_str = NULL;
 	}
 	free(c);
 	freeing_2darray(paths);

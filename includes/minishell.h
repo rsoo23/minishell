@@ -155,6 +155,7 @@ int		changing_dir(char **arr);
 void	shell_echo(char **a);
 
 // shell_utils1.c
+int		get_input(void);
 char	*shell_strjoin(char const *s1, char *s2, char const *s3, int num);
 char	*name_finder(char *s);
 char	**array_append(char **a, char *line);
