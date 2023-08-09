@@ -34,7 +34,8 @@ SRCS = main \
 		parsing/cmd_list_utils_1 \
 		parsing/heredoc \
 		executing/execute \
-		executing/execute_utils_1 
+		executing/execute_utils_1 \
+		executing/execute_utils_2
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
 

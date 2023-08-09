@@ -95,7 +95,7 @@ int		check_if_quotes_closed(char *s);
 //tokenizing_utils_1.c
 int		is_wspace(char c);
 void	read_quote(t_tok_info *info, char *s, char q);
-void	handle_single_dollar(char *s, t_exp *exp);
+void	handle_single_dollar(t_exp *exp);
 void	handle_exit_code(t_exp *exp);
 
 // token_list_utils_1.c
@@ -168,11 +168,14 @@ void	freeing_2darray(char **s);
 char	*merge_path(char *c);
 void	cmd_clear(t_cmd **cmd_list);
 
-// execute_utils.c
+// execute_utils_1.c
 void	init_fds(t_cmd *lst);
 int		get_cmd_list_len(t_cmd *lst);
 void	closing_pipes(t_cmd *cmd_list, t_cmd *cmd_node);
 void	sig_init_or_end(int type);
+
+// execute_utils_2.c
+void	print_exit_error_msg(char *str);
 
 // execute.c
 int		execute(t_cmd *inst);
