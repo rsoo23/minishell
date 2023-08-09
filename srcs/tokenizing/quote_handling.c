@@ -76,7 +76,9 @@ char	*intepret_quotes(char *s)
 	while (s[exp.i])
 	{
 		exp.len = 0;
-		if (s[exp.i] == '\'')
+		if (s[exp.i] == '$')
+			handle_single_dollar(s, &exp);
+		else if (s[exp.i] == '\'')
 			intepret_quotes_content(s, &exp, '\'');
 		else if (s[exp.i] == '"')
 			intepret_quotes_content(s, &exp, '"');

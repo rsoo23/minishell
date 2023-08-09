@@ -94,6 +94,21 @@ static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
 // 	}
 // }
 
+// void	print_cmd_list(t_cmd *cmd_list)
+// {
+// 	t_cmd	*temp = cmd_list;
+// 	while (temp)
+// 	{
+// 		int i = -1;
+// 		if (temp->cmds)
+// 			while (temp->cmds[++i])
+// 				printf("cmd %d: %s\n", i, temp->cmds[i]);
+// 		printf("fd_in: %d\n", temp->fd_in);
+// 		printf("fd_out: %d\n", temp->fd_out);
+// 		temp = temp->next;
+// 	}
+// }
+
 void	parse(t_tok **token_list, t_cmd **cmd_list)
 {
 	t_cmd	*new_cmd;
@@ -118,20 +133,6 @@ void	parse(t_tok **token_list, t_cmd **cmd_list)
 	}
 }
 
-// void	print_cmd_list(t_cmd *cmd_list)
-// {
-// 	t_cmd	*temp = cmd_list;
-// 	while (temp)
-// 	{
-// 		int i = -1;
-// 		if (temp->cmds)
-// 			while (temp->cmds[++i])
-// 				printf("cmd %d: %s\n", i, temp->cmds[i]);
-// 		printf("fd_in: %d\n", temp->fd_in);
-// 		printf("fd_out: %d\n", temp->fd_out);
-// 		temp = temp->next;
-// 	}
-// }
 
 // int main()
 // {

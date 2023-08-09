@@ -6,7 +6,7 @@
 /*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 17:47:41 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/07 17:48:23 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 09:57:03 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,22 @@ void	read_quote(t_tok_info *info, char *s, char q)
 	}
 	info->i++;
 	info->temp_word_len++;
+}
+
+void	handle_exit_code(t_exp *exp)
+{
+	printf("HI\n");
+	exp->i += 2;
+	printf("exit code %d\n", g_main.exit_code);
+	exp->res = ft_strjoin_gnl(exp->res, ft_itoa(g_main.exit_code));
+}
+
+void	handle_single_dollar(char *s, t_exp *exp)
+{
+	if (!s[exp->i + 1] || s[exp->i + 1] == '$' \
+	|| s[exp->i + 1] == '"' || is_wspace(s[exp->i + 1]))
+	{
+		exp->i++;
+		exp->res = ft_strjoin_gnl(exp->res, "$");
+	}
 }

@@ -95,6 +95,8 @@ int		check_if_quotes_closed(char *s);
 //tokenizing_utils_1.c
 int		is_wspace(char c);
 void	read_quote(t_tok_info *info, char *s, char q);
+void	handle_single_dollar(char *s, t_exp *exp);
+void	handle_exit_code(t_exp *exp);
 
 // token_list_utils_1.c
 t_tok	*init_token(char *temp_tok_str);
