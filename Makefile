@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+         #
+#    By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/02 00:10:03 by rsoo              #+#    #+#              #
-#    Updated: 2023/08/09 17:31:08 by rsoo             ###   ########.fr        #
+#    Updated: 2023/08/09 19:17:11 by lewlee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,6 @@ SRCS = main \
 		executing/execute_utils_2
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)
-file_check = $(shell if [ -e readline_path.txt ]; then echo "yes"; else echo "no"; fi)
 
 LIBFT_DIR = libft
 LIBFT = libft.a
@@ -46,22 +45,24 @@ LIBFT = libft.a
 %.o: %.c ./Makefile
 	@$(CC) $(CFLAGS) $(CSAN) $(READ_INC) -c $< -o $@
 
+
 all: find_path $(NAME)
 
-$(NAME): $(OBJS) $(RDLINE_PATH)
-	@make bonus -C $(LIBFT_DIR)
-	@$(CC) $(CFLAGS) $(CSAN) $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
-
 find_path:
-ifeq ($(call file_check),no)
+ifeq ($(wildcard readline_path.txt),)
 	@echo "\033[96mFinding \033[0;93mlibreadline.a...\033[0;37m"
 	@find / -name "libreadline.a" 2>/dev/null | head -n 1 > readline_path.txt
 else
 	@echo "\033[96mUsing existing \033[0;93mreadline_path.txt\033[0;37m"
 endif
+RDLINE_PATH = $(shell cat readline_path.txt 2> /dev/null | tr '\n' ' ')
+READ_LIB = $(addprefix -L, $(subst /libreadline.a,, $(RDLINE_PATH)))
+READ_INC = $(addprefix -I, $(subst /lib/libreadline.a,/include, $(RDLINE_PATH)))
 
-READ_LIB = -L/usr/local/Cellar/readline/8.2.1/lib
-READ_INC = -I/usr/local/Cellar/readline/8.2.1/include
+$(NAME): $(OBJS) $(RDLINE_PATH)
+	@make bonus -C $(LIBFT_DIR)
+	@$(CC) $(CFLAGS) $(CSAN) $(READ_LIB) -lreadline $(OBJS) -o $(NAME) $(LIBFT_DIR)/$(LIBFT)
+
 
 clean:
 	@make clean -C $(LIBFT_DIR)
@@ -73,4 +74,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY = RDLINE_PATH clean fclean re all
+.PHONY = clean fclean re all 

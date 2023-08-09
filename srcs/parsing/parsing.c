@@ -44,7 +44,7 @@ static void	get_inputs(t_tok **token_list, t_cmd *new_cmd)
 	{
 		redir = temp->str;
 		if ((is_heredoc(redir) || is_input_redir(redir)) \
-		&& is_input_redir_valid(token_list, &temp))
+		&& is_next_token_valid(token_list, &temp))
 		{
 			if (is_heredoc(redir))
 				get_heredoc(new_cmd, temp->next->str);
@@ -73,14 +73,18 @@ static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
 	while (temp && !is_pipe(temp->str))
 	{
 		redir = temp->str;
-		if (is_output_redir(redir) && temp->next)
+		if (is_output_redir(redir) \
+		&& is_next_token_valid(token_list, &temp))
 		{
 			get_fd(new_cmd, redir, temp->next->str);
 			delete_token(token_list, temp->next->str);
 			temp = *token_list;
 			delete_token(token_list, redir);
+			temp = *token_list;
 			continue ;
 		}
+		if (!temp)
+			break ;
 		temp = temp->next;
 	}
 }

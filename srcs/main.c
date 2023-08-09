@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 17:58:16 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/09 18:53:47 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,12 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		if (g_main.user_input[0] != '\n')
 			add_history(g_main.user_input);
-		if (!intepret_input(&g_main.tokens_info, g_main.user_input) || \
-		!parse(&g_main.tokens_info.token_list, &g_main.cmd_list))
+		if (!intepret_input(&g_main.tokens_info, g_main.user_input))
 		{
 			delete_token_list(&g_main.tokens_info.token_list);
 			continue ;
 		}
+		parse(&g_main.tokens_info.token_list, &g_main.cmd_list);
 		exit_status = execute(g_main.cmd_list);
 		cmd_clear(&g_main.cmd_list);
 	}

@@ -76,7 +76,7 @@ void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst)
 	delete_token(tok_lst, (*tok_lst)->str);
 }
 
-int	is_input_redir_valid(t_tok **token_list, t_tok **temp)
+int	is_next_token_valid(t_tok **token_list, t_tok **temp)
 {
 	if ((*token_list)->next && !is_meta_char((*token_list)->next->str[0]))
 		return (1);

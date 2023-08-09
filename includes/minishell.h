@@ -120,7 +120,7 @@ void	parse(t_tok **tok_lst, t_cmd **cmd_lst);
 void	freeing_2darray(char **s);
 char	**append_cmds(char **cmds, char *str);
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
-int		is_input_redir_valid(t_tok **token_list, t_tok **temp);
+int		is_next_token_valid(t_tok **token_list, t_tok **temp);
 void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst);
 
 // metachar_check.c
