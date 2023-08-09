@@ -13,7 +13,7 @@
 NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
-CSAN = -fsanitize=address -g3
+CSAN = -fsanitize=address -g3 -ggdb
 RM = rm -rf
 
 SRCS_DIR = srcs/

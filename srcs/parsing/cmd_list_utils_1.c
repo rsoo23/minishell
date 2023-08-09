@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 12:48:43 by rsoo              #+#    #+#             */
-/*   Updated: 2023/07/27 09:33:36 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/08 13:06:09 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_cmd	*init_cmd(int pipe_stat)
 	if (!new_cmd)
 		return (NULL);
 	new_cmd->cmds = NULL;
+	new_cmd->infile_name = NULL;
 	new_cmd->fd_in = 0;
 	new_cmd->fd_out = 1;
 	new_cmd->pipe_stat = pipe_stat;

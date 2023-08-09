@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/08 09:26:12 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/08 14:07:39 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	cmd_clear(t_cmd **cmd_list)
 		temp = *cmd_list;
 		*cmd_list = (*cmd_list)->next;
 		freeing_2darray(temp->cmds);
+		if (temp->infile_name)
+			free(temp->infile_name);
 		free(temp);
 	}
 	cmd_list = NULL;
@@ -75,8 +77,8 @@ void	initialize(char	**envp)
 	tcgetattr(0, &g_main.origi_attri);
 	tcgetattr(0, &g_main.new_attri);
 	g_main.new_attri.c_lflag &= ~ECHOCTL;
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
+	// signal(SIGINT, sig_handler);
+	// signal(SIGQUIT, sig_handler);
 	tcsetattr(0, TCSANOW, &g_main.new_attri);
 }
 

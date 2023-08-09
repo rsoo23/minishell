@@ -16,6 +16,11 @@ void	expand_env_var(char *s, t_exp *exp)
 {
 	exp->len = 0;
 	exp->i++;
+	if (!s[exp->i] || is_wspace(s[exp->i]) || s[exp->i] == '"')
+	{
+		exp->res = ft_strjoin_gnl(exp->res, "$");
+		return ;
+	}
 	while (s[exp->i] && s[exp->i] != '$' && \
 	!is_wspace(s[exp->i]) && s[exp->i] != '"' && s[exp->i] != '\'')
 	{
@@ -80,6 +85,15 @@ void	read_str(char *s, t_exp *exp)
 	{
 		exp->i++;
 		exp->len++;
+	}
+	if (s[exp->i] == '$')
+	{
+		if (!s[exp->i + 1])
+			exp->i++;
+		else if (is_wspace(s[exp->i + 1]) || s[exp->i + 1] == '"')
+			exp->i += 2;
+		exp->res = ft_strjoin_gnl(exp->res, "$");
+		return ;
 	}
 	if (s[exp->i] == '$' && s[exp->i + 1] == '?')
 	{

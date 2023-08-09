@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:08:13 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/01 17:41:05 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/08 10:34:23 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,44 +71,27 @@ void	remove_envp(char *s)
 	int		i;
 	int		len;
 	char	**r_a;
+	char	*temp;
 
 	if (!s)
 		return ;
+	temp = shell_getenv(s);
+	if (!temp)
+		return ;
+	free(temp);
 	r_a = malloc(array2d_y(g_main.envp) * sizeof(char *));
 	if (!r_a)
 		return ;
 	i = -1;
 	len = ft_strlen(s);
-	while (g_main.envp[++i] && !!ft_strncmp(s, g_main.envp[i], len))
+	while (g_main.envp[++i] && ft_strncmp(s, g_main.envp[i], len))
 		r_a[i] = g_main.envp[i];
-	if (g_main.envp[i])
-	{
-		free(g_main.envp[i]);
-		while (g_main.envp[++i])
-			r_a[i - 1] = g_main.envp[i];
-		i--;
-	}
-	r_a[i] = NULL;
+	free(g_main.envp[i]);
+	while (g_main.envp[++i])
+		r_a[i - 1] = g_main.envp[i];
+	r_a[i - 1] = NULL;
 	free(g_main.envp);
 	g_main.envp = r_a;
-}
-
-// this function checks if the current envp has the same string 's'
-// if it does then it sends it to the remove_envp function
-// else it does nothing
-void	unset_envp(char *s)
-{
-	int	i;
-	int	len;
-
-	if (!s)
-		return ;
-	i = 0;
-	len = ft_strlen(s);
-	while (g_main.envp[i] && !!ft_strncmp(s, g_main.envp[i], len))
-		i++;
-	if (g_main.envp[i])
-		remove_envp(s);
 }
 
 // this function duplicates the envp

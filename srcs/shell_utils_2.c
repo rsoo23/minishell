@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:19:17 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/02 14:10:43 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/08 10:40:38 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,21 @@ int	find_char(char *s, char c)
 // prints the envp
 void	print_envp(void)
 {
-	int	i;
+	int		i;
+	char	*temp;
 
 	i = 0;
+	temp = shell_getenv("PATH");
+	if (!temp)
+	{
+		ft_putstr_fd("minishell\033[0;37m: \033[0;31m", 2);
+		ft_putstr_fd("env", 2);
+		ft_putstr_fd("\033[0;37m: No such file or directory\n", 2);
+		return ;
+	}
 	while (g_main.envp[i])
 		printf("%s\n", g_main.envp[i++]);
+	free(temp);
 }
 
 void	print_export(void)
@@ -77,6 +87,8 @@ char	*merge_path(char *c)
 	if (!c)
 		return (NULL);
 	temp = shell_getenv("PATH");
+	if (!temp)
+		return (NULL);
 	paths = ft_split(temp, ':');
 	free(temp);
 	i = -1;
