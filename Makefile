@@ -6,7 +6,7 @@
 #    By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/02 00:10:03 by rsoo              #+#    #+#              #
-#    Updated: 2023/08/09 12:27:19 by lewlee           ###   ########.fr        #
+#    Updated: 2023/08/09 12:38:19 by lewlee           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,6 @@ SRCS = main \
 		parsing/heredoc \
 		executing/execute \
 		executing/execute_utils_1 \
-		executing/execute_utils_2\
 		executing/execute_utils_2
 SRCS_CFILES = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRCS)))
 OBJS = $(SRCS_CFILES:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 10:58:30 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 12:32:53 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 12:35:25 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	finishing_up_cmd(int child_amount, t_cmd *cmd_list)
 		wait(&sig);
 		if (WIFEXITED(sig))
 			g_main.exit_code = WEXITSTATUS(sig);
-		// printf("exit code %d\n", g_main.exit_code);
 	}
 	sig_init_or_end(1);
 }
