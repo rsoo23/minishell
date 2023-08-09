@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/09 11:07:51 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 12:27:34 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,12 @@ static void	tokenize(t_tok_info *info, char *s)
 void	intepret_quotes_in_tokens(t_tok_info *info)
 {
 	t_tok	*temp;
-	int		i;
 
 	temp = info->token_list;
-	i = 0;
 	while (temp)
 	{
 		temp->str = intepret_quotes(temp->str);
 		temp = temp->next;
-		i++;
 	}
 }
 

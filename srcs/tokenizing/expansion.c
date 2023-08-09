@@ -50,12 +50,13 @@ void	read_double_quotes(char *s, t_exp *exp)
 	exp->res = ft_strjoin(exp->res, "\"");
 	while (s[exp->i] != '"')
 	{
-		if (s[exp->i] == '$' && s[exp->i + 1] != '?')
+		if (s[exp->i] == '$' && (!s[exp->i + 1] || s[exp->i + 1] == '$' \
+		|| s[exp->i + 1] == '"' || is_wspace(s[exp->i + 1])))
+			handle_single_dollar(exp);
+		else if (s[exp->i] == '$' && s[exp->i + 1] != '?')
 			expand_env_var(s, exp);
 		else if (s[exp->i] == '$' && s[exp->i + 1] == '?')
 			handle_exit_code(exp);
-		else if (s[exp->i] == '$')
-			handle_single_dollar(s, exp);
 		else
 		{
 			while (s[exp->i] != '$' && s[exp->i] != '"')
@@ -95,12 +96,13 @@ char	*expansion(char *s)
 	while (s[exp.i])
 	{
 		exp.len = 0;
-		if (s[exp.i] == '$' && s[exp.i + 1] == '?')
+		if (s[exp.i] == '$' && (!s[exp.i + 1] || s[exp.i + 1] == '$' \
+		|| s[exp.i + 1] == '"' || is_wspace(s[exp.i + 1])))
+			handle_single_dollar(&exp);
+		else if (s[exp.i] == '$' && s[exp.i + 1] == '?')
 			handle_exit_code(&exp);
 		else if (s[exp.i] == '$' && s[exp.i + 1] != '?')
 			expand_env_var(s, &exp);
-		else if (s[exp.i] == '$')
-			handle_single_dollar(s, &exp);
 		else if (s[exp.i] == '\'')
 			read_single_quotes(s, &exp);
 		else if (s[exp.i] == '"')

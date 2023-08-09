@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 12:03:09 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 12:29:24 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ int	exec_action_builtins(char **cmd, int cmd_lst_len)
 		while (cmd[i])
 			add_to_envp(cmd[i++]);
 	else if (!ft_strncmp(cmd[0], "exit", 5) && cmd_lst_len == 1)
+	{
+		if (cmd[1])
+			print_exit_error_msg(cmd[1]);
 		return (EXIT_SHELL);
+	}
 	else
 		return (0);
 	return (ACTION_BUILTIN);
@@ -75,14 +79,6 @@ int	exec_display_builtins(char **cmd)
 	else
 		return (0);
 	return (DISPLAY_BUILTIN);
-}
-
-void	sig_smt(int signum)
-{
-	if (signum == SIGQUIT)
-		exit(131);
-	else
-		exit(130);
 }
 
 // --------- USED FOR DEBUGGING ---------

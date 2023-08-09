@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 17:47:41 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/09 11:07:31 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/09 12:28:12 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,8 @@ void	handle_exit_code(t_exp *exp)
 	exp->res = ft_strjoin_gnl(exp->res, ft_itoa(g_main.exit_code));
 }
 
-void	handle_single_dollar(char *s, t_exp *exp)
+void	handle_single_dollar(t_exp *exp)
 {
-	if (!s[exp->i + 1] || s[exp->i + 1] == '$' \
-	|| s[exp->i + 1] == '"' || is_wspace(s[exp->i + 1]))
-	{
-		exp->i++;
-		exp->res = ft_strjoin_gnl(exp->res, "$");
-	}
+	exp->i++;
+	exp->res = ft_strjoin_gnl(exp->res, "$");
 }
