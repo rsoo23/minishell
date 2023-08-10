@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:19:17 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 20:51:03 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/10 10:15:42 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,16 @@ char	*merge_path(char *c)
 	if (!c)
 		return (NULL);
 	temp = shell_getenv("PATH");
-	if (!temp)
-		return (NULL);
 	paths = ft_split(temp, ':');
 	free(temp);
 	i = -1;
-	while (paths[++i])
+	while (paths && paths[++i])
 	{
 		r_str = ft_strjoin(paths[i], c);
 		if (access(r_str, F_OK | X_OK) == 0)
 			break ;
 		free(r_str);
+		r_str = NULL;
 	}
 	free(c);
 	freeing_2darray(paths);

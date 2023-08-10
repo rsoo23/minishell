@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:52:25 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 20:58:01 by rsoo             ###   ########.fr       */
+/*   Updated: 2023/08/10 09:54:19 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	main(int ac, char **av, char **envp)
 	initialize(envp);
 	while (exit_status != EXIT_SHELL)
 	{
+		g_main.exit_code_minishell = 0;
 		if (!get_input())
 			break ;
 		if (!intepret_input(&g_main.tokens_info, g_main.user_input))

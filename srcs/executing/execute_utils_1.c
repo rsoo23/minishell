@@ -6,13 +6,13 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 12:42:09 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 20:52:22 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/10 11:13:42 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	get_cmd_list_len(t_cmd *lst)
+int	getcmdlstlen(t_cmd *lst)
 {
 	t_cmd	*temp;
 	int		i;

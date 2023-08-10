@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/09 20:58:03 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/10 11:14:17 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,27 +39,25 @@ void	cmd_error(char *cmd_path, t_cmd *cmd_lst, int type)
 	exit(127);
 }
 
-int	exec_action_builtins(char **cmd, int cmd_lst_len)
+int	exec_action_builtins(char **cmd, int cmdlstlen)
 {
 	int	i;
 
 	i = 1;
-	if (!cmd || !(cmd_lst_len >= 1 && cmd_lst_len <= 2))
+	if (!cmd || !(cmdlstlen >= 1 && cmdlstlen <= 2))
 		return (0);
-	if (!ft_strncmp(cmd[0], "cd", 3))
+	if (!ft_strncmp(cmd[0], "cd", 3) && cmdlstlen == 1)
 		changing_dir(cmd);
-	else if (!ft_strncmp(cmd[0], "unset", 6) && array2d_y(cmd) > 1)
+	else if (!ft_strncmp(cmd[0], "unset", 6) && array2d_y(cmd) > 1
+		&& cmdlstlen == 1)
 		while (cmd[i])
 			remove_envp(cmd[i++]);
-	else if (!ft_strncmp(cmd[0], "export", 7) && array2d_y(cmd) > 1)
+	else if (!ft_strncmp(cmd[0], "export", 7) && array2d_y(cmd) > 1
+		&& cmdlstlen == 1)
 		while (cmd[i])
 			add_to_envp(cmd[i++]);
-	else if (!ft_strncmp(cmd[0], "exit", 5) && cmd_lst_len == 1)
-	{
-		if (cmd[1])
-			print_exit_error_msg(cmd[1]);
-		return (EXIT_SHELL);
-	}
+	else if (!ft_strncmp(cmd[0], "exit", 5))
+		return (exit_func(cmd, cmdlstlen));
 	else
 		return (0);
 	return (ACTION_BUILTIN);
@@ -119,25 +117,25 @@ int	execute(t_cmd *cmd_list)
 	int		exit_status;
 	int		child_index;
 
-	if (!cmd_list)
-		return (0);
 	init_fds(cmd_list);
 	temp = cmd_list;
 	exit_status = 0;
-	child_index = 0;
+	child_index = 1;
 	sig_init_or_end(0);
-	while (temp)
+	while (temp && child_index++)
 	{
-		exit_status = exec_action_builtins(temp->cmds, \
-		get_cmd_list_len(cmd_list));
-		if (exit_status == EXIT_SHELL || exit_status == ACTION_BUILTIN)
+		exit_status = exec_action_builtins(temp->cmds, getcmdlstlen(cmd_list));
+		if (exit_status == ACTION_BUILTIN)
+		{
+			temp = temp->next;
+			continue ;
+		}
+		if (exit_status == EXIT_SHELL)
 			break ;
-		if (exit_status == 0 || (exit_status == \
-		DISPLAY_BUILTIN && get_cmd_list_len(cmd_list) > 1))
+		if (exit_status == 0 || getcmdlstlen(cmd_list) > 1)
 			execute_child(temp);
-		child_index++;
 		temp = temp->next;
 	}
-	finishing_up_cmd(child_index, cmd_list);
+	finishing_up_cmd(--child_index, cmd_list);
 	return (exit_status);
 }

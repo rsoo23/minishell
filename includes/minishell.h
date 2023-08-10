@@ -82,6 +82,7 @@ typedef struct s_main
 	char			**envp;
 	int				print_flag;
 	int				exit_code;
+	int				exit_code_minishell;
 	struct termios	origi_attri;
 	struct termios	new_attri;
 }	t_main;
@@ -170,14 +171,15 @@ void	cmd_clear(t_cmd **cmd_list);
 
 // execute_utils_1.c
 void	init_fds(t_cmd *lst);
-int		get_cmd_list_len(t_cmd *lst);
+int		getcmdlstlen(t_cmd *lst);
 void	closing_pipes(t_cmd *cmd_list, t_cmd *cmd_node);
 void	sig_init_or_end(int type);
 
 // execute_utils_2.c
 void	finishing_up_cmd(int child_amount, t_cmd *cmd_list);
-void	print_exit_error_msg(char *str);
+void	print_exit_error_msg(char *str, int type);
 void	child_init(t_cmd *cmd_node);
+int		exit_func(char **cmds, int cmdlstlen);
 
 // execute.c
 int		execute(t_cmd *inst);

@@ -6,7 +6,7 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:05:40 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/07 10:53:32 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/10 09:54:47 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	end_minishell(void)
 	printf("ram ended  *                               \033[96m║\n");
 	printf("╚═══════════════════════════════════════════");
 	printf("═════════════════════════════════════╝\033[0;37m\n\n");
-	return (0);
+	return (g_main.exit_code_minishell);
 }
 
 // prints the 2nd part of the welcome msg

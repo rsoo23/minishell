@@ -20,9 +20,9 @@ static int	find_closing_quote(char *s, int *i, char q)
 		if (!s[*i])
 		{
 			if (q == '\'')
-				printf("Error: single quotes unclosed\n");
+				printf("\033[0;31mError\033[0;37m: single quotes unclosed\n");
 			else if (q == '"')
-				printf("Error: double quotes unclosed\n");
+				printf("\033[0;31mError\033[0;37m: double quotes unclosed\n");
 			return (0);
 		}
 		(*i)++;
