@@ -39,8 +39,8 @@ echo
  
 exit
 ----
-[x] - Execute exit command with or without arguments
-[x] - Repeat multiple times with different arguments
+[ ] - Execute exit command with or without arguments
+[ ] - Repeat multiple times with different arguments
 - Don't forget to relaunch the minishell
 - if something crashes use the crash flag.
 - if something is not working use the incomplete work flag.
@@ -68,73 +68,73 @@ Single Quotes
 
 env
 ---
-[x] - Check if env shows you the current environment variables
+[ ] - Check if env shows you the current environment variables
  Yes No
 
 export
 ------
-[x] - Export environment variables, create new ones and replace old ones
-[x] - Check them with env
+[ ] - Export environment variables, create new ones and replace old ones
+[ ] - Check them with env
 
-[x] - Double quotes
-[x] - Single quotes
+[ ] - Double quotes
+[ ] - Single quotes
  Yes No
 
 unset
 -----
-[x] - Export environment variables, create new ones and replace old ones
-[x] - Use unset to remove some of them
-[x] - Multiple variables
+[ ] - Export environment variables, create new ones and replace old ones
+[ ] - Use unset to remove some of them
+[ ] - Multiple variables
 - Check the result with env
  Yes No
  
 cd
 --
-[x] - Use the command cd to move the working directory and check if you are in the
+[ ] - Use the command cd to move the working directory and check if you are in the
   right directory with /bin/ls
-[x] - Repeat multiple times with working and not working cd
-[x] - try '.' '..' as arguments too
-[x] - cd notes or srcs
+[ ] - Repeat multiple times with working and not working cd
+[ ] - try '.' '..' as arguments too
+[ ] - cd notes or srcs
  Yes No
 
 pwd
 ---
-[x] - Use the command pwd
-[x] - Repeat multiple times in multiple directories
+[ ] - Use the command pwd
+[ ] - Repeat multiple times in multiple directories
  Yes No
 
 Pipes
 -----
-[x] - Execute commands with pipes like 'cat file | grep bla | more'
-[x] - Repeat multiple times with different commands and arguments
-[x] - Try some failing commands like 'ls filethatdoesntexist | grep bla | more'
-[x] - Try to mix pipes and redirections.
+[ ] - Execute commands with pipes like 'cat file | grep bla | more'
+[ ] - Repeat multiple times with different commands and arguments
+[ ] - Try some failing commands like 'ls filethatdoesntexist | grep bla | more'
+[ ] - Try to mix pipes and redirections.
  Yes No
 
 Go Crazy and history
 --------------------
-[x] - type a command line then use ctrl-C then press enter the buffer should be
+[ ] - type a command line then use ctrl-C then press enter the buffer should be
   clean and nothing try to execute.
-[x] - Can we navigate through history with up and down and retry some command
-[x] - Execute commands that should not work like 'dsbksdgbksdghsd' and check if
+[ ] - Can we navigate through history with up and down and retry some command
+[ ] - Execute commands that should not work like 'dsbksdgbksdghsd' and check if
   the shell doesn't crash and prints an error
-[x] - cat | cat | ls behave "normally"
+[ ] - cat | cat | ls behave "normally"
 - Try to execute a long command with a ton of arguments
 - Have fun with that beautiful minishell and enjoy it
  Yes No
 
 Environment Variables
 ---------------------
-- [x] Execute echo with some $ variables as arguments
-- [x] Check that $ is interpreted as an environment variable
-- [x] Check that double quotes interpolate $
-- [x] Check that $USER exists or set it.
-- [x] echo "$USER" should print the value of $USER
+- [ ] Execute echo with some $ variables as arguments
+- [ ] Check that $ is interpreted as an environment variable
+- [ ] Check that double quotes interpolate $
+- [ ] Check that $USER exists or set it.
+- [ ] echo "$USER" should print the value of $USER
  Yes No
 
 Bonus
-[x] echo "'$USER'": 'rsoo'
-[x] echo '"$USER"': "$USER"
+[ ] echo "'$USER'": 'rsoo'
+[ ] echo '"$USER"': "$USER"
 
 ------------------------------------------------------------------------------------------------
 WIP:
@@ -183,16 +183,16 @@ Relative Path
 
 Environment Path
 ----------------
-[x] - Execute commands but this time without any path. (ls, wc, awk etc...)
-[x] - Unset the $PATH and check if it is not working anymore
+[ ] - Execute commands but this time without any path. (ls, wc, awk etc...)
+[ ] - Unset the $PATH and check if it is not working anymore
 [] - Set the $PATH to a multiple directory value (directory1:directory2) and
   check that directories are checked in order from left to right
  Yes No
 
 Redirection
 -----------
-[x] - Execute commands with redirections < and/or >
-[x] - Repeat multiple times with different commands and arguments and sometimes
+[ ] - Execute commands with redirections < and/or >
+[ ] - Repeat multiple times with different commands and arguments and sometimes
   change > with >>
 [] - Check if multiple of the same redirections fail
 [] - Test << redirection (it doesn't need to update history).

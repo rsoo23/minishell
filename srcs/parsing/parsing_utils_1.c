@@ -63,29 +63,44 @@ void	get_fd(t_cmd *new_cmd, char *redir, char *file_name)
 		new_cmd->fd_out = open(file_name, O_CREAT | O_WRONLY | O_APPEND, 0666);
 }
 
-void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst)
+int	is_any_metastr(char *s)
 {
-	char	*pending_cmd;
+	// int	strlen;
 
-	new_cmd = init_cmd(1);
-	pending_cmd = readline("> ");
-	while (!pending_cmd[0])
-		pending_cmd = readline("> ");
-	new_cmd->cmds = ft_split(pending_cmd, ' ');
-	add_cmd_to_back(cmd_list, new_cmd);
-	delete_token(tok_lst, (*tok_lst)->str);
+	// strlen = 0;
+	if (!s)
+		return (0);
+	// strlen = ft_strlen(s);
+	if (!ft_strncmp(s, "<", 2))
+		return (1);
+	else if (!ft_strncmp(s, "<>", 3))
+		return (1);
+	else if (!ft_strncmp(s, "<<", 3))
+		return (1);
+	else if (!ft_strncmp(s, ">", 2))
+		return (1);
+	else if (!ft_strncmp(s, ">>", 3))
+		return (1);
+	else if (!ft_strncmp(s, "|", 2))
+		return (1);
+	return (0);
 }
+
+// << (not metastr)
+// << (empty)
+// << <
 
 int	is_next_token_valid(t_tok **token_list, t_tok **temp)
 {
-	if ((*token_list)->next && !is_meta_char((*token_list)->next->str[0]))
+	if ((*token_list)->next && !is_any_metastr((*token_list)->next->str))
 		return (1);
-	else if (!(*token_list)->next)
-		ft_putstr_fd("bash: syntax error near unexpected token 'newline'\n", 2);
-	else if (is_input_redir((*token_list)->next->str) \
-	|| is_meta_char((*token_list)->next->str[0]))
+	else if (!(*token_list)->next && !(*token_list)->in_quotes)
+		ft_putstr_fd("minishell: syntax error near unexpected token 'newline'\n"\
+		, 2);
+	else if (is_any_metastr((*token_list)->str) && (*token_list)->next
+		&& is_any_metastr((*token_list)->next->str))
 	{
-		ft_putstr_fd("bash: syntax error near unexpected token ", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 		ft_putstr_fd("'", 2);
 		ft_putstr_fd((*token_list)->next->str, 2);
 		ft_putstr_fd("'\n", 2);

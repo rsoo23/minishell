@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/09 12:27:34 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/10 11:40:18 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ static void	tokenize_meta_char(t_tok_info *info, char *s)
 	add_token_to_back(&info->token_list, new_token);
 }
 
-// void	print_tok(t_tok *token_list)
-// {
-// 	t_tok *temp = token_list;
-// 	while (temp)
-// 	{
-// 		printf("%s\n", temp->str);
-// 		temp = temp->next;
-// 	}
-// }
+void	print_tok(t_tok *token_list)
+{
+	t_tok *temp = token_list;
+	while (temp)
+	{
+		printf("%s\n", temp->str);
+		temp = temp->next;
+	}
+}
 
 static void	tokenize(t_tok_info *info, char *s)
 {
@@ -75,16 +75,27 @@ static void	tokenize(t_tok_info *info, char *s)
 	}
 }
 
-void	intepret_quotes_in_tokens(t_tok_info *info)
+int	intepret_quotes_in_tokens(t_tok_info *info)
 {
 	t_tok	*temp;
 
 	temp = info->token_list;
 	while (temp)
 	{
-		temp->str = intepret_quotes(temp->str);
+		printf("before intepret: %s%%\n", temp->str);
+		temp->str = intepret_quotes(temp, temp->str);
+		printf("after intepret: %s%%\n", temp->str);
+		// if (!ft_strncmp(temp->str, "", ft_strlen(temp->str)))
+		// 	return (ft_putstr_fd("minishell: : command not found\n", 2), 0);
+		// else if (!ft_strncmp(temp->str, "|", ft_strlen(temp->str)))
+		// 	return (ft_putstr_fd(\
+		// 	"minishell: syntax error near unexpected token `|'\n", 2), 0);
+		// else if (!ft_strncmp(temp->str, "||", 2))
+		// 	return (ft_putstr_fd(\
+		// 	"minishell: syntax error near unexpected token `||'\n", 2), 0);
 		temp = temp->next;
 	}
+	return (1);
 }
 
 int	intepret_input(t_tok_info *info, char *s)
@@ -95,6 +106,8 @@ int	intepret_input(t_tok_info *info, char *s)
 		return (0);
 	s = expansion(s);
 	tokenize(info, s);
-	intepret_quotes_in_tokens(info);
+	if (!intepret_quotes_in_tokens(info))
+		return (0);
+	print_tok(info->token_list);
 	return (1);
 }

@@ -47,7 +47,8 @@ typedef struct s_exp
 
 typedef struct s_tok
 {
-	char			*str;	
+	char			*str;
+	int				in_quotes;
 	struct s_tok	*next;
 	struct s_tok	*prev;
 }	t_tok;
@@ -108,7 +109,7 @@ void	delete_token_list(t_tok **token_list);
 
 // expansion.c
 char	*expansion(char *s);
-char	*intepret_quotes(char *s);
+char	*intepret_quotes(t_tok *token, char *s);
 void	read_str(char *s, t_exp *exp);
 
 // quote_handling.c
@@ -122,7 +123,6 @@ void	freeing_2darray(char **s);
 char	**append_cmds(char **cmds, char *str);
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
 int		is_next_token_valid(t_tok **token_list, t_tok **temp);
-void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst);
 
 // metachar_check.c
 int		is_pipe(char *str);

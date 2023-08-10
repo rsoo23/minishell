@@ -12,6 +12,19 @@
 
 #include "../../includes/minishell.h"
 
+void	hanging_pipe(t_cmd **cmd_list, t_cmd *new_cmd, t_tok **tok_lst)
+{
+	char	*pending_cmd;
+
+	new_cmd = init_cmd(1);
+	pending_cmd = readline("> ");
+	while (!pending_cmd[0])
+		pending_cmd = readline("> ");
+	new_cmd->cmds = ft_split(pending_cmd, ' ');
+	add_cmd_to_back(cmd_list, new_cmd);
+	delete_token(tok_lst, (*tok_lst)->str);
+}
+
 // Get any commands while searching for any corresponding flags / arguments,
 // assigning it into a 2d array
 
@@ -67,8 +80,6 @@ static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
 	t_tok	*temp;
 	char	*redir;
 
-	if (!(*token_list))
-		return ;
 	temp = *token_list;
 	while (temp && !is_pipe(temp->str))
 	{

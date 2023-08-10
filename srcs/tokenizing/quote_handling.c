@@ -52,7 +52,7 @@ int	check_if_quotes_closed(char *s)
 	return (1);
 }
 
-void	intepret_quotes_content(char *s, t_exp *exp, char q)
+void	intepret_quotes_content(t_tok *token, char *s, t_exp *exp, char q)
 {
 	exp->i++;
 	while (s[exp->i] != q)
@@ -62,10 +62,11 @@ void	intepret_quotes_content(char *s, t_exp *exp, char q)
 	}
 	exp->res = ft_strjoin_free_all(exp->res, \
 	ft_substr(s, exp->i - exp->len, exp->len));
+	token->in_quotes = 1;
 	exp->i++;
 }
 
-char	*intepret_quotes(char *s)
+char	*intepret_quotes(t_tok *token, char *s)
 {
 	t_exp	exp;
 
@@ -73,6 +74,7 @@ char	*intepret_quotes(char *s)
 	exp.env_var = NULL;
 	exp.temp = NULL;
 	exp.i = 0;
+	token->in_quotes = 0;
 	while (s[exp.i])
 	{
 		exp.len = 0;
@@ -80,9 +82,9 @@ char	*intepret_quotes(char *s)
 		|| s[exp.i + 1] == '"' || is_wspace(s[exp.i + 1])))
 			handle_single_dollar(&exp);
 		else if (s[exp.i] == '\'')
-			intepret_quotes_content(s, &exp, '\'');
+			intepret_quotes_content(token, s, &exp, '\'');
 		else if (s[exp.i] == '"')
-			intepret_quotes_content(s, &exp, '"');
+			intepret_quotes_content(token, s, &exp, '"');
 		else
 			read_str(s, &exp);
 	}
