@@ -107,6 +107,9 @@ void	add_token_to_back(t_tok **token_list, t_tok *new_token);
 void	delete_token(t_tok **token_list, char *content);
 void	delete_token_list(t_tok **token_list);
 
+// token_error_checking.c
+int token_error_checking(t_tok *tok_lst);
+
 // expansion.c
 char	*expansion(char *s);
 char	*intepret_quotes(t_tok *token, char *s);
@@ -122,7 +125,6 @@ void	parse(t_tok **tok_lst, t_cmd **cmd_lst);
 void	freeing_2darray(char **s);
 char	**append_cmds(char **cmds, char *str);
 void	get_fd(t_cmd *new_cmd, char *redir, char *file_name);
-int		is_next_token_valid(t_tok **token_list, t_tok **temp);
 
 // metachar_check.c
 int		is_pipe(char *str);

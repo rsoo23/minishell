@@ -47,7 +47,7 @@ void	read_single_quotes(char *s, t_exp *exp)
 void	read_double_quotes(char *s, t_exp *exp)
 {
 	exp->i++;
-	exp->res = ft_strjoin(exp->res, "\"");
+	exp->res = ft_strjoin_gnl(exp->res, "\"");
 	while (s[exp->i] != '"')
 	{
 		if (s[exp->i] == '$' && (!s[exp->i + 1] || s[exp->i + 1] == '$' \

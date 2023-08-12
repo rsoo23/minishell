@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+         #
+#    By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/02 00:10:03 by rsoo              #+#    #+#              #
-#    Updated: 2023/08/09 19:17:11 by lewlee           ###   ########.fr        #
+#    Updated: 2023/08/11 09:40:46 by rsoo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS = main \
 		tokenizing/tokenizing \
 		tokenizing/tokenizing_utils_1 \
 		tokenizing/token_list_utils_1 \
+		tokenizing/token_error_checking \
 		tokenizing/expansion \
 		tokenizing/quote_handling \
 		parsing/parsing \

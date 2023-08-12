@@ -36,7 +36,7 @@ void	get_cmds(t_tok **token_list, t_cmd *new_cmd)
 	temp = *token_list;
 	while (temp && !is_pipe(temp->str))
 	{
-		if (temp->str && !is_meta_char(temp->str[0]))
+		if (temp->str)
 		{
 			new_cmd->cmds = append_cmds(new_cmd->cmds, temp->str);
 			delete_token(token_list, temp->str);
@@ -56,8 +56,7 @@ static void	get_inputs(t_tok **token_list, t_cmd *new_cmd)
 	while (temp && !is_pipe(temp->str))
 	{
 		redir = temp->str;
-		if ((is_heredoc(redir) || is_input_redir(redir)) \
-		&& is_next_token_valid(token_list, &temp))
+		if ((is_heredoc(redir) || is_input_redir(redir)) && temp->next)
 		{
 			if (is_heredoc(redir))
 				get_heredoc(new_cmd, temp->next->str);
@@ -84,8 +83,7 @@ static void	get_outputs(t_tok **token_list, t_cmd *new_cmd)
 	while (temp && !is_pipe(temp->str))
 	{
 		redir = temp->str;
-		if (is_output_redir(redir) \
-		&& is_next_token_valid(token_list, &temp))
+		if (is_output_redir(redir) && temp->next)
 		{
 			get_fd(new_cmd, redir, temp->next->str);
 			delete_token(token_list, temp->next->str);
