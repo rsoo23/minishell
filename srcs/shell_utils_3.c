@@ -22,5 +22,5 @@ char	**split_path(void)
 		return (NULL);
 	paths = ft_split(temp, ':');
 	free(temp);
-    return (paths);
+	return (paths);
 }
