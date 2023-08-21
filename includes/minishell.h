@@ -108,7 +108,7 @@ void	delete_token(t_tok **token_list, char *content);
 void	delete_token_list(t_tok **token_list);
 
 // token_error_checking.c
-int token_error_checking(t_tok *tok_lst);
+int		token_error_checking(t_tok *tok_lst);
 
 // expansion.c
 char	*expansion(char *s);

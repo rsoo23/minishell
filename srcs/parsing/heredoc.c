@@ -21,11 +21,11 @@ static void	heredoc_child(int hd_pipe[2], char *limiter)
 	close(hd_pipe[0]);
 	while (user_in && ft_strncmp(user_in, limiter, ft_strlen(user_in)))
 	{
-		free(user_in);
-		user_in = readline("> ");
 		temp = ft_strjoin(user_in, "\n");
 		write(hd_pipe[1], temp, ft_strlen(temp));
 		free(temp);
+		free(user_in);
+		user_in = readline("> ");
 	}
 	free(user_in);
 	exit(EXIT_SUCCESS);

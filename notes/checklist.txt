@@ -1,26 +1,26 @@
-1. [ ] Prompt
+1. [x] Prompt
 Parent + Child 
 Ctrl + C kills the child and returns to parent
 Ctrl + D kills the parent
 Ctrl + \ can’t do anything 
 
-2. [ ] Working History
+2. [x] Working History
 ‘history’
 Shows index of commands 
 Static 2D buffer?
 
-3. [ ] Launching Correct Executable
+3. [x] Launching Correct Executable
 Based on path variable / absolute or relative path
 
-4. [ ] Not Handle:
+4. [x] Not Handle:
 \ backslash
 ; semicolon
 
-5. [ ] Single quote
+5. [x] Single quote
 Print everything in the single quotes
 Not handle meta-characters
 
-6. [ ] Double quotes
+6. [x] Double quotes
 Printf everything in the double quotes
 Not handle meta-characters except for $
 
@@ -30,13 +30,13 @@ Not handle meta-characters except for $
 << heredoc (takes input from STDIN until delimiter) (doesn’t have to update history)
 >> redirect output, append 
 
-8. [ ] Pipes
+8. [x] Pipes
 
 9. [ ] Environment Variables
 $ followed by sequence of char
 Expand to its value
 
-10. [ ] $?
+10. [x] $?
  expand to the exit status of the most recently executed foreground pipeline
 
 11. [ ] Kill signals
@@ -45,11 +45,11 @@ Expand to its value
 Prints everything that comes after to STDOUT
 -n prints without newline
 
-13. [ ] cd
+13. [x] cd
 Goes to root if no arguments
 Absolute and relative paths
 
-14. [ ] pwd
+14. [x] pwd
 Print working directory (absolute)
 
 15. [ ] export
@@ -59,10 +59,10 @@ But we do not need to set variables
 16. [ ] unset
 resets the env variable you set 
 
-17. [ ] env
+17. [x] env
 shows all environmental variables
 
-18. [ ] exit
+18. [x] exit
 
 --------------------------------------------------------------
 Problems

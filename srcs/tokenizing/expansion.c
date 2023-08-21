@@ -16,8 +16,9 @@ void	expand_env_var(char *s, t_exp *exp)
 {
 	exp->len = 0;
 	exp->i++;
-	while (s[exp->i] && s[exp->i] != '$' && \
-	!is_wspace(s[exp->i]) && s[exp->i] != '"' && s[exp->i] != '\'')
+	while (s[exp->i] && s[exp->i] != '$' && !is_wspace(s[exp->i])
+		&& s[exp->i] != '"' && s[exp->i] != '\''
+		&& ft_isalnum(s[exp->i]))
 	{
 		exp->i++;
 		exp->len++;

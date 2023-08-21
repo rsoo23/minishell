@@ -1,7 +1,7 @@
-if a command fails exit code = 127
-if a command gets terminated with ctrl + c exit code = 130
-if a command gets terminated with ctrl + \ exit code = 131
-if stopped with ctrl + z exit code = 146
-if ctrl + d exit code = 0
+errors
 
-Quit
+echo $OLD_PWD expands into what $PWD is
+bash tested and it should act like it failed
+
+$$ loops forever but this we decided not to handle it
+

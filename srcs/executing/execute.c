@@ -6,13 +6,13 @@
 /*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 10:33:49 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/10 11:14:17 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/10 17:50:14 by lewlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	cmd_error(char *cmd_path, t_cmd *cmd_lst, int type)
+void	cmd_error(t_cmd *cmd_lst, int type)
 {
 	t_cmd	*temp;
 
@@ -28,8 +28,6 @@ void	cmd_error(char *cmd_path, t_cmd *cmd_lst, int type)
 		ft_putstr_fd(cmd_lst->infile_name, 2);
 		ft_putstr_fd("\033[0;37m: No such file or directory\n", 2);
 	}
-	if (cmd_path)
-		free(cmd_path);
 	while (temp->prev)
 		temp = temp->prev;
 	cmd_clear(&temp);
@@ -69,7 +67,16 @@ int	exec_display_builtins(char **cmd)
 	if (cmd && !ft_strncmp(cmd[0], "pwd", 4))
 		printf("%s\n", g_main.current_path);
 	else if (cmd && !ft_strncmp(cmd[0], "env", 4))
+	{
+		if (cmd[1])
+		{
+			ft_putstr_fd("minishell\033[0;37m: env: \033[0;31m", 2);
+			ft_putstr_fd(cmd[1], 2);
+			ft_putstr_fd("\033[0;37m: No such file or directory\n", 2);
+			return (DISPLAY_BUILTIN);
+		}
 		print_envp();
+	}
 	else if (cmd && !ft_strncmp(cmd[0], "echo", 5))
 		shell_echo(cmd);
 	else if (cmd && !ft_strncmp(cmd[0], "export", 7) && !cmd[1])
@@ -101,13 +108,13 @@ void	execute_child(t_cmd *cmd_node)
 		if (exec_display_builtins(cmd_node->cmds) == DISPLAY_BUILTIN)
 			exit(EXIT_SUCCESS);
 		if (cmd_node->fd_in == -1 || cmd_node->fd_out == -1)
-			cmd_error(NULL, cmd_node, 1);
+			cmd_error(cmd_node, 1);
 		if (!cmd_node->cmds)
 			exit(EXIT_SUCCESS);
 		execve(cmd_node->cmds[0], cmd_node->cmds, g_main.envp);
 		temp = merge_path(ft_strjoin("/", cmd_node->cmds[0]));
 		execve(temp, cmd_node->cmds, g_main.envp);
-		cmd_error(temp, cmd_node, 0);
+		cmd_error(cmd_node, 0);
 	}
 }
 
