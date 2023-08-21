@@ -71,7 +71,7 @@ void	read_double_quotes(char *s, t_exp *exp)
 		exp->len = 0;
 	}
 	exp->i++;
-	exp->res = ft_strjoin(exp->res, "\"");
+	exp->res = ft_strjoin_gnl(exp->res, "\"");
 }
 
 void	read_str(char *s, t_exp *exp)
@@ -111,6 +111,5 @@ char	*expansion(char *s)
 		else
 			read_str(s, &exp);
 	}
-	free(s);
 	return (exp.res);
 }

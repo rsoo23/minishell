@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 23:50:37 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/21 10:33:00 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/21 12:03:32 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ static void	tokenize(t_tok_info *info, char *s)
 		else if (is_meta_char(s[info->i]) && s[info->i])
 			tokenize_meta_char(info, s);
 	}
+	free(s);
 }
 
 int	intepret_quotes_in_tokens(t_tok_info *info)
@@ -88,15 +89,20 @@ int	intepret_quotes_in_tokens(t_tok_info *info)
 	return (1);
 }
 
-int	intepret_input(t_tok_info *info, char *s)
+int	intepret_input(t_tok_info *info, char *user_input)
 {
+	char	*expanded_str;
+
 	info->i = 0;
 	info->token_list = NULL;
-	if (!check_if_quotes_closed(s))
+	if (!check_if_quotes_closed(user_input))
+	{
+		free(user_input);
 		return (0);
-	s = expansion(s);
-	tokenize(info, s);
-	free(s);
+	}
+	expanded_str = expansion(user_input);
+	free(user_input);
+	tokenize(info, expanded_str);
 	if (!intepret_quotes_in_tokens(info))
 		return (0);
 	if (!token_error_checking(info->token_list))

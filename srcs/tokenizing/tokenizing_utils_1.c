@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing_utils_1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 17:47:41 by rsoo              #+#    #+#             */
-/*   Updated: 2023/08/09 12:28:12 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/21 14:53:44 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	read_quote(t_tok_info *info, char *s, char q)
 void	handle_exit_code(t_exp *exp)
 {
 	exp->i += 2;
-	exp->res = ft_strjoin_gnl(exp->res, ft_itoa(g_main.exit_code));
+	exp->res = ft_strjoin_free_all(exp->res, ft_itoa(g_main.exit_code));
 }
 
 void	handle_single_dollar(t_exp *exp)

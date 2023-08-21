@@ -7,7 +7,7 @@ Compile
 - minishell Compile without errors if not use flags
 [x] - makefile must not re-link
  Yes No
- 
+
 Simple Command & global
 -----------------------
 [x] - Execute a simple command with an absolute path like /bin/ls or any other
@@ -51,7 +51,7 @@ Double Quotes
 [x] - Execute a simple command with arguments but this time double quotes (you
   should include whitespaces) (echo "cat srcs/main.c | sort > out")
 [x] - a command like : echo "cat lol.c | cat > lol.c"
-[x] - anything except $.
+[x] - anything except $
 - if something crashes use the crash flag.
 - if something is not working use the incomplete work flag.
  Yes No

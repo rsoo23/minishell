@@ -6,7 +6,7 @@
 #    By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/02 00:10:03 by rsoo              #+#    #+#              #
-#    Updated: 2023/08/11 09:40:46 by rsoo             ###   ########.fr        #
+#    Updated: 2023/08/21 14:45:27 by rsoo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS = main \
 		printing_msg \
 		shell_utils_1 \
 		shell_utils_2 \
+		shell_utils_3 \
 		metachar_check \
 		tokenizing/tokenizing \
 		tokenizing/tokenizing_utils_1 \

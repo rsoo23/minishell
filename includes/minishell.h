@@ -91,7 +91,7 @@ typedef struct s_main
 extern t_main	g_main;
 
 //tokenizing.c
-int		intepret_input(t_tok_info *info, char *s);
+int		intepret_input(t_tok_info *info, char *user_input);
 int		check_if_quotes_closed(char *s);
 
 //tokenizing_utils_1.c
@@ -170,6 +170,9 @@ void	print_envp(void);
 void	print_export(void);
 char	*merge_path(char *c);
 void	cmd_clear(t_cmd **cmd_list);
+
+// shell_utils3.c
+char	**split_path(void);
 
 // execute_utils_1.c
 void	init_fds(t_cmd *lst);

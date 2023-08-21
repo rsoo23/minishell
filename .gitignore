@@ -1,3 +1,4 @@
 readline_path.txt
 *.o
 *.a
+.vscode

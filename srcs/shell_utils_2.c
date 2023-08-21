@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lewlee <lewlee@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rsoo <rsoo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 10:19:17 by lewlee            #+#    #+#             */
-/*   Updated: 2023/08/10 10:15:42 by lewlee           ###   ########.fr       */
+/*   Updated: 2023/08/21 14:46:58 by rsoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,12 @@ char	*merge_path(char *c)
 	int		i;
 	char	*r_str;
 	char	**paths;
-	char	*temp;
 
 	if (!c)
 		return (NULL);
-	temp = shell_getenv("PATH");
-	paths = ft_split(temp, ':');
-	free(temp);
+	paths = split_path();
+	if (!paths)
+		return (NULL);
 	i = -1;
 	while (paths && paths[++i])
 	{
