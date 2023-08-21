@@ -46,35 +46,27 @@ int	check_redir_valid(t_tok *tok_lst)
 		ft_putstr_fd("'", 2);
 		ft_putstr_fd(tok_lst->next->str, 2);
 		ft_putstr_fd("'\n", 2);
-	} 
+	}
 	return (0);
 }
 
-int token_error_checking(t_tok *tok_lst)
+int	token_error_checking(t_tok *tok_lst)
 {
 	while (tok_lst)
 	{
-		if (!ft_strncmp(tok_lst->str, "", ft_strlen(tok_lst->str)) && 
+		if (!ft_strncmp(tok_lst->str, "", ft_strlen(tok_lst->str)) && \
 			!tok_lst->prev)
 			return (ft_putstr_fd("minishell: : command not found\n", 2), 0);
-		else if (!ft_strncmp(tok_lst->str, "|", ft_strlen(tok_lst->str)) && 
+		else if (!ft_strncmp(tok_lst->str, "|", ft_strlen(tok_lst->str)) && \
 			!tok_lst->prev && !tok_lst->in_quotes)
-			return (ft_putstr_fd(
-			"minishell: syntax error near unexpected token `|'\n", 2), 0);
+			return (ft_putstr_fd(\
+				"minishell: syntax error near unexpected token `|'\n", 2), 0);
 		else if (!ft_strncmp(tok_lst->str, "||", 2))
-			return (ft_putstr_fd(
+			return (ft_putstr_fd(\
 			"minishell: syntax error near unexpected token `||'\n", 2), 0);
 		else if (is_any_metastr(tok_lst->str) && !check_redir_valid(tok_lst))
 			return (0);
 		tok_lst = tok_lst->next;
 	}
-    return (1);
+	return (1);
 }
-
-// << (not metastr)
-// << (empty)
-// << <
-
-// 1. check if next exists || check if next str is not metastr
-// 2. check if next is null || check if current is not in quotes
-// 3. check if current is metastr || check if next exists || check if next is metastr
