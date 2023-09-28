@@ -36,6 +36,13 @@ In terms of the workload distribution I mainly worked on the tokenizing, parsing
 ![image](https://github.com/rsoo23/minishell/assets/81731553/f0ab9a96-32b0-4ca4-b97f-97055ab41171)
 ![image](https://github.com/rsoo23/minishell/assets/81731553/288a8616-7261-4eec-a515-383a9d3fdd14)
 
+# Dependencies:
+This project requires readline to work.
+If you do not have readline installed, use this command to install it.
+```bash
+sudo apt-get install lib32readline7 lib32readline-dev
+```
+This is required due our implementation for getting user input.
 
 # How to use:
 1. Clone the repository
